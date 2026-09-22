@@ -406,7 +406,7 @@ Solicitação de uma peça (coroa, prótese etc.) ao laboratório da própria cl
 
 ![DER da Meneghini Odontologia Integrada](der/der-meneghini-odontologia.png)
 
-O diagrama usa a notação vista em aula: retângulo para entidade, losango para relacionamento, elipse para atributo e bolinha preenchida para o atributo identificador. As entidades fracas (ITEM_ORCAMENTO e PARCELA) estão com borda dupla, ligadas às entidades fortes por relacionamentos identificadores (losango duplo). O atributo `NR_TELEFONE` está marcado como multivalorado (`1/N`) e `ENDERECO` é composto.
+O diagrama usa a notação de Chen vista em aula: retângulo para entidade, losango para relacionamento e elipse para atributo. O atributo identificador aparece com contorno azul e sublinhado. As entidades fracas (ITEM_ORCAMENTO e PARCELA) estão com borda dupla, ligadas às entidades fortes por relacionamentos identificadores (losango duplo), e o identificador parcial delas tem o sublinhado tracejado. O atributo `NR_TELEFONE` está com borda dupla por ser multivalorado e `ENDERECO` é composto, ramificado em logradouro, bairro e CEP. A legenda na base da imagem repete esses símbolos.
 
 Como ler as cardinalidades: seguimos a convenção do brModelo/Heuser, em que o `(mín,máx)` escrito ao lado de uma entidade indica quantas ocorrências dela se ligam a uma ocorrência da outra entidade. Por exemplo, em `PACIENTE (1,1) MARCA (1,N) AGENDAMENTO`, um paciente tem de 1 a N agendamentos, e cada agendamento é de exatamente 1 paciente.
 
