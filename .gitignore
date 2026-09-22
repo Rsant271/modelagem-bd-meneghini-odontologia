@@ -1,0 +1,10 @@
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Fontes vetoriais dos diagramas (a entrega e o PNG)
+*.svg
+
+# Temporarios
+*.log
+*.tmp
