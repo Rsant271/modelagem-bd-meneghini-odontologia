@@ -3,6 +3,7 @@
 **Disciplina:** Modelagem de Banco de Dados (2260065), Análise e Desenvolvimento de Sistemas, UNICID
 **Professor:** Cid Rodrigues de Andrade
 **Entrega 1: Modelo Conceitual (DER)**, setembro de 2026
+**Dicionário de dados em HTML:** [abrir no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html)
 
 ## Metadados
 
@@ -169,6 +170,8 @@ Os três processos se ligam assim: o Processo 1 termina com o contrato assinado 
 Convenções adotadas (seguindo o exemplo de dicionário de dados apresentado em aula): os nomes dos atributos usam os prefixos `ID_` (identificador), `NM_` (nome), `DT_` (data), `TP_` (tipo), `CD_` (código ou status), `QT_` (quantidade), `IN_` (indicador sim/não) e `DS_` (descrição). Acrescentamos `NR_` (número de documento ou número sequencial) e `VL_` (valor em reais). Na definição de cada entidade, `@` marca o identificador, `+` liga os atributos, `( )` indica atributo opcional e `1{ }N` indica atributo multivalorado.
 
 Todos os exemplos de valores citados abaixo são fictícios.
+
+O mesmo dicionário está em página HTML, com estilo próprio: [abrir o dicionário de dados no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html). O arquivo fica em [dicionario/dicionario-de-dados.html](dicionario/dicionario-de-dados.html) e o conteúdo é idêntico ao desta seção.
 
 ### PACIENTE
 
