@@ -3,7 +3,7 @@
 **Disciplina:** Modelagem de Banco de Dados (2260065), Análise e Desenvolvimento de Sistemas, UNICID
 **Professor:** Cid Rodrigues de Andrade
 **Entrega 1: Modelo Conceitual (DER)**, setembro de 2026
-**Dicionário de dados em HTML:** [abrir no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html)
+**Dicionário de dados completo (HTML):** [abrir no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html)
 
 ## Metadados
 
@@ -158,6 +158,8 @@ Os três processos se ligam assim: o Processo 1 termina com o contrato assinado 
 **Restrições organizacionais:**
 
 - LGPD: a clínica trata dados pessoais (nome, CPF, contato) e dados sensíveis de saúde (evolução clínica). Pela Lei 13.709/2018, esses dados exigem acesso restrito e finalidade definida. No modelo, a evolução clínica ficou em uma entidade separada para que o acesso a ela possa ser controlado. Neste trabalho não usamos nenhum dado real de paciente ou colaborador; os exemplos são fictícios.
+- Guarda do prontuário: pela Lei 13.787/2018 (art. 6º), o prontuário do paciente deve ser guardado por no mínimo 20 anos após o último registro. No modelo, a evolução clínica e os registros ligados a ela não podem ser apagados; ao fim do prazo, são anonimizados.
+- Biossegurança: a clínica segue as normas da ANVISA para o processamento e a esterilização do instrumental (RDC 15/2012). O controle dos ciclos de esterilização não entrou neste modelo porque não foi levantado na pesquisa de campo; fica como item a confirmar na próxima etapa.
 - Registro profissional: todo dentista precisa ter registro no CRO, então o CRO é um atributo obrigatório para colaboradores do tipo dentista.
 - Atendimento particular: a clínica não trabalha com convênios, então não existem entidades de convênio ou guia.
 - Uma única unidade: o modelo não tem entidade de unidade/filial, mas o consultório é uma entidade própria, o que permite crescer no futuro.
@@ -171,7 +173,7 @@ Convenções adotadas (seguindo o exemplo de dicionário de dados apresentado em
 
 Todos os exemplos de valores citados abaixo são fictícios.
 
-O mesmo dicionário está em página HTML, com estilo próprio: [abrir o dicionário de dados no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html). O arquivo fica em [dicionario/dicionario-de-dados.html](dicionario/dicionario-de-dados.html) e o conteúdo é idêntico ao desta seção.
+Esta seção traz a parte conceitual do dicionário: atributo, descrição e regra de negócio de cada entidade. A versão completa, com SGBD e collation, tipo físico, obrigatoriedade, leitura de cada expressão, chaves e índices, fluxo de dados, log de acesso e matriz de acesso com LGPD, está em página HTML: [abrir o dicionário de dados no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html). O arquivo fica em [dicionario/dicionario-de-dados.html](dicionario/dicionario-de-dados.html).
 
 ### PACIENTE
 

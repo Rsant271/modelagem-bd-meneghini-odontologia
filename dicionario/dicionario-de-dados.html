@@ -3,47 +3,64 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dicionário de Dados Conceitual: Meneghini Odontologia Integrada</title>
+<title>Dicionário de Dados: Meneghini Odontologia Integrada</title>
 <style>
   :root { --azul: #2b3a8f; --azul-claro: #e9ebf7; --cinza: #555; --borda: #cfd3e6; }
   * { box-sizing: border-box; }
   body { font-family: Arial, Helvetica, sans-serif; color: #222; background: #fff; margin: 0; padding: 24px 16px; line-height: 1.5; }
-  main { max-width: 1000px; margin: 0 auto; }
+  main { max-width: 1040px; margin: 0 auto; }
   header { border-bottom: 3px solid var(--azul); padding-bottom: 12px; margin-bottom: 24px; }
   h1 { color: var(--azul); font-size: 1.7em; margin: 0 0 4px; }
-  h2 { color: var(--azul); font-size: 1.3em; border-bottom: 1px solid var(--borda); padding-bottom: 4px; margin: 36px 0 8px; }
-  h3 { font-size: 1.05em; margin: 20px 0 6px; color: var(--cinza); }
+  h2 { color: var(--azul); font-size: 1.3em; border-bottom: 1px solid var(--borda); padding-bottom: 4px; margin: 40px 0 10px; }
+  h3 { font-size: 1.1em; margin: 28px 0 6px; color: #1c1e5a; }
+  h4 { font-size: 1em; margin: 14px 0 4px; color: var(--cinza); }
   .sub { font-size: 1.05em; margin: 0 0 6px; }
   .meta { color: var(--cinza); font-size: 0.92em; margin: 2px 0; }
   nav ul { columns: 3; padding-left: 20px; margin: 8px 0 0; }
   nav li { margin: 2px 0; }
   a { color: var(--azul); }
-  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 0.95em; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 0.93em; }
   th, td { border: 1px solid var(--borda); padding: 6px 8px; text-align: left; vertical-align: top; }
   th { background: var(--azul-claro); color: var(--azul); }
   tbody tr:nth-child(even) { background: #f7f8fc; }
-  td:first-child { font-family: "Courier New", monospace; width: 24%; }
+  table.attrs td:first-child { font-family: "Courier New", monospace; width: 19%; }
+  table.attrs td:nth-child(2) { font-family: "Courier New", monospace; font-size: 0.92em; width: 19%; overflow-wrap: anywhere; }
+  table.attrs td:nth-child(3) { width: 11%; }
+  table.conv td:first-child { font-family: "Courier New", monospace; width: 14%; }
+  table.matriz td:first-child { font-weight: bold; width: 18%; }
   code, pre { font-family: "Courier New", monospace; font-size: 0.95em; }
   pre { background: #f4f5fa; border-left: 4px solid var(--azul); padding: 8px 12px; overflow-x: auto; margin: 6px 0 10px; white-space: pre-wrap; }
   .fraca { display: inline-block; font-size: 0.7em; font-weight: normal; background: #fff3e0; color: #8a5a00; border: 1px solid #f0c48a; border-radius: 4px; padding: 1px 6px; margin-left: 8px; vertical-align: middle; }
   .nota { color: var(--cinza); font-size: 0.92em; margin: 0 0 8px; }
+  .leitura { background: #f7f8fc; border: 1px solid var(--borda); border-radius: 4px; padding: 8px 12px; margin: 6px 0 10px; }
+  .leitura strong { color: var(--azul); }
   .aviso { background: #fff8e1; border: 1px solid #f0d58c; border-radius: 4px; padding: 8px 12px; font-size: 0.95em; }
   .topo { font-size: 0.85em; }
+  ul.indices { margin: 4px 0 8px; padding-left: 22px; }
   footer { border-top: 1px solid var(--borda); margin-top: 36px; padding-top: 12px; color: var(--cinza); font-size: 0.9em; }
-  @media (max-width: 700px) { nav ul { columns: 1; } td:first-child { width: auto; } }
-  @media print { nav, .topo { display: none; } h2 { page-break-after: avoid; } table { page-break-inside: avoid; } }
+  @media (max-width: 700px) { nav ul { columns: 1; } table.attrs td { width: auto; } }
+  @media print { nav, .topo { display: none; } h2, h3 { page-break-after: avoid; } table { page-break-inside: avoid; } }
 </style>
 </head>
 <body>
 <main id="top">
 <header>
-  <h1>Dicionário de Dados Conceitual (Preliminar)</h1>
+  <h1>Dicionário de Dados</h1>
   <p class="sub">Modelagem de Banco de Dados para a Clínica Meneghini Odontologia Integrada</p>
-  <p class="meta">Modelagem de Banco de Dados (UNICID 2260065) · Entrega 1 · versão 1.0, setembro/2026</p>
+  <p class="meta">Modelagem de Banco de Dados (UNICID 2260065) · versão v1.1, 6 de outubro de 2026</p>
   <p class="meta">Grupo: Renan Silva dos Santos (RGM 47203099) · Leonardo Alves Tavares Calixta (RGM 47323485) · David Carlos da Fonseca Junior (RGM 46638202)</p>
-  <p class="meta">Esta página é a versão em HTML da Seção 5 do <a href="https://github.com/Rsant271/modelagem-bd-meneghini-odontologia#5-dicion%C3%A1rio-de-dados-conceitual-preliminar">README do repositório</a>. O conteúdo é o mesmo.</p>
+  <p class="meta">A parte conceitual (definição, atributo, descrição e regra de negócio) é a mesma da <a href="https://github.com/Rsant271/modelagem-bd-meneghini-odontologia#5-dicion%C3%A1rio-de-dados-conceitual-preliminar">Seção 5 do README</a>. As seções técnicas (SGBD, tipos, índices, fluxo de dados, log e acessos) estão só nesta página.</p>
 </header>
-<nav aria-label="Entidades">
+<nav aria-label="Sumário">
+  <strong>Sumário</strong>
+  <ul>
+    <li><a href="#convencoes">1. Convenções técnicas</a></li>
+    <li><a href="#cardinalidades">2. Entidades, cardinalidades e associativas</a></li>
+    <li><a href="#fluxo">3. Fluxo de dados</a></li>
+    <li><a href="#entidades">4. Dicionário por entidade</a></li>
+    <li><a href="#log">5. Log de acesso</a></li>
+    <li><a href="#acesso">6. Acesso por operação e LGPD</a></li>
+  </ul>
   <strong>Entidades (12)</strong>
   <ul>
     <li><a href="#paciente">PACIENTE</a></li>
@@ -60,239 +77,450 @@
     <li><a href="#pedido-laboratorio">PEDIDO_LABORATORIO</a></li>
   </ul>
 </nav>
-<h2 id="convencoes">Convenções</h2>
-<p>Os nomes dos atributos seguem os prefixos do exemplo de dicionário de dados apresentado em aula, mais dois que acrescentamos (<code>NR_</code> e <code>VL_</code>).</p>
-<table>
-  <thead><tr><th>Prefixo</th><th>Uso</th></tr></thead>
+<h2 id="convencoes">1. Convenções técnicas</h2>
+<table class="conv">
   <tbody>
-    <tr><td>ID_</td><td>identificador</td></tr>
-    <tr><td>NM_</td><td>nome</td></tr>
-    <tr><td>DT_</td><td>data</td></tr>
-    <tr><td>TP_</td><td>tipo</td></tr>
-    <tr><td>CD_</td><td>código ou status</td></tr>
-    <tr><td>QT_</td><td>quantidade</td></tr>
-    <tr><td>IN_</td><td>indicador sim/não</td></tr>
-    <tr><td>DS_</td><td>descrição</td></tr>
-    <tr><td>NR_</td><td>número de documento ou número sequencial</td></tr>
-    <tr><td>VL_</td><td>valor em reais</td></tr>
+    <tr><td>SGBD</td><td>MySQL 8.0 (Community), mecanismo de armazenamento InnoDB. O InnoDB garante transações e chaves estrangeiras, necessárias para manter juntos orçamento, itens, contrato e parcelas.</td></tr>
+    <tr><td>Codificação</td><td><code>utf8mb4</code> com collation <code>utf8mb4_0900_ai_ci</code>. Escolhida no lugar de <code>latin1</code> porque cobre toda a acentuação do português sem perda em nomes e textos livres. O sufixo <code>ai_ci</code> ignora acento e maiúscula na comparação: a recepção digita "jose" e encontra "José".</td></tr>
+    <tr><td>Versão</td><td>v1.1, 6 de outubro de 2026. Qualquer alteração de estrutura gera nova versão registrada no histórico abaixo; a prática atende ao princípio da responsabilização e prestação de contas da LGPD (art. 6º, X).</td></tr>
   </tbody>
 </table>
-<p>Na definição de cada entidade usamos a notação abaixo.</p>
+<h4>Histórico de versões</h4>
 <table>
+  <thead><tr><th>Versão</th><th>Data</th><th>O que mudou</th></tr></thead>
+  <tbody>
+    <tr><td>v1.0</td><td>22/09/2026</td><td>Dicionário preliminar da Entrega 1: atributo, descrição e regra de negócio por entidade.</td></tr>
+    <tr><td>v1.1</td><td>06/10/2026</td><td>Versão completa pedida na devolutiva: SGBD e collation, cardinalidades, fluxo de dados, leitura das expressões, tipo físico, índices, log de acesso e matriz de acesso com LGPD.</td></tr>
+  </tbody>
+</table>
+<h4>Notação formal</h4>
+<table class="conv">
   <thead><tr><th>Símbolo</th><th>Significado</th></tr></thead>
   <tbody>
-    <tr><td>@</td><td>identificador da entidade</td></tr>
-    <tr><td>+</td><td>liga os atributos</td></tr>
+    <tr><td>=</td><td>é composto de</td></tr>
+    <tr><td>+</td><td>e (liga os atributos obrigatórios)</td></tr>
     <tr><td>( )</td><td>atributo opcional</td></tr>
-    <tr><td>1{ }N</td><td>atributo multivalorado ou grupo que se repete</td></tr>
+    <tr><td>1{ }N</td><td>repetição: atributo multivalorado ou grupo que se repete, de 1 a N vezes</td></tr>
+    <tr><td>@</td><td>identificador da entidade (chave); nas entidades fracas é o identificador parcial</td></tr>
+  </tbody>
+</table>
+<h4>Prefixos padronizados</h4>
+<table class="conv">
+  <thead><tr><th>Prefixo</th><th>Uso</th></tr></thead>
+  <tbody>
+    <tr><td>ID_</td><td>identificador; não sofre operação matemática</td></tr>
+    <tr><td>NM_</td><td>nome</td></tr>
+    <tr><td>DT_</td><td>data, ou data e hora</td></tr>
+    <tr><td>TP_</td><td>tipo (categorização)</td></tr>
+    <tr><td>CD_</td><td>código de domínio ou status</td></tr>
+    <tr><td>QT_</td><td>quantidade</td></tr>
+    <tr><td>IN_</td><td>indicador sim/não</td></tr>
+    <tr><td>DS_</td><td>descrição ou texto livre</td></tr>
+    <tr><td>NR_</td><td>número de documento ou número sequencial (acrescentado pelo grupo)</td></tr>
+    <tr><td>VL_</td><td>valor em reais (acrescentado pelo grupo)</td></tr>
   </tbody>
 </table>
 <p class="aviso">Todos os exemplos de valores citados neste dicionário são fictícios. Nenhum dado real de paciente ou colaborador da clínica foi usado.</p>
-<h2 id="entidades">Entidades</h2>
+<h2 id="cardinalidades">2. Entidades, cardinalidades e associativas</h2>
+<p>Definição de cada entidade em uma frase e o motivo de ela existir no modelo.</p>
+<table>
+  <thead><tr><th>Entidade</th><th>O que representa</th><th>Por que é uma entidade</th></tr></thead>
+  <tbody>
+    <tr><td>PACIENTE</td><td>Pessoa atendida pela clínica</td><td>É o centro de todos os processos</td></tr>
+    <tr><td>COLABORADOR</td><td>Quem trabalha na clínica (dentista, recepção, comercial, laboratório etc.)</td><td>Uma única entidade para todos os cargos evita repetir os mesmos dados; o cargo diferencia quem pode atender</td></tr>
+    <tr><td>ESPECIALIDADE</td><td>Área de atuação do dentista</td><td>Um dentista pode ter mais de uma, por isso não cabe como um simples atributo</td></tr>
+    <tr><td>CONSULTORIO</td><td>Sala de atendimento</td><td>O consultório muda conforme a agenda; ele pertence ao agendamento, não ao dentista</td></tr>
+    <tr><td>PROCEDIMENTO</td><td>Serviço da tabela de preços</td><td>Existe mesmo sem nenhum paciente</td></tr>
+    <tr><td>ORCAMENTO</td><td>Proposta feita na avaliação</td><td>É o documento que o comercial negocia e o financeiro usa</td></tr>
+    <tr><td>ITEM_ORCAMENTO</td><td>Cada procedimento do orçamento</td><td>O paciente aprova item a item e cada item tem seu próprio andamento</td></tr>
+    <tr><td>CONTRATO</td><td>Itens aprovados com forma de pagamento</td><td>Na clínica, &quot;de orçamento passa para contrato&quot;</td></tr>
+    <tr><td>PARCELA</td><td>Cada pagamento do contrato</td><td>As parcelas são registradas e baixadas uma a uma</td></tr>
+    <tr><td>AGENDAMENTO</td><td>Consulta marcada</td><td>Liga paciente, dentista e consultório em uma data; é o evento em que os itens são executados</td></tr>
+    <tr><td>EVOLUCAO_CLINICA</td><td>Registro do prontuário por consulta</td><td>Separada do agendamento por ser dado sensível, com acesso restrito</td></tr>
+    <tr><td>PEDIDO_LABORATORIO</td><td>Peça solicitada ao laboratório</td><td>Tem ciclo próprio (pedido, produção, pronto, entregue)</td></tr>
+  </tbody>
+</table>
+<p>Relacionamentos e cardinalidades, lidas em palavras. No DER a cardinalidade aparece como (mín,máx) ao lado de cada entidade, na convenção do brModelo: o número junto a uma entidade diz quantas ocorrências dela se ligam a uma ocorrência da outra.</p>
+<table>
+  <thead><tr><th>Entidade</th><th>Relacionamento</th><th>Entidade</th><th>Tipo</th><th>Leitura</th></tr></thead>
+  <tbody>
+    <tr><td>PACIENTE</td><td>MARCA</td><td>AGENDAMENTO</td><td>1:N</td><td>Um paciente tem um ou mais agendamentos (a avaliação inicial já é um); cada agendamento é de um único paciente</td></tr>
+    <tr><td>COLABORADOR</td><td>ATENDE</td><td>AGENDAMENTO</td><td>1:N</td><td>Um dentista atende vários agendamentos; cada agendamento tem um único dentista</td></tr>
+    <tr><td>CONSULTORIO</td><td>OCUPA</td><td>AGENDAMENTO</td><td>1:N</td><td>Um consultório recebe vários agendamentos; cada agendamento ocupa um único consultório</td></tr>
+    <tr><td>AGENDAMENTO</td><td>REGISTRA</td><td>EVOLUCAO_CLINICA</td><td>1:1 (opcional)</td><td>Um agendamento atendido gera uma evolução clínica; um agendamento com falta não gera</td></tr>
+    <tr><td>PACIENTE</td><td>RECEBE</td><td>ORCAMENTO</td><td>1:N</td><td>Todo paciente recebe pelo menos um orçamento (a avaliação inicial gera o orçamento) e pode receber outros depois; cada orçamento é de um único paciente</td></tr>
+    <tr><td>COLABORADOR</td><td>AVALIA</td><td>ORCAMENTO</td><td>1:N</td><td>O dentista avaliador monta vários orçamentos; cada orçamento tem um único avaliador</td></tr>
+    <tr><td>COLABORADOR</td><td>NEGOCIA</td><td>ORCAMENTO</td><td>1:N (opcional)</td><td>O comercial negocia vários orçamentos; um orçamento pode ainda não ter passado pelo comercial</td></tr>
+    <tr><td>ORCAMENTO</td><td>CONTEM</td><td>ITEM_ORCAMENTO</td><td>1:N (identificador)</td><td>Um orçamento tem um ou mais itens; cada item pertence a um único orçamento</td></tr>
+    <tr><td>PROCEDIMENTO</td><td>REFERE</td><td>ITEM_ORCAMENTO</td><td>1:N</td><td>Um procedimento da tabela aparece em vários itens; cada item se refere a um único procedimento</td></tr>
+    <tr><td>ORCAMENTO</td><td>GERA</td><td>CONTRATO</td><td>1:1 (opcional)</td><td>Um orçamento aprovado gera um contrato; um orçamento recusado não gera</td></tr>
+    <tr><td>CONTRATO</td><td>TEM</td><td>PARCELA</td><td>1:N (identificador)</td><td>Um contrato tem uma ou mais parcelas; cada parcela é de um único contrato</td></tr>
+    <tr><td>AGENDAMENTO</td><td>EXECUTA</td><td>ITEM_ORCAMENTO</td><td>N:N</td><td>Em uma consulta o dentista pode executar vários itens; um item mais longo pode ocupar várias consultas</td></tr>
+    <tr><td>PACIENTE</td><td>PERTENCE</td><td>PEDIDO_LABORATORIO</td><td>1:N</td><td>Um paciente pode ter vários pedidos; cada pedido é de um único paciente</td></tr>
+    <tr><td>COLABORADOR</td><td>SOLICITA</td><td>PEDIDO_LABORATORIO</td><td>1:N</td><td>Um dentista solicita vários pedidos; cada pedido tem um único dentista solicitante</td></tr>
+    <tr><td>COLABORADOR</td><td>POSSUI</td><td>ESPECIALIDADE</td><td>N:N</td><td>Um dentista pode ter mais de uma especialidade; uma especialidade pode ser de vários dentistas</td></tr>
+  </tbody>
+</table>
+<h4>Entidades associativas</h4>
+<p>O modelo conceitual tem dois relacionamentos N:N, desenhados como losangos simples porque não têm atributos próprios. No modelo lógico cada um vira uma tabela associativa, cuja chave primária é a junção das chaves das duas entidades:</p>
+<table>
+  <thead><tr><th>Relacionamento</th><th>Tabela no modelo lógico</th><th>Chave</th><th>Leitura</th></tr></thead>
+  <tbody>
+    <tr><td>COLABORADOR POSSUI ESPECIALIDADE</td><td>COLABORADOR_ESPECIALIDADE</td><td>(ID_COLABORADOR, ID_ESPECIALIDADE)</td><td>Uma linha para cada especialidade de cada dentista. Um dentista com duas especialidades gera duas linhas.</td></tr>
+    <tr><td>AGENDAMENTO EXECUTA ITEM_ORCAMENTO</td><td>AGENDAMENTO_ITEM</td><td>(ID_AGENDAMENTO, ID_ORCAMENTO, NR_ITEM)</td><td>Uma linha para cada item executado em cada consulta. Um implante feito em duas sessões gera duas linhas, uma por consulta.</td></tr>
+  </tbody>
+</table>
+<p>As duas entidades fracas (ITEM_ORCAMENTO e PARCELA) também ganham chave composta no modelo lógico: o identificador parcial junto com a chave da entidade forte, (ID_ORCAMENTO, NR_ITEM) e (ID_CONTRATO, NR_PARCELA).</p>
+<h2 id="fluxo">3. Fluxo de dados</h2>
+<p>O fluxo abaixo acompanha o caminho do paciente descrito na Seção 2 do README e mostra, em cada etapa, quem opera o sistema e em quais entidades o dado é gravado ou lido.</p>
+<table>
+  <thead><tr><th>Etapa</th><th>Quem</th><th>O que acontece</th><th>Dados gravados ou lidos</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Recepção</td><td>A pessoa comparece à avaliação. A recepção abre o cadastro e registra a avaliação agendada.</td><td>PACIENTE (com telefones e endereço); AGENDAMENTO do tipo avaliação, ligado a um COLABORADOR dentista e a um CONSULTORIO</td></tr>
+    <tr><td>2</td><td>Dentista avaliador</td><td>Examina o paciente e monta o orçamento, item a item, a partir da tabela de preços.</td><td>ORCAMENTO; ITEM_ORCAMENTO, cada um apontando para um PROCEDIMENTO; leitura de VL_TABELA</td></tr>
+    <tr><td>3</td><td>Comercial</td><td>Negocia com o paciente. Registra o valor com desconto e a aprovação ou recusa de cada item.</td><td>ITEM_ORCAMENTO (VL_NEGOCIADO, CD_STATUS_APROVACAO); ORCAMENTO (CD_STATUS, VL_TOTAL)</td></tr>
+    <tr><td>4</td><td>Financeiro</td><td>Com itens aprovados, formaliza o contrato, define a forma de pagamento e gera as parcelas.</td><td>CONTRATO; PARCELA (uma linha por parcela)</td></tr>
+    <tr><td>5</td><td>Recepção</td><td>Agenda as consultas de tratamento e acompanha os status (confirmado, atendido, falta, reagendado).</td><td>AGENDAMENTO (novos registros e mudança de CD_STATUS)</td></tr>
+    <tr><td>6</td><td>Dentista</td><td>Atende a consulta, executa itens do plano e escreve a evolução clínica com os próximos passos.</td><td>EXECUTA (AGENDAMENTO × ITEM_ORCAMENTO); ITEM_ORCAMENTO (CD_STATUS_EXECUCAO); EVOLUCAO_CLINICA</td></tr>
+    <tr><td>7</td><td>Dentista e laboratório</td><td>Se o tratamento precisa de peça, o dentista abre o pedido; o laboratório atualiza até a entrega.</td><td>PEDIDO_LABORATORIO (criação pelo dentista; CD_STATUS e DT_ENTREGA pelo laboratório)</td></tr>
+    <tr><td>8</td><td>Financeiro</td><td>Cobra mês a mês e dá baixa nas parcelas pagas; o tratamento avança conforme o pagamento.</td><td>PARCELA (DT_PAGAMENTO, CD_STATUS)</td></tr>
+    <tr><td>9</td><td>Todos</td><td>Toda leitura e escrita nas entidades acima fica registrada no log de acesso.</td><td>Log do SGBD e tabela LOG_ALTERACAO (seção 5)</td></tr>
+  </tbody>
+</table>
+<p>Os fluxogramas dos processos 1 a 3 estão na Seção 2 do README; esta tabela é a leitura deles do ponto de vista do banco de dados.</p>
+<h2 id="entidades">4. Dicionário por entidade</h2>
+<p>Para cada entidade: definição, expressão formal, leitura em português, tabela de atributos (com o tipo físico previsto no MySQL 8 e a obrigatoriedade) e as chaves e índices previstos para o modelo lógico, com o motivo de cada um. As chaves estrangeiras citadas nos índices não aparecem no DER conceitual: elas surgem na conversão para o modelo lógico.</p>
 <article id="paciente">
   <h3>PACIENTE</h3>
   <p>Pessoa que procura a clínica e passa pela avaliação inicial.</p>
   <pre>PACIENTE = @ID_PACIENTE + NM_PACIENTE + NR_CPF + DT_NASCIMENTO + 1{NR_TELEFONE}N + (DS_EMAIL) + ENDERECO + DT_CADASTRO + TP_ORIGEM
 ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP</pre>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <p class="leitura"><strong>Leitura:</strong> Um paciente é identificado por ID_PACIENTE e tem, obrigatoriamente, nome, CPF, data de nascimento, endereço (logradouro, bairro e CEP), data de cadastro e canal de origem. Tem pelo menos um telefone e pode ter vários, por isso o 1{ }N. O e-mail é opcional.</p>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>ID_PACIENTE</td><td>Número que identifica o paciente no sistema</td><td>Obrigatório, único, gerado automaticamente</td></tr>
-      <tr><td>NM_PACIENTE</td><td>Nome completo do paciente</td><td>Obrigatório</td></tr>
-      <tr><td>NR_CPF</td><td>CPF do paciente</td><td>Obrigatório e único; necessário para o contrato</td></tr>
-      <tr><td>DT_NASCIMENTO</td><td>Data de nascimento</td><td>Obrigatório</td></tr>
-      <tr><td>NR_TELEFONE</td><td>Telefone(s) de contato</td><td>Pelo menos um; pode haver mais de um (multivalorado); usado para confirmar as consultas</td></tr>
-      <tr><td>DS_EMAIL</td><td>E-mail de contato</td><td>Opcional</td></tr>
-      <tr><td>ENDERECO (DS_LOGRADOURO, NM_BAIRRO, NR_CEP)</td><td>Endereço do paciente (atributo composto)</td><td>Obrigatório para o contrato</td></tr>
-      <tr><td>DT_CADASTRO</td><td>Data em que o paciente foi cadastrado</td><td>Preenchida automaticamente no cadastro</td></tr>
-      <tr><td>TP_ORIGEM</td><td>Como o paciente chegou à clínica</td><td>Valores possíveis: anúncio, indicação, fachada, parceria</td></tr>
+      <tr><td>ID_PACIENTE</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Número que identifica o paciente no sistema</td><td>Obrigatório, único, gerado automaticamente</td></tr>
+      <tr><td>NM_PACIENTE</td><td>VARCHAR(120)</td><td>Sim</td><td>Nome completo do paciente</td><td>Obrigatório</td></tr>
+      <tr><td>NR_CPF</td><td>CHAR(11)</td><td>Sim</td><td>CPF do paciente</td><td>Obrigatório e único; necessário para o contrato</td></tr>
+      <tr><td>DT_NASCIMENTO</td><td>DATE</td><td>Sim</td><td>Data de nascimento</td><td>Obrigatório</td></tr>
+      <tr><td>NR_TELEFONE</td><td>VARCHAR(15), uma linha por telefone</td><td>Sim (um ou mais)</td><td>Telefone(s) de contato</td><td>Pelo menos um; pode haver mais de um (multivalorado); usado para confirmar as consultas</td></tr>
+      <tr><td>DS_EMAIL</td><td>VARCHAR(120)</td><td>Não</td><td>E-mail de contato</td><td>Opcional</td></tr>
+      <tr><td>ENDERECO (DS_LOGRADOURO, NM_BAIRRO, NR_CEP)</td><td>VARCHAR(150) + VARCHAR(80) + CHAR(8)</td><td>Sim</td><td>Endereço do paciente (atributo composto)</td><td>Obrigatório para o contrato</td></tr>
+      <tr><td>DT_CADASTRO</td><td>DATE</td><td>Sim</td><td>Data em que o paciente foi cadastrado</td><td>Preenchida automaticamente no cadastro</td></tr>
+      <tr><td>TP_ORIGEM</td><td>ENUM(&#x27;anuncio&#x27;, &#x27;indicacao&#x27;, &#x27;fachada&#x27;, &#x27;parceria&#x27;)</td><td>Sim</td><td>Como o paciente chegou à clínica</td><td>Valores possíveis: anúncio, indicação, fachada, parceria</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária em ID_PACIENTE.</li>
+    <li>Índice único em NR_CPF: impede cadastrar o mesmo paciente duas vezes.</li>
+    <li>Índice em NM_PACIENTE: busca por nome na recepção (RNF04).</li>
+    <li>No modelo lógico, NR_TELEFONE vira a tabela TELEFONE_PACIENTE, com chave (ID_PACIENTE, NR_TELEFONE): é a eliminação do atributo multivalorado (1FN).</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="colaborador">
   <h3>COLABORADOR</h3>
   <p>Pessoa que trabalha na clínica: dentistas, auxiliares, recepção, financeiro, comercial, relacionamento, campanha, marketing, laboratório e apoio.</p>
   <pre>COLABORADOR = @ID_COLABORADOR + NM_COLABORADOR + NR_CPF + TP_CARGO + NM_SETOR + (NR_CRO) + DT_ADMISSAO + IN_ATIVO</pre>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <p class="leitura"><strong>Leitura:</strong> Um colaborador é identificado por ID_COLABORADOR e tem nome, CPF, cargo, setor, data de admissão e o indicador de ativo. O CRO aparece como opcional na estrutura porque só dentistas têm; a regra de negócio é que o torna obrigatório para esse cargo.</p>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>ID_COLABORADOR</td><td>Número que identifica o colaborador</td><td>Obrigatório, único</td></tr>
-      <tr><td>NM_COLABORADOR</td><td>Nome completo</td><td>Obrigatório</td></tr>
-      <tr><td>NR_CPF</td><td>CPF do colaborador</td><td>Obrigatório e único</td></tr>
-      <tr><td>TP_CARGO</td><td>Função na clínica (ex.: dentista, auxiliar, recepcionista, financeiro, comercial, laboratório)</td><td>Obrigatório; só colaboradores com cargo &quot;dentista&quot; podem atender agendamentos e ter especialidades</td></tr>
-      <tr><td>NM_SETOR</td><td>Setor em que trabalha (ex.: clínico, recepção, financeiro, comercial, laboratório)</td><td>Obrigatório</td></tr>
-      <tr><td>NR_CRO</td><td>Número de registro no Conselho Regional de Odontologia</td><td>Obrigatório e único para dentistas; vazio para os demais cargos</td></tr>
-      <tr><td>DT_ADMISSAO</td><td>Data de entrada na clínica</td><td>Obrigatório</td></tr>
-      <tr><td>IN_ATIVO</td><td>Indica se o colaborador está ativo</td><td>Colaborador inativo não pode ser escolhido em novos agendamentos, mas seu histórico é mantido</td></tr>
+      <tr><td>ID_COLABORADOR</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Número que identifica o colaborador</td><td>Obrigatório, único</td></tr>
+      <tr><td>NM_COLABORADOR</td><td>VARCHAR(120)</td><td>Sim</td><td>Nome completo</td><td>Obrigatório</td></tr>
+      <tr><td>NR_CPF</td><td>CHAR(11)</td><td>Sim</td><td>CPF do colaborador</td><td>Obrigatório e único</td></tr>
+      <tr><td>TP_CARGO</td><td>VARCHAR(40)</td><td>Sim</td><td>Função na clínica (ex.: dentista, auxiliar, recepcionista, financeiro, comercial, laboratório)</td><td>Obrigatório; só colaboradores com cargo &quot;dentista&quot; podem atender agendamentos e ter especialidades</td></tr>
+      <tr><td>NM_SETOR</td><td>VARCHAR(40)</td><td>Sim</td><td>Setor em que trabalha (ex.: clínico, recepção, financeiro, comercial, laboratório)</td><td>Obrigatório</td></tr>
+      <tr><td>NR_CRO</td><td>VARCHAR(20)</td><td>Não</td><td>Número de registro no Conselho Regional de Odontologia</td><td>Obrigatório e único para dentistas; vazio para os demais cargos</td></tr>
+      <tr><td>DT_ADMISSAO</td><td>DATE</td><td>Sim</td><td>Data de entrada na clínica</td><td>Obrigatório</td></tr>
+      <tr><td>IN_ATIVO</td><td>BOOLEAN</td><td>Sim</td><td>Indica se o colaborador está ativo</td><td>Colaborador inativo não pode ser escolhido em novos agendamentos, mas seu histórico é mantido</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária em ID_COLABORADOR.</li>
+    <li>Índice único em NR_CPF.</li>
+    <li>Índice único em NR_CRO, aceitando vazio para quem não é dentista: dois dentistas não podem ter o mesmo registro.</li>
+    <li>Índice em (TP_CARGO, IN_ATIVO): lista de dentistas ativos ao montar a agenda.</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="especialidade">
   <h3>ESPECIALIDADE</h3>
   <p>Área da odontologia em que um dentista atua.</p>
   <pre>ESPECIALIDADE = @ID_ESPECIALIDADE + NM_ESPECIALIDADE + (DS_ESPECIALIDADE)</pre>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <p class="leitura"><strong>Leitura:</strong> Uma especialidade tem identificador e nome; a descrição é opcional.</p>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>ID_ESPECIALIDADE</td><td>Identificador da especialidade</td><td>Obrigatório, único</td></tr>
-      <tr><td>NM_ESPECIALIDADE</td><td>Nome da especialidade (ex.: implantodontia, clínica geral, ortodontia, endodontia)</td><td>Obrigatório e único</td></tr>
-      <tr><td>DS_ESPECIALIDADE</td><td>Descrição resumida</td><td>Opcional</td></tr>
+      <tr><td>ID_ESPECIALIDADE</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Identificador da especialidade</td><td>Obrigatório, único</td></tr>
+      <tr><td>NM_ESPECIALIDADE</td><td>VARCHAR(60)</td><td>Sim</td><td>Nome da especialidade (ex.: implantodontia, clínica geral, ortodontia, endodontia)</td><td>Obrigatório e único</td></tr>
+      <tr><td>DS_ESPECIALIDADE</td><td>VARCHAR(255)</td><td>Não</td><td>Descrição resumida</td><td>Opcional</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária em ID_ESPECIALIDADE.</li>
+    <li>Índice único em NM_ESPECIALIDADE.</li>
+    <li>O N:N com COLABORADOR (POSSUI) vira a tabela COLABORADOR_ESPECIALIDADE, com chave (ID_COLABORADOR, ID_ESPECIALIDADE).</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="consultorio">
   <h3>CONSULTORIO</h3>
   <p>Sala com cadeira odontológica onde os atendimentos acontecem.</p>
   <pre>CONSULTORIO = @ID_CONSULTORIO + NR_CONSULTORIO + IN_ATIVO</pre>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <p class="leitura"><strong>Leitura:</strong> Um consultório tem identificador, número da sala e o indicador de ativo.</p>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>ID_CONSULTORIO</td><td>Identificador do consultório</td><td>Obrigatório, único</td></tr>
-      <tr><td>NR_CONSULTORIO</td><td>Número da sala (a clínica tem 7)</td><td>Obrigatório e único</td></tr>
-      <tr><td>IN_ATIVO</td><td>Indica se o consultório está em uso</td><td>Só consultórios ativos podem receber agendamentos</td></tr>
+      <tr><td>ID_CONSULTORIO</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Identificador do consultório</td><td>Obrigatório, único</td></tr>
+      <tr><td>NR_CONSULTORIO</td><td>TINYINT UNSIGNED</td><td>Sim</td><td>Número da sala (a clínica tem 7)</td><td>Obrigatório e único</td></tr>
+      <tr><td>IN_ATIVO</td><td>BOOLEAN</td><td>Sim</td><td>Indica se o consultório está em uso</td><td>Só consultórios ativos podem receber agendamentos</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária em ID_CONSULTORIO.</li>
+    <li>Índice único em NR_CONSULTORIO: não existem duas salas com o mesmo número.</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="procedimento">
   <h3>PROCEDIMENTO</h3>
   <p>Item da tabela de serviços da clínica, com preço de tabela.</p>
   <pre>PROCEDIMENTO = @ID_PROCEDIMENTO + CD_PROCEDIMENTO + NM_PROCEDIMENTO + (DS_PROCEDIMENTO) + VL_TABELA + (QT_DURACAO_MIN)</pre>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <p class="leitura"><strong>Leitura:</strong> Um procedimento tem identificador, código interno, nome e preço de tabela; a descrição e a duração estimada são opcionais.</p>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>ID_PROCEDIMENTO</td><td>Identificador do procedimento</td><td>Obrigatório, único</td></tr>
-      <tr><td>CD_PROCEDIMENTO</td><td>Código interno usado na tabela de preços (ex.: <code>IMP-01</code>)</td><td>Obrigatório e único</td></tr>
-      <tr><td>NM_PROCEDIMENTO</td><td>Nome do procedimento (ex.: limpeza, restauração, canal, implante)</td><td>Obrigatório</td></tr>
-      <tr><td>DS_PROCEDIMENTO</td><td>Descrição do que o procedimento inclui</td><td>Opcional</td></tr>
-      <tr><td>VL_TABELA</td><td>Preço de tabela em reais</td><td>Obrigatório; é a base do orçamento. O desconto é dado no item, nunca aqui</td></tr>
-      <tr><td>QT_DURACAO_MIN</td><td>Duração estimada em minutos</td><td>Opcional; ajuda a montar a agenda</td></tr>
+      <tr><td>ID_PROCEDIMENTO</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Identificador do procedimento</td><td>Obrigatório, único</td></tr>
+      <tr><td>CD_PROCEDIMENTO</td><td>VARCHAR(10)</td><td>Sim</td><td>Código interno usado na tabela de preços (ex.: <code>IMP-01</code>)</td><td>Obrigatório e único</td></tr>
+      <tr><td>NM_PROCEDIMENTO</td><td>VARCHAR(100)</td><td>Sim</td><td>Nome do procedimento (ex.: limpeza, restauração, canal, implante)</td><td>Obrigatório</td></tr>
+      <tr><td>DS_PROCEDIMENTO</td><td>TEXT</td><td>Não</td><td>Descrição do que o procedimento inclui</td><td>Opcional</td></tr>
+      <tr><td>VL_TABELA</td><td>DECIMAL(10,2)</td><td>Sim</td><td>Preço de tabela em reais</td><td>Obrigatório; é a base do orçamento. O desconto é dado no item, nunca aqui</td></tr>
+      <tr><td>QT_DURACAO_MIN</td><td>SMALLINT UNSIGNED</td><td>Não</td><td>Duração estimada em minutos</td><td>Opcional; ajuda a montar a agenda</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária em ID_PROCEDIMENTO.</li>
+    <li>Índice único em CD_PROCEDIMENTO: o código da tabela de preços não se repete.</li>
+    <li>Índice em NM_PROCEDIMENTO: busca pelo nome ao montar o orçamento.</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="orcamento">
   <h3>ORCAMENTO</h3>
   <p>Proposta de tratamento montada na avaliação, composta por itens.</p>
   <pre>ORCAMENTO = @ID_ORCAMENTO + DT_EMISSAO + VL_TOTAL + CD_STATUS + 1{ITEM_ORCAMENTO}N</pre>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <p class="leitura"><strong>Leitura:</strong> Um orçamento tem identificador, data de emissão, valor total e situação, e é formado por um ou mais itens (1{ITEM_ORCAMENTO}N), descritos na entidade fraca ITEM_ORCAMENTO.</p>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>ID_ORCAMENTO</td><td>Identificador do orçamento</td><td>Obrigatório, único</td></tr>
-      <tr><td>DT_EMISSAO</td><td>Data da avaliação em que o orçamento foi montado</td><td>Obrigatório</td></tr>
-      <tr><td>VL_TOTAL</td><td>Soma dos valores negociados dos itens aprovados</td><td>Calculado a partir dos itens</td></tr>
-      <tr><td>CD_STATUS</td><td>Situação do orçamento</td><td>Valores: em negociação, aprovado, aprovado parcialmente, recusado</td></tr>
+      <tr><td>ID_ORCAMENTO</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Identificador do orçamento</td><td>Obrigatório, único</td></tr>
+      <tr><td>DT_EMISSAO</td><td>DATE</td><td>Sim</td><td>Data da avaliação em que o orçamento foi montado</td><td>Obrigatório</td></tr>
+      <tr><td>VL_TOTAL</td><td>DECIMAL(10,2)</td><td>Sim</td><td>Soma dos valores negociados dos itens aprovados</td><td>Calculado a partir dos itens</td></tr>
+      <tr><td>CD_STATUS</td><td>ENUM(&#x27;em_negociacao&#x27;, &#x27;aprovado&#x27;, &#x27;aprovado_parcial&#x27;, &#x27;recusado&#x27;)</td><td>Sim</td><td>Situação do orçamento</td><td>Valores: em negociação, aprovado, aprovado parcialmente, recusado</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária em ID_ORCAMENTO.</li>
+    <li>No modelo lógico recebe como chaves estrangeiras o paciente (RECEBE), o dentista avaliador (AVALIA) e o comercial que negociou (NEGOCIA, opcional).</li>
+    <li>Índice em (ID_PACIENTE, DT_EMISSAO): histórico do paciente (RF15).</li>
+    <li>Índice em CD_STATUS: fila do comercial, orçamentos em negociação.</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="item-orcamento">
   <h3>ITEM_ORCAMENTO <span class="fraca">entidade fraca</span></h3>
   <p>Cada procedimento dentro de um orçamento. Só existe dentro de um orçamento.</p>
   <pre>ITEM_ORCAMENTO = @NR_ITEM + (NR_DENTE) + TP_FASE + VL_NEGOCIADO + CD_STATUS_APROVACAO + CD_STATUS_EXECUCAO</pre>
+  <p class="leitura"><strong>Leitura:</strong> Um item é identificado pelo seu número dentro do orçamento (identificador parcial: só faz sentido junto com ID_ORCAMENTO). Tem fase, valor negociado e duas situações, a de aprovação e a de execução; o dente é opcional.</p>
   <p class="nota"><code>NR_ITEM</code> é identificador parcial: só identifica o item dentro do orçamento ao qual pertence.</p>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>NR_ITEM</td><td>Número sequencial do item dentro do orçamento</td><td>Identificador parcial: só identifica o item dentro do orçamento ao qual pertence (entidade fraca)</td></tr>
-      <tr><td>NR_DENTE</td><td>Dente ao qual o procedimento se refere (ex.: 26)</td><td>Opcional, pois alguns procedimentos não são por dente (ex.: limpeza)</td></tr>
-      <tr><td>TP_FASE</td><td>Fase do procedimento</td><td>Valores: cirúrgica, protética, ambas (usado principalmente em implantes)</td></tr>
-      <tr><td>VL_NEGOCIADO</td><td>Valor final do item após o desconto</td><td>Não pode ser maior que o preço de tabela; o desconto fica dentro da margem permitida</td></tr>
-      <tr><td>CD_STATUS_APROVACAO</td><td>Se o paciente aprovou o item</td><td>Valores: aprovado, recusado. Cada item é aprovado separadamente</td></tr>
-      <tr><td>CD_STATUS_EXECUCAO</td><td>Andamento do item</td><td>Valores: em aberto, concluído. Começa em aberto e muda quando o dentista finaliza</td></tr>
+      <tr><td>NR_ITEM</td><td>SMALLINT UNSIGNED</td><td>Sim (identificador parcial)</td><td>Número sequencial do item dentro do orçamento</td><td>Identificador parcial: só identifica o item dentro do orçamento ao qual pertence (entidade fraca)</td></tr>
+      <tr><td>NR_DENTE</td><td>TINYINT UNSIGNED (notação FDI, 11 a 48)</td><td>Não</td><td>Dente ao qual o procedimento se refere (ex.: 26)</td><td>Opcional, pois alguns procedimentos não são por dente (ex.: limpeza)</td></tr>
+      <tr><td>TP_FASE</td><td>ENUM(&#x27;cirurgica&#x27;, &#x27;protetica&#x27;, &#x27;ambas&#x27;)</td><td>Sim</td><td>Fase do procedimento</td><td>Valores: cirúrgica, protética, ambas (usado principalmente em implantes)</td></tr>
+      <tr><td>VL_NEGOCIADO</td><td>DECIMAL(10,2)</td><td>Sim</td><td>Valor final do item após o desconto</td><td>Não pode ser maior que o preço de tabela; o desconto fica dentro da margem permitida</td></tr>
+      <tr><td>CD_STATUS_APROVACAO</td><td>ENUM(&#x27;aprovado&#x27;, &#x27;recusado&#x27;)</td><td>Sim</td><td>Se o paciente aprovou o item</td><td>Valores: aprovado, recusado. Cada item é aprovado separadamente</td></tr>
+      <tr><td>CD_STATUS_EXECUCAO</td><td>ENUM(&#x27;em_aberto&#x27;, &#x27;concluido&#x27;)</td><td>Sim</td><td>Andamento do item</td><td>Valores: em aberto, concluído. Começa em aberto e muda quando o dentista finaliza</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária composta (ID_ORCAMENTO, NR_ITEM): é a tradução da entidade fraca.</li>
+    <li>Chave estrangeira ID_PROCEDIMENTO (REFERE), com índice: quais itens usam cada procedimento.</li>
+    <li>Índice em CD_STATUS_EXECUCAO: itens em aberto do plano de tratamento (RF14).</li>
+    <li>O N:N com AGENDAMENTO (EXECUTA) vira a tabela AGENDAMENTO_ITEM, com chave (ID_AGENDAMENTO, ID_ORCAMENTO, NR_ITEM).</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="contrato">
   <h3>CONTRATO</h3>
   <p>Formalização dos itens aprovados, com a forma de pagamento.</p>
   <pre>CONTRATO = @ID_CONTRATO + DT_ASSINATURA + VL_CONTRATADO + TP_FORMA_PAGAMENTO + QT_PARCELAS + (VL_ENTRADA) + 1{PARCELA}N</pre>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <p class="leitura"><strong>Leitura:</strong> Um contrato tem identificador, data de assinatura, valor contratado, forma de pagamento e quantidade de parcelas, e é formado por uma ou mais parcelas. A entrada só existe quando a forma é boleto.</p>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>ID_CONTRATO</td><td>Identificador do contrato</td><td>Obrigatório, único</td></tr>
-      <tr><td>DT_ASSINATURA</td><td>Data em que o paciente fechou o contrato</td><td>Obrigatório</td></tr>
-      <tr><td>VL_CONTRATADO</td><td>Valor total contratado</td><td>Igual à soma dos itens aprovados do orçamento</td></tr>
-      <tr><td>TP_FORMA_PAGAMENTO</td><td>Forma de pagamento</td><td>Valores: à vista, cartão parcelado, boleto parcelado</td></tr>
-      <tr><td>QT_PARCELAS</td><td>Quantidade de parcelas</td><td>1 quando à vista</td></tr>
-      <tr><td>VL_ENTRADA</td><td>Valor da entrada</td><td>Obrigatório no boleto: no mínimo 20% do valor contratado</td></tr>
+      <tr><td>ID_CONTRATO</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Identificador do contrato</td><td>Obrigatório, único</td></tr>
+      <tr><td>DT_ASSINATURA</td><td>DATE</td><td>Sim</td><td>Data em que o paciente fechou o contrato</td><td>Obrigatório</td></tr>
+      <tr><td>VL_CONTRATADO</td><td>DECIMAL(10,2)</td><td>Sim</td><td>Valor total contratado</td><td>Igual à soma dos itens aprovados do orçamento</td></tr>
+      <tr><td>TP_FORMA_PAGAMENTO</td><td>ENUM(&#x27;a_vista&#x27;, &#x27;cartao_parcelado&#x27;, &#x27;boleto_parcelado&#x27;)</td><td>Sim</td><td>Forma de pagamento</td><td>Valores: à vista, cartão parcelado, boleto parcelado</td></tr>
+      <tr><td>QT_PARCELAS</td><td>TINYINT UNSIGNED</td><td>Sim</td><td>Quantidade de parcelas</td><td>1 quando à vista</td></tr>
+      <tr><td>VL_ENTRADA</td><td>DECIMAL(10,2)</td><td>Não</td><td>Valor da entrada</td><td>Obrigatório no boleto: no mínimo 20% do valor contratado</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária em ID_CONTRATO.</li>
+    <li>Índice único em ID_ORCAMENTO (chave estrangeira de GERA): um orçamento gera no máximo um contrato, o 1:1 do DER.</li>
+    <li>Índice em DT_ASSINATURA: fechamentos por período (consulta gerencial da Entrega 2).</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="parcela">
   <h3>PARCELA <span class="fraca">entidade fraca</span></h3>
   <p>Cada pagamento previsto de um contrato.</p>
   <pre>PARCELA = @NR_PARCELA + VL_PARCELA + DT_VENCIMENTO + (DT_PAGAMENTO) + CD_STATUS</pre>
+  <p class="leitura"><strong>Leitura:</strong> Uma parcela é identificada pelo seu número dentro do contrato (identificador parcial). Tem valor, vencimento e situação; a data de pagamento só é preenchida quando o financeiro dá a baixa.</p>
   <p class="nota"><code>NR_PARCELA</code> é identificador parcial: só identifica a parcela dentro do contrato ao qual pertence.</p>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>NR_PARCELA</td><td>Número da parcela dentro do contrato</td><td>Identificador parcial: só identifica a parcela dentro do contrato ao qual pertence (entidade fraca)</td></tr>
-      <tr><td>VL_PARCELA</td><td>Valor da parcela</td><td>Obrigatório</td></tr>
-      <tr><td>DT_VENCIMENTO</td><td>Data de vencimento</td><td>Obrigatório</td></tr>
-      <tr><td>DT_PAGAMENTO</td><td>Data em que foi paga</td><td>Preenchida quando o financeiro dá a baixa</td></tr>
-      <tr><td>CD_STATUS</td><td>Situação da parcela</td><td>Valores: aberta, paga, atrasada</td></tr>
+      <tr><td>NR_PARCELA</td><td>TINYINT UNSIGNED</td><td>Sim (identificador parcial)</td><td>Número da parcela dentro do contrato</td><td>Identificador parcial: só identifica a parcela dentro do contrato ao qual pertence (entidade fraca)</td></tr>
+      <tr><td>VL_PARCELA</td><td>DECIMAL(10,2)</td><td>Sim</td><td>Valor da parcela</td><td>Obrigatório</td></tr>
+      <tr><td>DT_VENCIMENTO</td><td>DATE</td><td>Sim</td><td>Data de vencimento</td><td>Obrigatório</td></tr>
+      <tr><td>DT_PAGAMENTO</td><td>DATE</td><td>Não</td><td>Data em que foi paga</td><td>Preenchida quando o financeiro dá a baixa</td></tr>
+      <tr><td>CD_STATUS</td><td>ENUM(&#x27;aberta&#x27;, &#x27;paga&#x27;, &#x27;atrasada&#x27;)</td><td>Sim</td><td>Situação da parcela</td><td>Valores: aberta, paga, atrasada</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária composta (ID_CONTRATO, NR_PARCELA).</li>
+    <li>Índice em (CD_STATUS, DT_VENCIMENTO): cobrança do mês e parcelas atrasadas (RF11).</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="agendamento">
   <h3>AGENDAMENTO</h3>
   <p>Consulta marcada: um paciente, com um dentista, em um consultório, em uma data e hora.</p>
   <pre>AGENDAMENTO = @ID_AGENDAMENTO + DT_HORA_INICIO + QT_DURACAO_MIN + TP_AGENDAMENTO + CD_STATUS + (DS_OBSERVACAO)</pre>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <p class="leitura"><strong>Leitura:</strong> Um agendamento tem identificador, data e hora de início, duração, tipo e situação; a observação é opcional. Paciente, dentista e consultório chegam pelos relacionamentos MARCA, ATENDE e OCUPA.</p>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>ID_AGENDAMENTO</td><td>Identificador do agendamento</td><td>Obrigatório, único</td></tr>
-      <tr><td>DT_HORA_INICIO</td><td>Data e hora de início</td><td>Obrigatório; não pode haver dois agendamentos no mesmo consultório, nem o mesmo dentista em dois consultórios, no mesmo horário</td></tr>
-      <tr><td>QT_DURACAO_MIN</td><td>Duração prevista em minutos</td><td>Obrigatório</td></tr>
-      <tr><td>TP_AGENDAMENTO</td><td>Tipo da consulta</td><td>Valores: avaliação (sem custo), tratamento</td></tr>
-      <tr><td>CD_STATUS</td><td>Situação do agendamento</td><td>Valores: agendado, confirmado, atendido, falta, reagendado</td></tr>
-      <tr><td>DS_OBSERVACAO</td><td>Observação da recepção</td><td>Opcional</td></tr>
+      <tr><td>ID_AGENDAMENTO</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Identificador do agendamento</td><td>Obrigatório, único</td></tr>
+      <tr><td>DT_HORA_INICIO</td><td>DATETIME</td><td>Sim</td><td>Data e hora de início</td><td>Obrigatório; não pode haver dois agendamentos no mesmo consultório, nem o mesmo dentista em dois consultórios, no mesmo horário</td></tr>
+      <tr><td>QT_DURACAO_MIN</td><td>SMALLINT UNSIGNED</td><td>Sim</td><td>Duração prevista em minutos</td><td>Obrigatório</td></tr>
+      <tr><td>TP_AGENDAMENTO</td><td>ENUM(&#x27;avaliacao&#x27;, &#x27;tratamento&#x27;)</td><td>Sim</td><td>Tipo da consulta</td><td>Valores: avaliação (sem custo), tratamento</td></tr>
+      <tr><td>CD_STATUS</td><td>ENUM(&#x27;agendado&#x27;, &#x27;confirmado&#x27;, &#x27;atendido&#x27;, &#x27;falta&#x27;, &#x27;reagendado&#x27;)</td><td>Sim</td><td>Situação do agendamento</td><td>Valores: agendado, confirmado, atendido, falta, reagendado</td></tr>
+      <tr><td>DS_OBSERVACAO</td><td>VARCHAR(255)</td><td>Não</td><td>Observação da recepção</td><td>Opcional</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária em ID_AGENDAMENTO.</li>
+    <li>Chaves estrangeiras ID_PACIENTE, ID_COLABORADOR e ID_CONSULTORIO.</li>
+    <li>Índices únicos em (ID_CONSULTORIO, DT_HORA_INICIO) e em (ID_COLABORADOR, DT_HORA_INICIO): impedem dois agendamentos no mesmo consultório, ou com o mesmo dentista, no mesmo horário de início (RF07). A sobreposição de durações diferentes fica a cargo da aplicação.</li>
+    <li>Índice em DT_HORA_INICIO: agenda do dia (RNF04).</li>
+    <li>Índice em ID_PACIENTE: histórico do paciente (RF15).</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="evolucao-clinica">
   <h3>EVOLUCAO_CLINICA</h3>
   <p>Registro, no prontuário, do que o dentista fez na consulta.</p>
   <pre>EVOLUCAO_CLINICA = @ID_EVOLUCAO + DT_REGISTRO + DS_EVOLUCAO + (NR_DENTE) + (DS_PROXIMOS_PASSOS)</pre>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <p class="leitura"><strong>Leitura:</strong> Uma evolução tem identificador, data e hora do registro e o texto do que foi feito; dente e próximos passos são opcionais. Liga-se a exatamente um agendamento atendido (REGISTRA).</p>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>ID_EVOLUCAO</td><td>Identificador da evolução</td><td>Obrigatório, único</td></tr>
-      <tr><td>DT_REGISTRO</td><td>Data e hora do registro</td><td>Obrigatório</td></tr>
-      <tr><td>DS_EVOLUCAO</td><td>O que foi feito na consulta e o que foi finalizado</td><td>Obrigatório; dado sensível de saúde, com acesso restrito aos dentistas</td></tr>
-      <tr><td>NR_DENTE</td><td>Dente tratado</td><td>Opcional</td></tr>
-      <tr><td>DS_PROXIMOS_PASSOS</td><td>Próximos passos do tratamento, anotados pelo dentista</td><td>Opcional; orienta a recepção a agendar a próxima sessão</td></tr>
+      <tr><td>ID_EVOLUCAO</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Identificador da evolução</td><td>Obrigatório, único</td></tr>
+      <tr><td>DT_REGISTRO</td><td>DATETIME</td><td>Sim</td><td>Data e hora do registro</td><td>Obrigatório</td></tr>
+      <tr><td>DS_EVOLUCAO</td><td>TEXT</td><td>Sim</td><td>O que foi feito na consulta e o que foi finalizado</td><td>Obrigatório; dado sensível de saúde, com acesso restrito aos dentistas</td></tr>
+      <tr><td>NR_DENTE</td><td>TINYINT UNSIGNED (notação FDI)</td><td>Não</td><td>Dente tratado</td><td>Opcional</td></tr>
+      <tr><td>DS_PROXIMOS_PASSOS</td><td>TEXT</td><td>Não</td><td>Próximos passos do tratamento, anotados pelo dentista</td><td>Opcional; orienta a recepção a agendar a próxima sessão</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária em ID_EVOLUCAO.</li>
+    <li>Índice único em ID_AGENDAMENTO (chave estrangeira de REGISTRA): um agendamento gera no máximo uma evolução, o 1:1 do DER.</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="pedido-laboratorio">
   <h3>PEDIDO_LABORATORIO</h3>
   <p>Solicitação de uma peça (coroa, prótese etc.) ao laboratório da própria clínica.</p>
   <pre>PEDIDO_LABORATORIO = @ID_PEDIDO + DT_SOLICITACAO + DS_PECA + DT_PRAZO_ENTREGA + (DT_ENTREGA) + CD_STATUS</pre>
-  <table>
-    <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+  <p class="leitura"><strong>Leitura:</strong> Um pedido tem identificador, data da solicitação, descrição da peça, prazo combinado e situação; a data de entrega só é preenchida quando a peça fica pronta.</p>
+  <table class="attrs">
+    <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
-      <tr><td>ID_PEDIDO</td><td>Identificador do pedido</td><td>Obrigatório, único</td></tr>
-      <tr><td>DT_SOLICITACAO</td><td>Data em que o dentista fez o pedido</td><td>Obrigatório</td></tr>
-      <tr><td>DS_PECA</td><td>Descrição da peça solicitada (ex.: coroa de porcelana no dente 26)</td><td>Obrigatório</td></tr>
-      <tr><td>DT_PRAZO_ENTREGA</td><td>Prazo combinado entre dentista, recepção e laboratório</td><td>Obrigatório</td></tr>
-      <tr><td>DT_ENTREGA</td><td>Data em que a peça ficou pronta</td><td>Preenchida pelo laboratório</td></tr>
-      <tr><td>CD_STATUS</td><td>Situação do pedido</td><td>Valores: solicitado, em produção, pronto, entregue</td></tr>
+      <tr><td>ID_PEDIDO</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Identificador do pedido</td><td>Obrigatório, único</td></tr>
+      <tr><td>DT_SOLICITACAO</td><td>DATE</td><td>Sim</td><td>Data em que o dentista fez o pedido</td><td>Obrigatório</td></tr>
+      <tr><td>DS_PECA</td><td>VARCHAR(255)</td><td>Sim</td><td>Descrição da peça solicitada (ex.: coroa de porcelana no dente 26)</td><td>Obrigatório</td></tr>
+      <tr><td>DT_PRAZO_ENTREGA</td><td>DATE</td><td>Sim</td><td>Prazo combinado entre dentista, recepção e laboratório</td><td>Obrigatório</td></tr>
+      <tr><td>DT_ENTREGA</td><td>DATE</td><td>Não</td><td>Data em que a peça ficou pronta</td><td>Preenchida pelo laboratório</td></tr>
+      <tr><td>CD_STATUS</td><td>ENUM(&#x27;solicitado&#x27;, &#x27;em_producao&#x27;, &#x27;pronto&#x27;, &#x27;entregue&#x27;)</td><td>Sim</td><td>Situação do pedido</td><td>Valores: solicitado, em produção, pronto, entregue</td></tr>
     </tbody>
   </table>
-  <p class="topo"><a href="#top">voltar ao índice</a></p>
+  <h4>Chaves e índices</h4>
+  <ul class="indices">
+    <li>Chave primária em ID_PEDIDO.</li>
+    <li>Chaves estrangeiras ID_PACIENTE (PERTENCE) e ID_COLABORADOR do dentista solicitante (SOLICITA).</li>
+    <li>Índice em (CD_STATUS, DT_PRAZO_ENTREGA): fila do laboratório por prazo.</li>
+    <li>Índice em ID_PACIENTE: pedidos do paciente.</li>
+  </ul>
+  <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
+<h2 id="log">5. Log de acesso (metadado operacional)</h2>
+<p>O log responde "quem fez o quê, e quando" em cima dos dados. Ele existe em dois níveis.</p>
+<table>
+  <thead><tr><th>Nível</th><th>Como funciona</th></tr></thead>
+  <tbody>
+    <tr><td>No SGBD</td><td>O MySQL 8 Community não traz o plugin de auditoria (ele é da edição Enterprise). A alternativa é ligar general_log=ON com log_output=TABLE, que grava cada comando executado na tabela mysql.general_log, com usuário, horário e texto do comando. Retenção de 90 dias, com rotação semanal, separada da retenção dos dados de negócio.</td></tr>
+    <tr><td>Na aplicação</td><td>Uma tabela LOG_ALTERACAO (ID_LOG, DT_HORA, ID_COLABORADOR, NM_TABELA, ID_REGISTRO, TP_OPERACAO, DS_ANTES, DS_DEPOIS), alimentada por gatilhos (triggers) nas operações que o RNF05 pede: baixa de parcela, mudança de status de agendamento e de item, conclusão de item e qualquer escrita em EVOLUCAO_CLINICA.</td></tr>
+    <tr><td>Quem lê</td><td>Administração e Auditoria leem o log; nenhum papel altera ou apaga. É isso que permite responder &quot;quem deu baixa nesta parcela e quando&quot;.</td></tr>
+  </tbody>
+</table>
+<h2 id="acesso">6. Acesso por operação e LGPD (metadado administrativo)</h2>
+<p>Papéis: Recepção, Dentista, Comercial, Financeiro, Laboratório, Relacionamento (setor que fala com o paciente depois do fechamento), Administração e Auditoria (leitura para conferência). &quot;Nenhum papel&quot; em APAGAR significa que o registro não é excluído: ele muda de situação ou é anonimizado ao fim do prazo de guarda.</p>
+<table class="matriz">
+  <thead><tr><th>Tabela</th><th>LER</th><th>INSERIR</th><th>ATUALIZAR</th><th>APAGAR</th></tr></thead>
+  <tbody>
+    <tr><td>PACIENTE</td><td>Recepção, Dentista, Comercial, Financeiro, Relacionamento, Auditoria</td><td>Recepção</td><td>Recepção</td><td>Nenhum papel: anonimização ao fim da retenção</td></tr>
+    <tr><td>COLABORADOR</td><td>Todos (nome e cargo); Administração e Auditoria (dados completos)</td><td>Administração</td><td>Administração</td><td>Nenhum papel: desligamento marca IN_ATIVO como não</td></tr>
+    <tr><td>ESPECIALIDADE</td><td>Todos</td><td>Administração</td><td>Administração</td><td>Administração, só sem dentista vinculado</td></tr>
+    <tr><td>CONSULTORIO</td><td>Todos</td><td>Administração</td><td>Administração</td><td>Nenhum papel: desativa com IN_ATIVO</td></tr>
+    <tr><td>PROCEDIMENTO</td><td>Todos</td><td>Administração</td><td>Administração</td><td>Nenhum papel: um procedimento já usado em item não pode sumir</td></tr>
+    <tr><td>ORCAMENTO e ITEM_ORCAMENTO</td><td>Dentista, Comercial, Financeiro, Recepção, Auditoria</td><td>Dentista avaliador</td><td>Dentista (itens e execução), Comercial (valor negociado e aprovação)</td><td>Nenhum papel: orçamento recusado fica com esse status</td></tr>
+    <tr><td>CONTRATO e PARCELA</td><td>Financeiro, Comercial, Auditoria; Recepção vê só a situação</td><td>Financeiro</td><td>Financeiro (baixa)</td><td>Nenhum papel: documento financeiro</td></tr>
+    <tr><td>AGENDAMENTO</td><td>Recepção, Dentista, Comercial, Financeiro, Relacionamento, Auditoria</td><td>Recepção</td><td>Recepção (status), Dentista (marca como atendido)</td><td>Nenhum papel: cancelamento é mudança de status</td></tr>
+    <tr><td>EVOLUCAO_CLINICA</td><td>Dentista, Auditoria</td><td>Dentista que atendeu</td><td>Nenhum papel: correção gera novo registro</td><td>Nenhum papel</td></tr>
+    <tr><td>PEDIDO_LABORATORIO</td><td>Dentista, Laboratório, Recepção, Auditoria</td><td>Dentista</td><td>Laboratório (status e entrega)</td><td>Nenhum papel</td></tr>
+  </tbody>
+</table>
+<h4>Enquadramento na LGPD</h4>
+<table>
+  <tbody>
+    <tr><td><strong>Dados pessoais comuns</strong></td><td>PACIENTE e COLABORADOR guardam nome, CPF, contato e endereço (LGPD, art. 5º, I). Para o paciente, a base legal é a execução do contrato de tratamento (art. 7º, V); para o colaborador, a relação de trabalho.</td></tr>
+    <tr><td><strong>Dados sensíveis de saúde</strong></td><td>EVOLUCAO_CLINICA é dado de saúde (art. 5º, II). ORCAMENTO, ITEM_ORCAMENTO e PEDIDO_LABORATORIO também revelam a condição bucal do paciente, por isso recebem o mesmo cuidado. O tratamento se ampara na tutela da saúde (art. 11, II, &quot;f&quot;).</td></tr>
+    <tr><td><strong>Prazo de guarda</strong></td><td>O prontuário (a evolução clínica e os registros ligados a ela) é guardado por no mínimo 20 anos após o último registro (Lei 13.787/2018, art. 6º). Encerrado o prazo, os dados são anonimizados, nunca apagados fisicamente, o que preserva a estatística da clínica sem identificar o paciente. Contratos e parcelas seguem o prazo de prescrição de cobrança (5 anos, Código Civil, art. 206, § 5º, I) e depois o mesmo tratamento.</td></tr>
+    <tr><td><strong>Acesso por perfil</strong></td><td>A matriz acima é a tradução do RNF01: a evolução clínica só é lida por dentistas, os dados de pagamento só pelo financeiro, e nenhum papel apaga dado clínico ou financeiro.</td></tr>
+    <tr><td><strong>Responsabilização</strong></td><td>O log de acesso e o histórico de versões deste dicionário atendem ao princípio da responsabilização e prestação de contas (art. 6º, X).</td></tr>
+  </tbody>
+</table>
 <footer>
-  <p>Dicionário preliminar do modelo conceitual (Entrega 1). Na Entrega 2 ele será atualizado com o modelo lógico (tipos, chaves e índices).</p>
+  <p>Dicionário de dados do modelo da Meneghini Odontologia Integrada, v1.1. A parte conceitual foi feita na Entrega 1 e
+  as seções técnicas foram acrescentadas a partir da devolutiva do professor, como preparação para o modelo lógico da Entrega 2.
+  Repositório: <a href="https://github.com/Rsant271/modelagem-bd-meneghini-odontologia">github.com/Rsant271/modelagem-bd-meneghini-odontologia</a>.</p>
 </footer>
 </main>
 </body>
