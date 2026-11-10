@@ -47,7 +47,7 @@
 <header>
   <h1>Dicionário de Dados</h1>
   <p class="sub">Modelagem de Banco de Dados para a Clínica Meneghini Odontologia Integrada</p>
-  <p class="meta">Modelagem de Banco de Dados (UNICID 2260065) · versão v1.1, 6 de outubro de 2026</p>
+  <p class="meta">Modelagem de Banco de Dados (UNICID 2260065) · versão v1.2, 9 de novembro de 2026</p>
   <p class="meta">Grupo: Renan Silva dos Santos (RGM 47203099) · Leonardo Alves Tavares Calixta (RGM 47323485) · David Carlos da Fonseca Junior (RGM 46638202)</p>
   <p class="meta">A parte conceitual (definição, atributo, descrição e regra de negócio) é a mesma da <a href="https://github.com/Rsant271/modelagem-bd-meneghini-odontologia#5-dicion%C3%A1rio-de-dados-conceitual-preliminar">Seção 5 do README</a>. As seções técnicas (SGBD, tipos, índices, fluxo de dados, log e acessos) estão só nesta página.</p>
 </header>
@@ -82,7 +82,7 @@
   <tbody>
     <tr><td>SGBD</td><td>MySQL 8.0 (Community), mecanismo de armazenamento InnoDB. O InnoDB garante transações e chaves estrangeiras, necessárias para manter juntos orçamento, itens, contrato e parcelas.</td></tr>
     <tr><td>Codificação</td><td><code>utf8mb4</code> com collation <code>utf8mb4_0900_ai_ci</code>. Escolhida no lugar de <code>latin1</code> porque cobre toda a acentuação do português sem perda em nomes e textos livres. O sufixo <code>ai_ci</code> ignora acento e maiúscula na comparação: a recepção digita "jose" e encontra "José".</td></tr>
-    <tr><td>Versão</td><td>v1.1, 6 de outubro de 2026. Qualquer alteração de estrutura gera nova versão registrada no histórico abaixo; a prática atende ao princípio da responsabilização e prestação de contas da LGPD (art. 6º, X).</td></tr>
+    <tr><td>Versão</td><td>v1.2, 9 de novembro de 2026. Qualquer alteração de estrutura gera nova versão registrada no histórico abaixo; a prática atende ao princípio da responsabilização e prestação de contas da LGPD (art. 6º, X).</td></tr>
   </tbody>
 </table>
 <h4>Histórico de versões</h4>
@@ -91,6 +91,7 @@
   <tbody>
     <tr><td>v1.0</td><td>22/09/2026</td><td>Dicionário preliminar da Entrega 1: atributo, descrição e regra de negócio por entidade.</td></tr>
     <tr><td>v1.1</td><td>06/10/2026</td><td>Versão completa pedida na devolutiva: SGBD e collation, cardinalidades, fluxo de dados, leitura das expressões, tipo físico, índices, log de acesso e matriz de acesso com LGPD.</td></tr>
+    <tr><td>v1.2</td><td>09/11/2026</td><td>Segunda rodada de levantamento na clínica: tipos alta e retorno e atributo opcional DT_RETORNO_PREVISTO em AGENDAMENTO; regra de inadimplência em PARCELA (duas parcelas atrasadas bloqueiam o agendamento); diretor clínico e setor administrativo em COLABORADOR; fluxo de dados com cobrança, alta, retorno e cadastro de colaboradores.</td></tr>
   </tbody>
 </table>
 <h4>Notação formal</h4>
@@ -183,11 +184,14 @@
     <tr><td>5</td><td>Recepção</td><td>Agenda as consultas de tratamento e acompanha os status (confirmado, atendido, falta, reagendado).</td><td>AGENDAMENTO (novos registros e mudança de CD_STATUS)</td></tr>
     <tr><td>6</td><td>Dentista</td><td>Atende a consulta, executa itens do plano e escreve a evolução clínica com os próximos passos.</td><td>EXECUTA (AGENDAMENTO × ITEM_ORCAMENTO); ITEM_ORCAMENTO (CD_STATUS_EXECUCAO); EVOLUCAO_CLINICA</td></tr>
     <tr><td>7</td><td>Dentista e laboratório</td><td>Se o tratamento precisa de peça, o dentista abre o pedido; o laboratório atualiza até a entrega.</td><td>PEDIDO_LABORATORIO (criação pelo dentista; CD_STATUS e DT_ENTREGA pelo laboratório)</td></tr>
-    <tr><td>8</td><td>Financeiro</td><td>Cobra mês a mês e dá baixa nas parcelas pagas; o tratamento avança conforme o pagamento.</td><td>PARCELA (DT_PAGAMENTO, CD_STATUS)</td></tr>
-    <tr><td>9</td><td>Todos</td><td>Toda leitura e escrita nas entidades acima fica registrada no log de acesso.</td><td>Log do SGBD e tabela LOG_ALTERACAO (seção 5)</td></tr>
+    <tr><td>8</td><td>Financeiro (cobrança)</td><td>Dá baixa nas parcelas pagas e cobra as atrasadas; uma pessoa do financeiro cuida da cobrança dos pacientes. As parcelas são mensais; com duas sem pagar, o paciente não agenda e o tratamento é interrompido (RN19). Quando volta a pagar, o tratamento segue de onde parou no planejamento.</td><td>PARCELA (DT_PAGAMENTO, CD_STATUS); leitura de PARCELA pela recepção antes de cada novo agendamento</td></tr>
+    <tr><td>9</td><td>Recepção e diretor clínico</td><td>Concluído o último item do plano, a recepção agenda a consulta de alta; o diretor clínico confere o tratamento e define o retorno (em geral seis meses depois).</td><td>AGENDAMENTO do tipo alta, com DT_RETORNO_PREVISTO; EVOLUCAO_CLINICA da consulta de alta</td></tr>
+    <tr><td>10</td><td>Recepção</td><td>A manutenção ou limpeza do retorno em geral já está no orçamento inicial (o planejamento geral); a recepção procura deixá-la paga antes e, perto da data prevista, liga ou manda mensagem para o paciente marcar.</td><td>AGENDAMENTO do tipo retorno; ITEM_ORCAMENTO da manutenção e as PARCELA do contrato; leitura de DT_RETORNO_PREVISTO</td></tr>
+    <tr><td>11</td><td>Administração</td><td>Cadastra o colaborador novo (dentista ou qualquer função) e mantém o cadastro; a gestora, que lidera os setores administrativo e financeiro, mantém especialidades, consultórios e tabela de preços. Holerite, pagamento e ponto ficam fora do modelo.</td><td>COLABORADOR; POSSUI (COLABORADOR × ESPECIALIDADE) para os dentistas; ESPECIALIDADE, CONSULTORIO e PROCEDIMENTO</td></tr>
+    <tr><td>12</td><td>Todos</td><td>Toda leitura e escrita nas entidades acima fica registrada no log de acesso.</td><td>Log do SGBD e tabela LOG_ALTERACAO (seção 5)</td></tr>
   </tbody>
 </table>
-<p>Os fluxogramas dos processos 1 a 3 estão na Seção 2 do README; esta tabela é a leitura deles do ponto de vista do banco de dados.</p>
+<p>Os fluxogramas dos processos 1, 2, 3 e 6 estão na Seção 2 do README; esta tabela é a leitura deles do ponto de vista do banco de dados.</p>
 <h2 id="entidades">4. Dicionário por entidade</h2>
 <p>Para cada entidade: definição, expressão formal, leitura em português, tabela de atributos (com o tipo físico previsto no MySQL 8 e a obrigatoriedade) e as chaves e índices previstos para o modelo lógico, com o motivo de cada um. As chaves estrangeiras citadas nos índices não aparecem no DER conceitual: elas surgem na conversão para o modelo lógico.</p>
 <article id="paciente">
@@ -221,7 +225,7 @@ ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP</pre>
 </article>
 <article id="colaborador">
   <h3>COLABORADOR</h3>
-  <p>Pessoa que trabalha na clínica: dentistas, auxiliares, recepção, financeiro, comercial, relacionamento, campanha, marketing, laboratório e apoio.</p>
+  <p>Pessoa que trabalha na clínica: dentistas (incluindo o diretor clínico), auxiliares de saúde bucal, recepção, financeiro, comercial, relacionamento, campanha, marketing, laboratório, administrativo e apoio.</p>
   <pre>COLABORADOR = @ID_COLABORADOR + NM_COLABORADOR + NR_CPF + TP_CARGO + NM_SETOR + (NR_CRO) + DT_ADMISSAO + IN_ATIVO</pre>
   <p class="leitura"><strong>Leitura:</strong> Um colaborador é identificado por ID_COLABORADOR e tem nome, CPF, cargo, setor, data de admissão e o indicador de ativo. O CRO aparece como opcional na estrutura porque só dentistas têm; a regra de negócio é que o torna obrigatório para esse cargo.</p>
   <table class="attrs">
@@ -230,8 +234,8 @@ ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP</pre>
       <tr><td>ID_COLABORADOR</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Número que identifica o colaborador</td><td>Obrigatório, único</td></tr>
       <tr><td>NM_COLABORADOR</td><td>VARCHAR(120)</td><td>Sim</td><td>Nome completo</td><td>Obrigatório</td></tr>
       <tr><td>NR_CPF</td><td>CHAR(11)</td><td>Sim</td><td>CPF do colaborador</td><td>Obrigatório e único</td></tr>
-      <tr><td>TP_CARGO</td><td>VARCHAR(40)</td><td>Sim</td><td>Função na clínica (ex.: dentista, auxiliar, recepcionista, financeiro, comercial, laboratório)</td><td>Obrigatório; só colaboradores com cargo &quot;dentista&quot; podem atender agendamentos e ter especialidades</td></tr>
-      <tr><td>NM_SETOR</td><td>VARCHAR(40)</td><td>Sim</td><td>Setor em que trabalha (ex.: clínico, recepção, financeiro, comercial, laboratório)</td><td>Obrigatório</td></tr>
+      <tr><td>TP_CARGO</td><td>VARCHAR(40)</td><td>Sim</td><td>Função na clínica (ex.: dentista, diretor clínico, auxiliar de saúde bucal, recepcionista, financeiro, comercial, administrativo, gestora, laboratório)</td><td>Obrigatório; só dentistas podem atender agendamentos e ter especialidades. O diretor clínico é um dentista: atende a consulta de alta, avaliações novas e, às vezes, cirurgias</td></tr>
+      <tr><td>NM_SETOR</td><td>VARCHAR(40)</td><td>Sim</td><td>Setor em que trabalha (ex.: clínico, recepção, financeiro, comercial, administrativo, laboratório)</td><td>Obrigatório</td></tr>
       <tr><td>NR_CRO</td><td>VARCHAR(20)</td><td>Não</td><td>Número de registro no Conselho Regional de Odontologia</td><td>Obrigatório e único para dentistas; vazio para os demais cargos</td></tr>
       <tr><td>DT_ADMISSAO</td><td>DATE</td><td>Sim</td><td>Data de entrada na clínica</td><td>Obrigatório</td></tr>
       <tr><td>IN_ATIVO</td><td>BOOLEAN</td><td>Sim</td><td>Indica se o colaborador está ativo</td><td>Colaborador inativo não pode ser escolhido em novos agendamentos, mas seu histórico é mantido</td></tr>
@@ -388,7 +392,7 @@ ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP</pre>
   <h3>PARCELA <span class="fraca">entidade fraca</span></h3>
   <p>Cada pagamento previsto de um contrato.</p>
   <pre>PARCELA = @NR_PARCELA + VL_PARCELA + DT_VENCIMENTO + (DT_PAGAMENTO) + CD_STATUS</pre>
-  <p class="leitura"><strong>Leitura:</strong> Uma parcela é identificada pelo seu número dentro do contrato (identificador parcial). Tem valor, vencimento e situação; a data de pagamento só é preenchida quando o financeiro dá a baixa.</p>
+  <p class="leitura"><strong>Leitura:</strong> Uma parcela é identificada pelo seu número dentro do contrato (identificador parcial). Tem valor, vencimento (uma parcela por mês) e situação; a data de pagamento só é preenchida quando o financeiro dá a baixa. Duas parcelas atrasadas do mesmo paciente bloqueiam novos agendamentos (RN19); quando o paciente volta a pagar, o tratamento segue de onde parou.</p>
   <p class="nota"><code>NR_PARCELA</code> é identificador parcial: só identifica a parcela dentro do contrato ao qual pertence.</p>
   <table class="attrs">
     <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
@@ -397,30 +401,31 @@ ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP</pre>
       <tr><td>VL_PARCELA</td><td>DECIMAL(10,2)</td><td>Sim</td><td>Valor da parcela</td><td>Obrigatório</td></tr>
       <tr><td>DT_VENCIMENTO</td><td>DATE</td><td>Sim</td><td>Data de vencimento</td><td>Obrigatório</td></tr>
       <tr><td>DT_PAGAMENTO</td><td>DATE</td><td>Não</td><td>Data em que foi paga</td><td>Preenchida quando o financeiro dá a baixa</td></tr>
-      <tr><td>CD_STATUS</td><td>ENUM(&#x27;aberta&#x27;, &#x27;paga&#x27;, &#x27;atrasada&#x27;)</td><td>Sim</td><td>Situação da parcela</td><td>Valores: aberta, paga, atrasada</td></tr>
+      <tr><td>CD_STATUS</td><td>ENUM(&#x27;aberta&#x27;, &#x27;paga&#x27;, &#x27;atrasada&#x27;)</td><td>Sim</td><td>Situação da parcela</td><td>Valores: aberta, paga, atrasada. Duas parcelas atrasadas bloqueiam novos agendamentos do paciente (RN19)</td></tr>
     </tbody>
   </table>
   <h4>Chaves e índices</h4>
   <ul class="indices">
     <li>Chave primária composta (ID_CONTRATO, NR_PARCELA).</li>
-    <li>Índice em (CD_STATUS, DT_VENCIMENTO): cobrança do mês e parcelas atrasadas (RF11).</li>
+    <li>Índice em (CD_STATUS, DT_VENCIMENTO): cobrança do mês e parcelas atrasadas (RF11, RF16); é também a consulta que a recepção faz antes de agendar, para aplicar o bloqueio por inadimplência (RF17).</li>
   </ul>
   <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
 <article id="agendamento">
   <h3>AGENDAMENTO</h3>
-  <p>Consulta marcada: um paciente, com um dentista, em um consultório, em uma data e hora.</p>
-  <pre>AGENDAMENTO = @ID_AGENDAMENTO + DT_HORA_INICIO + QT_DURACAO_MIN + TP_AGENDAMENTO + CD_STATUS + (DS_OBSERVACAO)</pre>
-  <p class="leitura"><strong>Leitura:</strong> Um agendamento tem identificador, data e hora de início, duração, tipo e situação; a observação é opcional. Paciente, dentista e consultório chegam pelos relacionamentos MARCA, ATENDE e OCUPA.</p>
+  <p>Consulta marcada: um paciente, com um dentista, em um consultório, em uma data e hora. Cobre a avaliação, as consultas de tratamento, a consulta de alta e o retorno.</p>
+  <pre>AGENDAMENTO = @ID_AGENDAMENTO + DT_HORA_INICIO + QT_DURACAO_MIN + TP_AGENDAMENTO + CD_STATUS + (DS_OBSERVACAO) + (DT_RETORNO_PREVISTO)</pre>
+  <p class="leitura"><strong>Leitura:</strong> Um agendamento tem identificador, data e hora de início, duração, tipo (avaliação, tratamento, alta ou retorno) e situação. A observação e a data prevista de retorno são opcionais; a segunda só é preenchida na consulta de alta. Paciente, dentista e consultório chegam pelos relacionamentos MARCA, ATENDE e OCUPA.</p>
   <table class="attrs">
     <thead><tr><th>Atributo</th><th>Tipo físico</th><th>Obrigatório</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
     <tbody>
       <tr><td>ID_AGENDAMENTO</td><td>INT UNSIGNED, auto-incremento</td><td>Sim (identificador)</td><td>Identificador do agendamento</td><td>Obrigatório, único</td></tr>
       <tr><td>DT_HORA_INICIO</td><td>DATETIME</td><td>Sim</td><td>Data e hora de início</td><td>Obrigatório; não pode haver dois agendamentos no mesmo consultório, nem o mesmo dentista em dois consultórios, no mesmo horário</td></tr>
       <tr><td>QT_DURACAO_MIN</td><td>SMALLINT UNSIGNED</td><td>Sim</td><td>Duração prevista em minutos</td><td>Obrigatório</td></tr>
-      <tr><td>TP_AGENDAMENTO</td><td>ENUM(&#x27;avaliacao&#x27;, &#x27;tratamento&#x27;)</td><td>Sim</td><td>Tipo da consulta</td><td>Valores: avaliação (sem custo), tratamento</td></tr>
+      <tr><td>TP_AGENDAMENTO</td><td>ENUM(&#x27;avaliacao&#x27;, &#x27;tratamento&#x27;, &#x27;alta&#x27;, &#x27;retorno&#x27;)</td><td>Sim</td><td>Tipo da consulta</td><td>Valores: avaliação (sem custo), tratamento, alta (com o diretor clínico), retorno (manutenção ou limpeza)</td></tr>
       <tr><td>CD_STATUS</td><td>ENUM(&#x27;agendado&#x27;, &#x27;confirmado&#x27;, &#x27;atendido&#x27;, &#x27;falta&#x27;, &#x27;reagendado&#x27;)</td><td>Sim</td><td>Situação do agendamento</td><td>Valores: agendado, confirmado, atendido, falta, reagendado</td></tr>
       <tr><td>DS_OBSERVACAO</td><td>VARCHAR(255)</td><td>Não</td><td>Observação da recepção</td><td>Opcional</td></tr>
+      <tr><td>DT_RETORNO_PREVISTO</td><td>DATE</td><td>Não</td><td>Data prevista do retorno do paciente, definida na consulta de alta</td><td>Opcional; preenchida só no agendamento do tipo alta, em geral seis meses depois. A recepção usa essa data para ligar ou mandar mensagem e marcar o retorno (RN21, RN22)</td></tr>
     </tbody>
   </table>
   <h4>Chaves e índices</h4>
@@ -430,6 +435,7 @@ ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP</pre>
     <li>Índices únicos em (ID_CONSULTORIO, DT_HORA_INICIO) e em (ID_COLABORADOR, DT_HORA_INICIO): impedem dois agendamentos no mesmo consultório, ou com o mesmo dentista, no mesmo horário de início (RF07). A sobreposição de durações diferentes fica a cargo da aplicação.</li>
     <li>Índice em DT_HORA_INICIO: agenda do dia (RNF04).</li>
     <li>Índice em ID_PACIENTE: histórico do paciente (RF15).</li>
+    <li>Índice em DT_RETORNO_PREVISTO: lista dos retornos que vencem no período, para a recepção ligar ou mandar mensagem (RF18).</li>
   </ul>
   <p class="topo"><a href="#top">voltar ao sumário</a></p>
 </article>
@@ -491,7 +497,7 @@ ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP</pre>
   </tbody>
 </table>
 <h2 id="acesso">6. Acesso por operação e LGPD (metadado administrativo)</h2>
-<p>Papéis: Recepção, Dentista, Comercial, Financeiro, Laboratório, Relacionamento (setor que fala com o paciente depois do fechamento), Administração e Auditoria (leitura para conferência). &quot;Nenhum papel&quot; em APAGAR significa que o registro não é excluído: ele muda de situação ou é anonimizado ao fim do prazo de guarda.</p>
+<p>Papéis: Recepção, Dentista (inclui o diretor clínico), Comercial, Financeiro (inclui a pessoa responsável pela cobrança dos pacientes), Laboratório, Relacionamento (setor que fala com o paciente depois do fechamento), Administração (setor administrativo, liderado pela gestora: cadastra os colaboradores e mantém especialidades, consultórios e tabela de preços) e Auditoria (leitura para conferência). &quot;Nenhum papel&quot; em APAGAR significa que o registro não é excluído: ele muda de situação ou é anonimizado ao fim do prazo de guarda.</p>
 <table class="matriz">
   <thead><tr><th>Tabela</th><th>LER</th><th>INSERIR</th><th>ATUALIZAR</th><th>APAGAR</th></tr></thead>
   <tbody>
@@ -512,13 +518,13 @@ ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP</pre>
   <tbody>
     <tr><td><strong>Dados pessoais comuns</strong></td><td>PACIENTE e COLABORADOR guardam nome, CPF, contato e endereço (LGPD, art. 5º, I). Para o paciente, a base legal é a execução do contrato de tratamento (art. 7º, V); para o colaborador, a relação de trabalho.</td></tr>
     <tr><td><strong>Dados sensíveis de saúde</strong></td><td>EVOLUCAO_CLINICA é dado de saúde (art. 5º, II). ORCAMENTO, ITEM_ORCAMENTO e PEDIDO_LABORATORIO também revelam a condição bucal do paciente, por isso recebem o mesmo cuidado. O tratamento se ampara na tutela da saúde (art. 11, II, &quot;f&quot;).</td></tr>
-    <tr><td><strong>Prazo de guarda</strong></td><td>O prontuário (a evolução clínica e os registros ligados a ela) é guardado por no mínimo 20 anos após o último registro (Lei 13.787/2018, art. 6º). Encerrado o prazo, os dados são anonimizados, nunca apagados fisicamente, o que preserva a estatística da clínica sem identificar o paciente. Contratos e parcelas seguem o prazo de prescrição de cobrança (5 anos, Código Civil, art. 206, § 5º, I) e depois o mesmo tratamento.</td></tr>
+    <tr><td><strong>Prazo de guarda</strong></td><td>Na clínica o prontuário é digital, no Controle Odonto. O prontuário (a evolução clínica e os registros ligados a ela) é guardado por no mínimo 20 anos após o último registro (Lei 13.787/2018, art. 6º). Encerrado o prazo, os dados são anonimizados, nunca apagados fisicamente, o que preserva a estatística da clínica sem identificar o paciente. Contratos e parcelas seguem o prazo de prescrição de cobrança (5 anos, Código Civil, art. 206, § 5º, I) e depois o mesmo tratamento.</td></tr>
     <tr><td><strong>Acesso por perfil</strong></td><td>A matriz acima é a tradução do RNF01: a evolução clínica só é lida por dentistas, os dados de pagamento só pelo financeiro, e nenhum papel apaga dado clínico ou financeiro.</td></tr>
     <tr><td><strong>Responsabilização</strong></td><td>O log de acesso e o histórico de versões deste dicionário atendem ao princípio da responsabilização e prestação de contas (art. 6º, X).</td></tr>
   </tbody>
 </table>
 <footer>
-  <p>Dicionário de dados do modelo da Meneghini Odontologia Integrada, v1.1. A parte conceitual foi feita na Entrega 1 e
+  <p>Dicionário de dados do modelo da Meneghini Odontologia Integrada, v1.2. A parte conceitual foi feita na Entrega 1 e
   as seções técnicas foram acrescentadas a partir da devolutiva do professor, como preparação para o modelo lógico da Entrega 2.
   Repositório: <a href="https://github.com/Rsant271/modelagem-bd-meneghini-odontologia">github.com/Rsant271/modelagem-bd-meneghini-odontologia</a>.</p>
 </footer>
