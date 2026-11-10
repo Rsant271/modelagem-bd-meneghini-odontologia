@@ -532,7 +532,7 @@ ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP</pre>
   <thead><tr><th>Restrição</th><th>Coluna(s)</th><th>Regra de negócio ou motivo</th></tr></thead>
   <tbody>
     <tr><td>NOT NULL</td><td>NM_PACIENTE, NR_CPF, DT_NASCIMENTO, DS_LOGRADOURO, NM_BAIRRO, NR_CEP, DT_CADASTRO, TP_ORIGEM</td><td>Atributos obrigatórios da expressão formal</td></tr>
-    <tr><td>UNIQUE</td><td>NR_CPF</td><td>Cadastro sem duplicidade (Processo 1)</td></tr>
+    <tr><td>UNIQUE</td><td>NR_CPF</td><td>Cadastro sem duplicidade (PR01)</td></tr>
     <tr><td>CHECK</td><td>NR_CPF com 11 dígitos</td><td>CPF guardado sem máscara</td></tr>
     <tr><td>DEFAULT</td><td>DT_CADASTRO = data atual</td><td>O cadastro é aberto no dia da avaliação (RN17)</td></tr>
   </tbody>
@@ -596,7 +596,7 @@ ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP</pre>
   <tbody>
     <tr><td>NOT NULL</td><td>ID_PACIENTE, ID_COLABORADOR_AVALIADOR, DT_EMISSAO, VL_TOTAL, CD_STATUS</td><td>Todo orçamento tem paciente e avaliador (RN02)</td></tr>
     <tr><td>FK</td><td>ID_PACIENTE referencia PACIENTE; ID_COLABORADOR_AVALIADOR e ID_COLABORADOR_COMERCIAL referenciam COLABORADOR</td><td>RECEBE, AVALIA e NEGOCIA; a coluna do comercial pode ficar vazia até a negociação</td></tr>
-    <tr><td>DEFAULT</td><td>CD_STATUS = em_negociacao; VL_TOTAL = 0</td><td>O orçamento nasce na avaliação e segue para o comercial (Processo 2)</td></tr>
+    <tr><td>DEFAULT</td><td>CD_STATUS = em_negociacao; VL_TOTAL = 0</td><td>O orçamento nasce na avaliação e segue para o comercial (PR02)</td></tr>
   </tbody>
 </table>
 <h3 id="restr-item-orcamento">ITEM_ORCAMENTO</h3>
