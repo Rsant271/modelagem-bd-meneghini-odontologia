@@ -703,7 +703,8 @@ E casos errados de propósito, um para cada consulta de auditoria:
 - paciente 8, bloqueado, com consulta marcada (agendamento 31) (A06);
 - pedido 2 ao laboratório com prazo vencido e não entregue (A07);
 - item 2 do orçamento 17 concluído sem consulta ligada (A08);
-- alta do agendamento 35 feita por dentista comum, não pelo diretor clínico (A09).
+- alta do agendamento 35 feita por dentista comum, não pelo diretor clínico (A09);
+- item 2 do orçamento 12 (limpeza) negociado a 200 com preço de tabela 180, acima da margem da RN03 (consulta A11, que entra na Parte 4).
 
 A A02 (o contrato bate com os itens aprovados e com a entrada mais as parcelas, RN05 e RN07) lista os 20 contratos com "ok", porque nela a massa está correta. A A10 mostra o log: as 60 evoluções da carga e as alterações da Parte 2, com o nome de quem fez. Algumas consultas usam a data do dia (`CURDATE()`), então os dias de atraso e as listas de vencidos mudam conforme o dia em que o script roda.
 
