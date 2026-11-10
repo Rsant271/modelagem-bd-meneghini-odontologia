@@ -12,6 +12,8 @@
 | Renan Silva dos Santos | 47203099 |
 | Leonardo Alves Tavares Calixta | 47323485 |
 | David Carlos da Fonseca Junior | 46638202 |
+| Vinicius Scherer Di Giorno | 47028238 |
+| Lucas Henrique Roque Cruz | 47178922 |
 
 ---
 
