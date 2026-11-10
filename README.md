@@ -3,17 +3,19 @@
 **Disciplina:** Modelagem de Banco de Dados (2260065), Análise e Desenvolvimento de Sistemas, UNICID
 **Professor:** Cid Rodrigues de Andrade
 **Entrega 1: Modelo Conceitual (DER)**, setembro de 2026; revisado em novembro de 2026 a partir da devolutiva do professor e de uma segunda rodada de levantamento na clínica
+**Entrega 2: Modelo Lógico, Implementação SQL e Apresentação Final**, novembro de 2026
+**Levantamento de campo (texto do grupo e fotos):** [levantamento/levantamento.md](levantamento/levantamento.md)
 **Dicionário de dados completo (HTML):** [abrir no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html)
 
 ## Metadados
 
-| Nome | RGM |
-|---|---|
-| Renan Silva dos Santos | 47203099 |
-| Leonardo Alves Tavares Calixta | 47323485 |
-| David Carlos da Fonseca Junior | 46638202 |
-| Vinicius Scherer Di Giorno | 47028238 |
-| Lucas Henrique Roque Cruz | 47178922 |
+| Nome | RGM | Usuário no GitHub |
+|---|---|---|
+| Renan Silva dos Santos | 47203099 | Rsant271 |
+| Leonardo Alves Tavares Calixta | 47323485 | leonardo-calixta |
+| David Carlos da Fonseca Junior | 46638202 | davidjunior95 |
+| Vinicius Scherer Di Giorno | 47028238 | vinischerer08-hub |
+| Lucas Henrique Roque Cruz | 47178922 | Lusca2803 |
 
 ---
 
@@ -33,13 +35,17 @@ A Meneghini Odontologia Integrada é uma clínica odontológica particular no ba
 
 **Nome e natureza da organização:** Meneghini Odontologia Integrada, clínica odontológica privada, com fins lucrativos. Oferece avaliação, clínica geral, implantodontia, ortodontia e endodontia, e tem laboratório de prótese próprio.
 
-**Contexto e porte:** a clínica tem uma única unidade, com 7 consultórios (7 cadeiras ativas) e cerca de 30 colaboradores, entre dentistas (implantodontia, clínica geral, ortodontia e endodontia), auxiliares de saúde bucal, recepção, financeiro, relacionamento, campanha, marketing, comercial, laboratório e apoio (manobrista). O atendimento é particular, sem convênio. A operação é diária, com agenda dividida por dentista, consultório e horário. A clínica tem ainda um diretor clínico, que faz a consulta de alta ao fim de cada tratamento; um setor administrativo em que uma pessoa cuida só dos colaboradores (cadastro, holerites, pagamentos e folha de ponto); uma pessoa do financeiro dedicada à cobrança dos pacientes; uma gestora que lidera os setores administrativo e financeiro e mantém os cadastros de apoio (especialidades, consultórios e tabela de preços); e uma sala própria de esterilização de materiais, onde as auxiliares de saúde bucal (ASB) processam o instrumental, além de auxiliarem os dentistas em sala.
+**Contexto e porte:** em números, a clínica tem 1 unidade, 7 consultórios com 7 cadeiras ativas, cerca de 30 colaboradores, 4 especialidades oferecidas (implantodontia, clínica geral, ortodontia e endodontia) além da avaliação inicial, e 1 laboratório de prótese próprio. Os cerca de 30 colaboradores se dividem entre dentistas (implantodontia, clínica geral, ortodontia e endodontia), auxiliares de saúde bucal, recepção, financeiro, relacionamento, campanha, marketing, comercial, laboratório e apoio (manobrista). O atendimento é particular, sem convênio. A operação é diária, com agenda dividida por dentista, consultório e horário. A clínica tem ainda um diretor clínico, que faz a consulta de alta ao fim de cada tratamento; um setor administrativo em que uma pessoa cuida só dos colaboradores (cadastro, holerites, pagamentos e folha de ponto); uma pessoa do financeiro dedicada à cobrança dos pacientes; uma gestora que lidera os setores administrativo e financeiro e mantém os cadastros de apoio (especialidades, consultórios e tabela de preços); e uma sala própria de esterilização de materiais, onde as auxiliares de saúde bucal (ASB) processam o instrumental, além de auxiliarem os dentistas em sala.
 
 **Problemas e necessidades identificados:**
 
-Hoje as informações da clínica ficam espalhadas. A planilha de leads é do setor de agendamento; a recepção, por exemplo, só tem contato com quem já é paciente da clínica. Existem dois CRMs: um de marketing, para gestão de leads e campanhas, e outro próprio para odontologia, o Controle Odonto, com o prontuário do paciente. A consequência é desinformação, ou a informação existe mas não de maneira facilitada e simples de entender, e sem esse contexto fica mais difícil e mais lento agir.
+Os problemas estão numerados para que cada um possa ser rastreado até as entidades do modelo e, na Entrega 2, até a consulta SQL que o atende.
 
-O pedido ao laboratório e o prazo de entrega da peça também são combinados na conversa entre dentista, recepção e laboratório, sem um registro único com status. E como o paciente pode aprovar só parte do orçamento, é preciso acompanhar item a item o que está em aberto e o que já foi concluído.
+- **P1. Informação do paciente espalhada.** A planilha de leads é do setor de agendamento; a recepção só tem contato com quem já é paciente. Existem dois CRMs: um de marketing, para leads e campanhas, e o Controle Odonto, próprio para odontologia, com o prontuário. A informação existe, mas não de maneira simples de entender, e sem esse contexto fica mais difícil e mais lento agir. *Como o modelo resolve:* o caminho completo do paciente (cadastro, agendamentos, orçamentos, contrato, parcelas, evolução clínica e pedidos ao laboratório) fica em um único modelo, ligado pelo mesmo identificador do paciente; a origem dele fica guardada em `TP_ORIGEM`.
+- **P2. Pedido ao laboratório sem registro único.** O pedido e o prazo de entrega da peça são combinados na conversa entre dentista, recepção e laboratório, sem um registro com status. *Como o modelo resolve:* a entidade PEDIDO_LABORATORIO guarda a data do pedido, a peça, o prazo combinado, a data de entrega e o status (solicitado, em produção, pronto, entregue).
+- **P3. Orçamento aprovado em parte.** O paciente pode aprovar só parte do orçamento, e é preciso acompanhar item a item o que foi aprovado, o que está em aberto e o que já foi concluído. *Como o modelo resolve:* cada procedimento do orçamento é um ITEM_ORCAMENTO com status de aprovação e status de execução próprios, e o relacionamento EXECUTA registra em qual consulta cada item foi feito.
+- **P4. Bloqueio por inadimplência.** Na hora de agendar, a recepção precisa saber se o paciente tem duas parcelas sem pagar, porque nesse caso ele não agenda e o tratamento fica interrompido até voltar a pagar (RN19). *Como o modelo resolve:* a entidade PARCELA guarda vencimento, data de pagamento e status de cada parcela, e o bloqueio é calculado a partir delas (RF16 e RF17), sem um campo a mais no cadastro do paciente.
+- **P5. Retorno depois da alta.** Perto da data prevista do retorno, a recepção liga ou manda mensagem para o paciente marcar a manutenção ou limpeza, e precisa saber quais retornos vencem no período. *Como o modelo resolve:* o agendamento de alta guarda a data prevista do retorno (`DT_RETORNO_PREVISTO`), e os tipos alta e retorno entram em `TP_AGENDAMENTO` (RF18).
 
 **Justificativa da escolha:** o grupo tem acesso garantido à clínica e ao proprietário para a pesquisa de campo. A clínica tem porte adequado ao trabalho: os processos de captação, avaliação, orçamento, contrato, agendamento, atendimento, laboratório e pagamento geram um modelo com várias entidades e relacionamentos, sem ficar grande demais para esta primeira etapa. Por ser uma organização real e em funcionamento, as regras de negócio foram levantadas diretamente com quem opera a clínica.
 
@@ -51,20 +57,24 @@ O pedido ao laboratório e o prazo de entrega da peça também são combinados n
 | Telefone | (11) 93455-9297 |
 | E-mail | meneghiniodonto@gmail.com |
 | Link no Google | [Meneghini Odontologia Integrada no Google Maps](https://www.google.com/maps/search/?api=1&query=Meneghini+Odontologia+Integrada+-+Dentista+Zona+Norte%2C+Av.+Leôncio+de+Magalhães%2C+162+-+Jardim+São+Paulo%2C+São+Paulo+-+SP) |
-| Responsável entrevistado | Fábio Meneghini (proprietário) |
-| Visita e entrevista | Feitas por Renan Silva dos Santos, em nome do grupo |
-| Registro do contato | Foto de Renan Silva dos Santos com Helen, gestora da clínica, na recepção (abaixo) |
+| Responsável pela organização | Fábio Meneghini, proprietário. Telefone: (11) 93455-9297 |
+| Vínculo do grupo com a clínica | Renan Silva dos Santos trabalha na clínica, na equipe de marketing. Mesmo assim o levantamento foi feito por entrevista com o proprietário, como o trabalho pede |
+| Entrevista | Feita por Renan Silva dos Santos, em nome do grupo, com Fábio Meneghini, proprietário, e Helen Meneghini, gestora, na própria clínica, em 15/09/2026. Segunda rodada de perguntas em 09/11/2026, depois da devolutiva do professor |
+| Registro do contato | Foto de Renan Silva dos Santos com Helen Meneghini, gestora da clínica, na recepção (abaixo) |
+| Levantamento completo | [levantamento/levantamento.md](levantamento/levantamento.md), texto escrito pelo grupo a partir da entrevista e da observação no local; as fotos ficam na mesma pasta |
+
+Resumo do levantamento: a entrevista cobriu a identificação e o porte da clínica, o caminho do paciente (captação, avaliação sem custo, negociação, agendamento, execução, laboratório e pagamento) e as regras de cada etapa: orçamento com aprovação item a item, agenda por dentista e consultório, pedido de laboratório por paciente, pagamento por contrato com parcelas mensais e entrada de 20% no boleto. A segunda rodada completou a cobrança e a inadimplência, a consulta de alta e o retorno, o cadastro de colaboradores, a guarda do prontuário e a esterilização. O que não foi levantado (compras, fornecedores e estoque) está registrado como fora do trabalho, com o motivo.
 
 Fotos do local:
 
 <p align="center">
-  <img src="evidencias/01-entrada.jpg" width="32%" />
-  <img src="evidencias/02-recepcao.jpg" width="32%" />
-  <img src="evidencias/03-consultorio.jpg" width="32%" />
+  <img src="levantamento/01-entrada.jpg" width="32%" />
+  <img src="levantamento/02-recepcao.jpg" width="32%" />
+  <img src="levantamento/03-consultorio.jpg" width="32%" />
 </p>
 <p align="center">
-  <img src="evidencias/04-sala-comercial.jpg" width="32%" />
-  <img src="evidencias/05-consultorio-2.jpg" width="32%" />
+  <img src="levantamento/04-sala-comercial.jpg" width="32%" />
+  <img src="levantamento/05-consultorio-2.jpg" width="32%" />
 </p>
 
 *Da esquerda para a direita, de cima para baixo: entrada com o nome da clínica, recepção, consultório, sala comercial/administrativa e um segundo consultório.*
@@ -72,10 +82,24 @@ Fotos do local:
 Registro do contato:
 
 <p align="center">
-  <img src="evidencias/06-visita-gestora.jpg" width="32%" alt="Renan Silva dos Santos com Helen, gestora da clínica, na recepção" />
+  <img src="levantamento/06-visita-gestora.jpg" width="32%" alt="Renan Silva dos Santos com Helen Meneghini, gestora da clínica, na recepção" />
 </p>
 
-*Renan Silva dos Santos, integrante do grupo, com Helen, gestora da clínica, na recepção da Meneghini Odontologia Integrada (novembro de 2026).*
+*Renan Silva dos Santos, integrante do grupo, com Helen Meneghini, gestora da clínica, na recepção da Meneghini Odontologia Integrada (novembro de 2026).*
+
+### 1.1 Revisão da Entrega 1
+
+A devolutiva do professor (issues #3 e #4 do repositório) apontou os itens abaixo. A tabela diz o que mudou em cada um e por quê.
+
+| Apontamento da E1 | O que mudou | Por quê |
+|---|---|---|
+| Contato com a organização sem foto ou print (critério 3.2, fator 0,85) | Foto de Renan Silva dos Santos com Helen Meneghini, gestora da clínica, na recepção, publicada em `levantamento/06-visita-gestora.jpg` e citada na tabela de evidências | A visita e a entrevista estavam só relatadas em texto; a foto comprova o contato presencial |
+| Processos com cobertura parcial (65%): faltavam relacionamento pós-tratamento, compra de materiais, fornecedores e estoque; cadastro de colaboradores incompleto | Processo 6 (alta e retorno), com fluxograma próprio; Processo 7 (cadastros de apoio: colaboradores, especialidades, consultórios e tabela de preços); compras, fornecedores e estoque declarados fora do levantamento na Delimitação, na Seção 2 e na Seção 8 | Voltamos à clínica em 09/11 e ela explicou como funcionam a alta, o retorno e o cadastro. A área de compras não ficou acessível ao grupo; registramos a limitação em vez de inventar um processo |
+| Regras de negócio com cobertura parcial (78%): faltavam inadimplência, guarda do prontuário, biossegurança e compras | RN18 a RN24 (cobrança e inadimplência, alta e retorno, cadastro de colaboradores e cadastros de apoio); restrições de guarda do prontuário e de biossegurança reescritas na Seção 4; compras fora, pelo motivo acima | As regras vieram da segunda rodada de perguntas. A guarda do prontuário segue a Lei 13.787/2018, art. 6º, conferida no texto oficial. A biossegurança ficou como fato da clínica: sala própria de esterilização e auxiliares de saúde bucal treinadas |
+| Dicionário de dados não atendido: faltavam cardinalidades e associativas, fluxo de dados, SGBD e collation, leitura das expressões, tipo físico e índices, log de acesso e acesso por operação com LGPD | Dicionário v1.2 em HTML, com todos esses itens (link no topo deste README) | Era o item de maior desconto (0,20). O dicionário da E1 só tinha atributo, descrição e regra de cada entidade |
+| Observação sobre o DER: nenhuma entidade associativa com atributos próprios | Os dois relacionamentos N:N (COLABORADOR com ESPECIALIDADE e AGENDAMENTO com ITEM_ORCAMENTO) continuam sem atributos no DER; na conversão para o lógico viram as tabelas COLABORADOR_ESPECIALIDADE e AGENDAMENTO_ITEM | Nenhum dos dois tem dado próprio: a especialidade é só a ligação, e o item executado em uma consulta não tem valor nem quantidade, porque o valor fica no item do orçamento |
+| Observação: a seção de IA dizia que a ferramenta "gerou as imagens do DER e dos fluxogramas" | O software usado está informado na Seção 7: as imagens são geradas por um script em Python escrito pelo grupo com apoio da ferramenta de IA e revisado pelo grupo. O uso continua declarado na Seção 9 | Os slides da Entrega 2 pedem o software usado no DER e o registro de todo uso de IA |
+| Observação: último commit da E1 feito depois do envio do formulário | O conteúdo desta entrega entra na branch `main` antes do envio do formulário | Regra do repositório: só a `main` é corrigida |
 
 ---
 
@@ -447,7 +471,9 @@ O diagrama usa a notação de Chen vista em aula: retângulo para entidade, losa
 
 Como ler as cardinalidades: seguimos a convenção do brModelo/Heuser, em que o `(mín,máx)` escrito ao lado de uma entidade indica quantas ocorrências dela se ligam a uma ocorrência da outra entidade. Por exemplo, em `PACIENTE (1,1) MARCA (1,N) AGENDAMENTO`, um paciente tem de 1 a N agendamentos, e cada agendamento é de exatamente 1 paciente.
 
-O modelo tem 12 entidades e 15 relacionamentos, sendo 2 do tipo N:N (COLABORADOR com ESPECIALIDADE e AGENDAMENTO com ITEM_ORCAMENTO). Na próxima etapa, no modelo lógico, esses dois vão gerar tabelas intermediárias.
+O modelo tem 12 entidades e 15 relacionamentos, sendo 2 do tipo N:N (COLABORADOR com ESPECIALIDADE e AGENDAMENTO com ITEM_ORCAMENTO). No modelo lógico, esses dois geram tabelas intermediárias.
+
+Software usado: o DER não foi desenhado no brModelo. Foi gerado por um script em Python escrito pelo grupo com apoio da ferramenta de IA, que produz o arquivo SVG (`der/der-meneghini-odontologia.svg`) na notação do brModelo/Heuser; o PNG foi convertido do SVG com o navegador Google Chrome. O grupo revisou o resultado entidade por entidade e cardinalidade por cardinalidade. Os fluxogramas da Seção 2 e o diagrama do modelo lógico foram feitos do mesmo jeito.
 
 ---
 
