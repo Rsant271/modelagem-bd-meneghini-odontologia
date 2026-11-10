@@ -2,8 +2,8 @@
 
 **Disciplina:** Modelagem de Banco de Dados (2260065), Análise e Desenvolvimento de Sistemas, UNICID
 **Professor:** Cid Rodrigues de Andrade
-**Entrega 1: Modelo Conceitual (DER)**, setembro de 2026
-**Dicionário de dados em HTML:** [abrir no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html)
+**Entrega 1: Modelo Conceitual (DER)**, setembro de 2026; revisado em novembro de 2026 a partir da devolutiva do professor e de uma segunda rodada de levantamento na clínica
+**Dicionário de dados completo (HTML):** [abrir no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html)
 
 ## Metadados
 
@@ -12,6 +12,8 @@
 | Renan Silva dos Santos | 47203099 |
 | Leonardo Alves Tavares Calixta | 47323485 |
 | David Carlos da Fonseca Junior | 46638202 |
+| Vinicius Scherer Di Giorno | 47028238 |
+| Lucas Henrique Roque Cruz | 47178922 |
 
 ---
 
@@ -23,7 +25,7 @@ A Meneghini Odontologia Integrada é uma clínica odontológica particular no ba
 
 **Objetivo:** levantar os requisitos e as regras de funcionamento da clínica por meio de pesquisa de campo e construir o modelo conceitual (DER) de um sistema de gestão de informações que organize esses dados sem redundância e sem inconsistência.
 
-**Delimitação:** o modelo cobre o núcleo clínico, comercial e financeiro da clínica: cadastro de pacientes e colaboradores, agendamento, avaliação, orçamento, contrato e parcelas, execução dos procedimentos, evolução clínica e pedidos ao laboratório. Ficam fora desta etapa a folha de pagamento, as compras e o estoque de materiais, as campanhas de marketing e a contabilidade. Os leads (pessoas que ainda não compareceram à clínica) também ficam fora: eles são controlados em uma planilha do time de agendamento, a maioria não vira paciente e só esse time tem acesso. A pessoa entra no modelo quando comparece à avaliação e a recepção abre o cadastro. Os materiais (resinas, implantes etc.) variam por especialidade e não foram levantados na pesquisa de campo, então ficam para uma etapa futura. A clínica atende somente particular, sem convênios, e por isso o modelo não tem entidades de convênio.
+**Delimitação:** o modelo cobre o núcleo clínico, comercial e financeiro da clínica: cadastro de pacientes e colaboradores, agendamento, avaliação, orçamento, contrato e parcelas, execução dos procedimentos, evolução clínica, pedidos ao laboratório, cobrança e o caminho do paciente depois do tratamento (consulta de alta e retorno). Ficam fora desta etapa a folha de pagamento (holerite, pagamento de colaborador e ponto), as campanhas de marketing e a contabilidade. As compras de materiais, o cadastro de fornecedores e o controle de estoque também ficam fora, por um motivo diferente: o grupo não teve acesso a essa área da clínica na pesquisa de campo. Resinas, implantes e outros materiais variam por especialidade, e sem saber quem compra, como repõe e como controla, qualquer modelo seria inventado; preferimos registrar a limitação. Os leads (pessoas que ainda não compareceram à clínica) também ficam fora: eles são controlados em uma planilha do time de agendamento, a maioria não vira paciente e só esse time tem acesso. A pessoa entra no modelo quando comparece à avaliação e a recepção abre o cadastro. A clínica atende somente particular, sem convênios, e por isso o modelo não tem entidades de convênio.
 
 ---
 
@@ -31,7 +33,7 @@ A Meneghini Odontologia Integrada é uma clínica odontológica particular no ba
 
 **Nome e natureza da organização:** Meneghini Odontologia Integrada, clínica odontológica privada, com fins lucrativos. Oferece avaliação, clínica geral, implantodontia, ortodontia e endodontia, e tem laboratório de prótese próprio.
 
-**Contexto e porte:** a clínica tem uma única unidade, com 7 consultórios (7 cadeiras ativas) e cerca de 30 colaboradores, entre dentistas (implantodontia, clínica geral, ortodontia e endodontia), auxiliares de saúde bucal, recepção, financeiro, relacionamento, campanha, marketing, comercial, laboratório e apoio (manobrista). O atendimento é particular, sem convênio. A operação é diária, com agenda dividida por dentista, consultório e horário.
+**Contexto e porte:** a clínica tem uma única unidade, com 7 consultórios (7 cadeiras ativas) e cerca de 30 colaboradores, entre dentistas (implantodontia, clínica geral, ortodontia e endodontia), auxiliares de saúde bucal, recepção, financeiro, relacionamento, campanha, marketing, comercial, laboratório e apoio (manobrista). O atendimento é particular, sem convênio. A operação é diária, com agenda dividida por dentista, consultório e horário. A clínica tem ainda um diretor clínico, que faz a consulta de alta ao fim de cada tratamento; um setor administrativo em que uma pessoa cuida só dos colaboradores (cadastro, holerites, pagamentos e folha de ponto); uma pessoa do financeiro dedicada à cobrança dos pacientes; uma gestora que lidera os setores administrativo e financeiro e mantém os cadastros de apoio (especialidades, consultórios e tabela de preços); e uma sala própria de esterilização de materiais, onde as auxiliares de saúde bucal (ASB) processam o instrumental, além de auxiliarem os dentistas em sala.
 
 **Problemas e necessidades identificados:**
 
@@ -51,6 +53,7 @@ O pedido ao laboratório e o prazo de entrega da peça também são combinados n
 | Link no Google | [Meneghini Odontologia Integrada no Google Maps](https://www.google.com/maps/search/?api=1&query=Meneghini+Odontologia+Integrada+-+Dentista+Zona+Norte%2C+Av.+Leôncio+de+Magalhães%2C+162+-+Jardim+São+Paulo%2C+São+Paulo+-+SP) |
 | Responsável entrevistado | Fábio Meneghini (proprietário) |
 | Visita e entrevista | Feitas por Renan Silva dos Santos, em nome do grupo |
+| Registro do contato | Foto de Renan Silva dos Santos com Helen, gestora da clínica, na recepção (abaixo) |
 
 Fotos do local:
 
@@ -66,6 +69,14 @@ Fotos do local:
 
 *Da esquerda para a direita, de cima para baixo: entrada com o nome da clínica, recepção, consultório, sala comercial/administrativa e um segundo consultório.*
 
+Registro do contato:
+
+<p align="center">
+  <img src="evidencias/06-visita-gestora.jpg" width="32%" alt="Renan Silva dos Santos com Helen, gestora da clínica, na recepção" />
+</p>
+
+*Renan Silva dos Santos, integrante do grupo, com Helen, gestora da clínica, na recepção da Meneghini Odontologia Integrada (novembro de 2026).*
+
 ---
 
 ## 2. Processos de Negócio
@@ -76,7 +87,11 @@ Fotos do local:
 2. Avaliação, orçamento e contrato. O dentista avaliador examina o paciente e monta o orçamento com procedimentos avulsos (por dente e por fase). O setor comercial negocia. Os itens aprovados viram contrato com a forma de pagamento, e o financeiro gera as parcelas.
 3. Agendamento e atendimento. A recepção agenda as consultas (paciente, dentista, consultório, data e hora), confirma a presença e registra falta ou atendimento. O dentista executa os itens do plano e registra a evolução clínica.
 4. Pedido ao laboratório. Quando o tratamento precisa de uma peça (coroa, prótese etc.), o dentista faz o pedido ao laboratório da própria clínica, que produz a peça e avisa quando está pronta.
-5. Pagamento. As parcelas são registradas e baixadas no sistema. O tratamento avança conforme o plano e a evolução do pagamento.
+5. Pagamento e cobrança. As parcelas são mensais, uma por mês, registradas e baixadas no sistema. Uma pessoa do financeiro cuida da parte dos pacientes, incluindo a cobrança de quem atrasa. O tratamento avança conforme o plano e a evolução do pagamento; se o paciente para de pagar e chega a duas parcelas sem pagar, ele não consegue agendar e o tratamento é interrompido. Quando volta a pagar, o tratamento segue de onde parou no planejamento.
+6. Alta e retorno. Quando o último item do plano é concluído, a recepção agenda a consulta de alta com o diretor clínico, que confere o tratamento. Na alta fica definido o retorno do paciente, em geral seis meses depois, para manutenção ou limpeza. Essa manutenção ou limpeza costuma já estar lançada no orçamento inicial do paciente, que no Controle Odonto é um planejamento geral com tudo o que ele precisa; por isso a recepção procura deixar esse valor pago antes do retorno e, perto da data, liga ou manda mensagem para o paciente marcar. Tudo fica registrado no sistema. Hoje a clínica não faz pesquisa de satisfação nem reativação de pacientes antigos, então esses dois contatos não entram no modelo.
+7. Cadastros de apoio. O setor administrativo tem uma pessoa responsável só pelos colaboradores, dentistas ou de qualquer outra função. Ela faz o cadastro no Controle Odonto quando alguém entra e cuida de holerites, pagamentos e folha de ponto. Especialidades, consultórios e tabela de preços são mantidos pela gestora, que lidera os setores administrativo e financeiro. No modelo entram o cadastro do colaborador (nome, CPF, cargo, setor, CRO e especialidades dos dentistas, admissão e situação), as especialidades, os consultórios e os procedimentos da tabela de preços; holerite, pagamento e ponto são folha de pagamento e ficam fora.
+
+**Fora do levantamento:** compra de materiais, cadastro de fornecedores e controle de estoque não aparecem aqui porque o grupo não teve acesso a essa área da clínica. O grupo registrou a limitação em vez de descrever um processo que não viu funcionar.
 
 **Fluxogramas:**
 
@@ -92,7 +107,11 @@ Processo 3: pedido ao laboratório da clínica.
 
 ![Fluxograma do processo 3](fluxogramas/processo-3-pedido-de-laboratorio.png)
 
-Os três processos se ligam assim: o Processo 1 termina com o contrato assinado e as primeiras consultas agendadas, que são o início do Processo 2. Dentro do Processo 2, sempre que o dentista precisa de uma peça, abre-se um pedido no Processo 3, e a peça pronta é instalada em uma consulta do Processo 2. As parcelas geradas no Processo 1 são baixadas pelo financeiro ao longo do tratamento, e a agenda das próximas sessões segue o plano e o andamento do pagamento.
+Processo 6: alta e retorno (fim do tratamento, consulta de alta com o diretor clínico e retorno para manutenção ou limpeza).
+
+![Fluxograma do processo 6](fluxogramas/processo-6-alta-e-retorno.png)
+
+Os processos se ligam assim: o Processo 1 termina com o contrato assinado e as primeiras consultas agendadas, que são o início do Processo 2. Dentro do Processo 2, sempre que o dentista precisa de uma peça, abre-se um pedido no Processo 3, e a peça pronta é instalada em uma consulta do Processo 2. As parcelas geradas no Processo 1 são baixadas pelo financeiro ao longo do tratamento, e a agenda das próximas sessões segue o plano e o andamento do pagamento. Se o paciente acumula duas parcelas sem pagar, o financeiro começa a cobrança (Processo 5), a recepção não agenda novas consultas e o tratamento fica interrompido. Quando o último item do plano é concluído, o Processo 2 leva ao Processo 6: consulta de alta com o diretor clínico e retorno marcado para alguns meses depois, o que traz o paciente de volta à agenda. O Processo 7 é de apoio: é dele que vem o cadastro de dentistas e demais colaboradores usado em todos os outros.
 
 ---
 
@@ -117,6 +136,9 @@ Os três processos se ligam assim: o Processo 1 termina com o contrato assinado 
 | RF13 | Registrar pedidos ao laboratório, com paciente, dentista solicitante, peça, prazo e status. |
 | RF14 | Acompanhar os itens do plano de tratamento em aberto e concluídos. |
 | RF15 | Consultar o histórico do paciente: agendamentos, orçamentos, contratos, parcelas, evoluções e pedidos. |
+| RF16 | Listar as parcelas atrasadas e os pacientes com duas parcelas sem pagar, para a cobrança do financeiro. |
+| RF17 | Impedir novo agendamento para o paciente com duas parcelas sem pagar, informando o motivo à recepção. |
+| RF18 | Registrar a consulta de alta com o diretor clínico e a data prevista do retorno, e listar os retornos que vencem no período para a recepção entrar em contato. |
 
 ### 3.2 Requisitos Não Funcionais
 
@@ -154,14 +176,23 @@ Os três processos se ligam assim: o Processo 1 termina com o contrato assinado 
 | RN15 | O pedido ao laboratório é feito por paciente, solicitado por um dentista, e o prazo é combinado entre dentista, recepção e laboratório. |
 | RN16 | A evolução clínica é registrada apenas em agendamentos atendidos. |
 | RN17 | Antes de comparecer à clínica, a pessoa é um lead controlado em planilha pelo time de agendamento; ela só entra no sistema (vira paciente) quando comparece à avaliação e a recepção abre o cadastro. |
+| RN18 | A cobrança dos pacientes, incluindo a inadimplência, é feita por uma pessoa do financeiro dedicada a isso. |
+| RN19 | As parcelas são mensais. O paciente com duas parcelas sem pagar não agenda novas consultas e o tratamento fica interrompido; quando volta a pagar, o tratamento segue de onde parou no planejamento. |
+| RN20 | Quando o último item do plano é concluído, o paciente passa por uma consulta de alta com o diretor clínico, que confere o tratamento. |
+| RN21 | Na alta é definido o retorno do paciente, em geral seis meses depois, para manutenção ou limpeza; a recepção agenda o retorno seguindo o processo da clínica e registra tudo no sistema. |
+| RN22 | A manutenção ou limpeza do retorno em geral já está lançada no orçamento inicial do paciente (o planejamento geral); a recepção procura deixar esse valor pago com antecedência e, perto da data, entra em contato por ligação ou mensagem para marcar. |
+| RN23 | O cadastro de colaboradores, dentistas ou de qualquer função, é feito pelo setor administrativo, por uma pessoa responsável só por isso. |
+| RN24 | Especialidades, consultórios e tabela de preços são mantidos pela gestora, que lidera os setores administrativo e financeiro. |
 
 **Restrições organizacionais:**
 
 - LGPD: a clínica trata dados pessoais (nome, CPF, contato) e dados sensíveis de saúde (evolução clínica). Pela Lei 13.709/2018, esses dados exigem acesso restrito e finalidade definida. No modelo, a evolução clínica ficou em uma entidade separada para que o acesso a ela possa ser controlado. Neste trabalho não usamos nenhum dado real de paciente ou colaborador; os exemplos são fictícios.
+- Guarda do prontuário: na clínica o prontuário é digital e fica no Controle Odonto. Pela Lei 13.787/2018 (art. 6º), o prontuário do paciente deve ser guardado por no mínimo 20 anos após o último registro. No modelo, a evolução clínica e os registros ligados a ela não podem ser apagados; ao fim do prazo, são anonimizados.
+- Biossegurança e esterilização: a clínica tem uma sala própria de esterilização de materiais. O processamento do instrumental é feito pelas auxiliares de saúde bucal (ASB), profissionais treinadas para isso, que também auxiliam os dentistas em sala. Esse controle é da rotina da equipe da sala de esterilização e fica fora do modelo de dados, que cobre o caminho do paciente.
 - Registro profissional: todo dentista precisa ter registro no CRO, então o CRO é um atributo obrigatório para colaboradores do tipo dentista.
 - Atendimento particular: a clínica não trabalha com convênios, então não existem entidades de convênio ou guia.
 - Uma única unidade: o modelo não tem entidade de unidade/filial, mas o consultório é uma entidade própria, o que permite crescer no futuro.
-- Sistema atual: a clínica já usa o Controle Odonto, e o modelo proposto precisa ser compatível com o que a equipe já registra (agenda, orçamento por item, parcelas, prontuário).
+- Sistema atual: a clínica já usa o Controle Odonto, e o modelo proposto precisa ser compatível com o que a equipe já registra (agenda, orçamento por item, parcelas, prontuário, cadastro de colaboradores).
 
 ---
 
@@ -171,7 +202,7 @@ Convenções adotadas (seguindo o exemplo de dicionário de dados apresentado em
 
 Todos os exemplos de valores citados abaixo são fictícios.
 
-O mesmo dicionário está em página HTML, com estilo próprio: [abrir o dicionário de dados no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html). O arquivo fica em [dicionario/dicionario-de-dados.html](dicionario/dicionario-de-dados.html) e o conteúdo é idêntico ao desta seção.
+Esta seção traz a parte conceitual do dicionário: atributo, descrição e regra de negócio de cada entidade. A versão completa, com SGBD e collation, tipo físico, obrigatoriedade, leitura de cada expressão, chaves e índices, fluxo de dados, log de acesso e matriz de acesso com LGPD, está em página HTML: [abrir o dicionário de dados no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html). O arquivo fica em [dicionario/dicionario-de-dados.html](dicionario/dicionario-de-dados.html).
 
 ### PACIENTE
 
@@ -194,7 +225,7 @@ Pessoa que procura a clínica e passa pela avaliação inicial.
 
 ### COLABORADOR
 
-Pessoa que trabalha na clínica: dentistas, auxiliares, recepção, financeiro, comercial, relacionamento, campanha, marketing, laboratório e apoio.
+Pessoa que trabalha na clínica: dentistas (incluindo o diretor clínico), auxiliares de saúde bucal, recepção, financeiro, comercial, relacionamento, campanha, marketing, laboratório, administrativo e apoio.
 
 `COLABORADOR = @ID_COLABORADOR + NM_COLABORADOR + NR_CPF + TP_CARGO + NM_SETOR + (NR_CRO) + DT_ADMISSAO + IN_ATIVO`
 
@@ -203,8 +234,8 @@ Pessoa que trabalha na clínica: dentistas, auxiliares, recepção, financeiro, 
 | ID_COLABORADOR | Número que identifica o colaborador | Obrigatório, único |
 | NM_COLABORADOR | Nome completo | Obrigatório |
 | NR_CPF | CPF do colaborador | Obrigatório e único |
-| TP_CARGO | Função na clínica (ex.: dentista, auxiliar, recepcionista, financeiro, comercial, laboratório) | Obrigatório; só colaboradores com cargo "dentista" podem atender agendamentos e ter especialidades |
-| NM_SETOR | Setor em que trabalha (ex.: clínico, recepção, financeiro, comercial, laboratório) | Obrigatório |
+| TP_CARGO | Função na clínica (ex.: dentista, diretor clínico, auxiliar de saúde bucal, recepcionista, financeiro, comercial, administrativo, gestora, laboratório) | Obrigatório; só dentistas podem atender agendamentos e ter especialidades. O diretor clínico é um dentista: atende a consulta de alta, avaliações novas e, às vezes, cirurgias |
+| NM_SETOR | Setor em que trabalha (ex.: clínico, recepção, financeiro, comercial, administrativo, laboratório) | Obrigatório |
 | NR_CRO | Número de registro no Conselho Regional de Odontologia | Obrigatório e único para dentistas; vazio para os demais cargos |
 | DT_ADMISSAO | Data de entrada na clínica | Obrigatório |
 | IN_ATIVO | Indica se o colaborador está ativo | Colaborador inativo não pode ser escolhido em novos agendamentos, mas seu histórico é mantido |
@@ -307,22 +338,23 @@ Cada pagamento previsto de um contrato.
 | VL_PARCELA | Valor da parcela | Obrigatório |
 | DT_VENCIMENTO | Data de vencimento | Obrigatório |
 | DT_PAGAMENTO | Data em que foi paga | Preenchida quando o financeiro dá a baixa |
-| CD_STATUS | Situação da parcela | Valores: aberta, paga, atrasada |
+| CD_STATUS | Situação da parcela | Valores: aberta, paga, atrasada. Duas parcelas atrasadas bloqueiam novos agendamentos do paciente (RN19) |
 
 ### AGENDAMENTO
 
-Consulta marcada: um paciente, com um dentista, em um consultório, em uma data e hora.
+Consulta marcada: um paciente, com um dentista, em um consultório, em uma data e hora. Cobre a avaliação, as consultas de tratamento, a consulta de alta e o retorno.
 
-`AGENDAMENTO = @ID_AGENDAMENTO + DT_HORA_INICIO + QT_DURACAO_MIN + TP_AGENDAMENTO + CD_STATUS + (DS_OBSERVACAO)`
+`AGENDAMENTO = @ID_AGENDAMENTO + DT_HORA_INICIO + QT_DURACAO_MIN + TP_AGENDAMENTO + CD_STATUS + (DS_OBSERVACAO) + (DT_RETORNO_PREVISTO)`
 
 | Atributo | Descrição | Regra de negócio associada |
 |---|---|---|
 | ID_AGENDAMENTO | Identificador do agendamento | Obrigatório, único |
 | DT_HORA_INICIO | Data e hora de início | Obrigatório; não pode haver dois agendamentos no mesmo consultório, nem o mesmo dentista em dois consultórios, no mesmo horário |
 | QT_DURACAO_MIN | Duração prevista em minutos | Obrigatório |
-| TP_AGENDAMENTO | Tipo da consulta | Valores: avaliação (sem custo), tratamento |
+| TP_AGENDAMENTO | Tipo da consulta | Valores: avaliação (sem custo), tratamento, alta (com o diretor clínico), retorno (manutenção ou limpeza) |
 | CD_STATUS | Situação do agendamento | Valores: agendado, confirmado, atendido, falta, reagendado |
 | DS_OBSERVACAO | Observação da recepção | Opcional |
+| DT_RETORNO_PREVISTO | Data prevista do retorno do paciente, definida na consulta de alta | Opcional; preenchida só no agendamento do tipo alta, em geral seis meses depois. A recepção usa essa data para ligar ou mandar mensagem e marcar o retorno (RN21, RN22) |
 
 ### EVOLUCAO_CLINICA
 
@@ -402,6 +434,8 @@ Solicitação de uma peça (coroa, prótese etc.) ao laboratório da própria cl
 - A evolução clínica fica em entidade própria por causa da LGPD (dado sensível de saúde, com acesso restrito).
 - O preço aparece em dois lugares: `VL_TABELA` no PROCEDIMENTO (preço de tabela) e `VL_NEGOCIADO` no ITEM_ORCAMENTO (preço com desconto). Assim a clínica guarda quanto foi cobrado em cada orçamento, mesmo que a tabela mude depois.
 - Não existem entidades de convênio (a clínica é particular) nem de unidade (a clínica tem um único endereço).
+- A consulta de alta e o retorno são agendamentos com tipos próprios (alta e retorno); a data prevista do retorno é um atributo opcional do agendamento de alta.
+- O bloqueio de agendamento por inadimplência (RN19) é calculado a partir das parcelas com status atrasada, sem atributo no PACIENTE, para não guardar a mesma informação em dois lugares.
 
 ---
 
@@ -443,9 +477,15 @@ As chaves estrangeiras não aparecem no DER. No modelo conceitual, a ligação e
 
 O lead ficou fora do modelo. Ele existe só em planilha, a maioria não vira paciente (é um funil) e só o time de agendamento tem acesso. O modelo começa quando a pessoa comparece à clínica e a recepção abre o cadastro; o paciente guarda apenas de onde veio (`TP_ORIGEM`). Incluir o lead traria o marketing para dentro do modelo sem necessidade nesta etapa.
 
-Os materiais também ficaram fora. Resinas, implantes e outros materiais são ligados às especialidades e não foram levantados na pesquisa de campo (quem controla, como repõe). Sem esses fatos, preferimos deixar para uma etapa futura a modelar de forma inventada.
+Compras de materiais, fornecedores e estoque ficaram fora porque o grupo não teve acesso a essa área da clínica na pesquisa de campo. Resinas, implantes e outros materiais variam por especialidade, e sem saber quem compra, como repõe e como controla, qualquer entidade de MATERIAL ou FORNECEDOR seria inventada. Por isso ficou registrada só a limitação.
 
-Sobre o escopo: deixamos de fora folha de pagamento, compras e estoque, marketing e contabilidade porque não fazem parte do caminho do paciente e tornariam o modelo grande demais para esta etapa. O modelo foi montado para receber essas partes depois sem alterar o que já existe.
+A alta e o retorno do paciente não viraram entidades novas. Chegamos a pensar em uma entidade RETORNO, mas a alta é uma consulta com o diretor clínico e o retorno é uma consulta de manutenção ou limpeza: as duas têm paciente, dentista, consultório, data e hora, exatamente o que AGENDAMENTO já guarda. Por isso acrescentamos dois valores ao tipo do agendamento (alta e retorno) e um atributo opcional, `DT_RETORNO_PREVISTO`, preenchido na alta. A manutenção que a recepção deixa paga antes fica no orçamento inicial do paciente: na clínica esse orçamento é um planejamento geral, com tudo o que o paciente precisa já lançado, e a manutenção costuma ser um item dele (ITEM_ORCAMENTO), pago pelas parcelas do contrato.
+
+A inadimplência ficou só nas parcelas, sem atributo novo. "Paciente bloqueado" se calcula a partir delas: se o paciente tem duas parcelas com status atrasada, a recepção não agenda (RN19). Como as parcelas são mensais, duas atrasadas são dois meses sem pagar; quando o paciente regulariza, o tratamento segue de onde parou no planejamento, e nada disso precisa ser guardado além das próprias parcelas. Guardar um indicador no PACIENTE repetiria o que as parcelas já dizem e poderia ficar desatualizado quando o financeiro desse a baixa.
+
+Os cadastros de apoio entraram como um processo só (Processo 7): o cadastro de colaboradores, feito pelo setor administrativo no Controle Odonto, e as especialidades, os consultórios e a tabela de preços, mantidos pela gestora que lidera os setores administrativo e financeiro (RN24). As quatro entidades envolvidas (COLABORADOR, ESPECIALIDADE, CONSULTORIO e PROCEDIMENTO) já existiam no modelo; a segunda rodada definiu quem mantém cada uma. Holerite, pagamento de colaborador e folha de ponto são folha de pagamento e continuam fora, como já estava na delimitação.
+
+Sobre o escopo: deixamos de fora folha de pagamento, marketing e contabilidade porque não fazem parte do caminho do paciente e tornariam o modelo grande demais para esta etapa; compras e estoque ficaram fora por falta de acesso, como explicado acima. O modelo foi montado para receber essas partes depois sem alterar o que já existe.
 
 ---
 
@@ -453,7 +493,7 @@ Sobre o escopo: deixamos de fora folha de pagamento, compras e estoque, marketin
 
 O trabalho foi feito pelo grupo: a escolha da clínica, a pesquisa de campo (visita, entrevista com o proprietário, Fábio Meneghini, e observação do funcionamento, feitas por Renan Silva dos Santos em nome do grupo), as decisões de escopo (sem convênio, lead e materiais fora do modelo), a lista das 12 entidades, a definição das cardinalidades em palavras a partir do funcionamento real da clínica, a correção da ordem dos processos, as regras de negócio e a revisão do texto. Nenhum dado do trabalho foi inventado por ferramenta: tudo o que está aqui veio da clínica ou de decisão do grupo.
 
-Usamos a ferramenta Claude (Anthropic) como apoio em três pontos, registrados abaixo no formato pedido pelo esqueleto.
+Usamos a ferramenta Claude (Anthropic) como apoio em quatro pontos, registrados abaixo no formato pedido pelo esqueleto.
 
 | Item | Uso 1: leitura do material da disciplina |
 |---|---|
@@ -488,15 +528,26 @@ Usamos a ferramenta Claude (Anthropic) como apoio em três pontos, registrados a
 | Justificativa da escolha final | Cada entidade e cada cardinalidade do trabalho tem origem em uma resposta da entrevista ou em uma decisão do grupo. |
 | Reflexão crítica | O rascunho supunha coisas que não são da clínica (paciente sem orçamento, um CRM só, lead dentro do sistema). Foi a pesquisa de campo que corrigiu. O ponto de mais cuidado foi a cardinalidade invertida, armadilha citada no material do brModelo: por isso respondemos as cardinalidades em palavras e escrevemos a regra de leitura na legenda do DER e neste README. Os pontos que ficaram em dúvida (evolução por consulta ou histórico único, teto de desconto por cargo, parcela atrasada) serão confirmados com a clínica antes da Entrega 2. |
 
+| Item | Uso 4: revisão após a devolutiva do professor |
+|---|---|
+| Ferramenta e etapa | Claude, em outubro e novembro de 2026, depois da devolutiva (issues #3 e #4). Ajudou a completar o dicionário de dados em HTML e a transformar as respostas de uma segunda rodada de levantamento na clínica em processos, requisitos e regras. |
+| Motivação | A devolutiva apontou processos e regras ausentes (relacionamento pós-tratamento, cadastro de colaboradores, inadimplência, guarda do prontuário, biossegurança, compras) e um dicionário incompleto. |
+| Prompt(s) utilizados | "Aqui estão as respostas da clínica sobre cobrança, alta e retorno, cadastro de colaboradores e esterilização. Transforme em processos, requisitos e regras no formato do README. Não invente nada: o que não foi respondido fica de fora ou marcado como pendente." |
+| Resposta recebida | Processos 6 e 7, RF16 a RF18, RN18 a RN24, restrições de guarda do prontuário e de biossegurança reescritas, e o dicionário v1.2 com cardinalidades, fluxo de dados, SGBD e collation, tipo físico, índices, log de acesso e matriz de acesso com LGPD. |
+| Fontes consultadas e verificadas | Respostas da clínica na segunda rodada; devolutiva e esqueletos do professor; Lei 13.787/2018 (art. 6º) e Código Civil (art. 206, § 5º, I), conferidos pelo grupo no texto oficial antes de entrar no trabalho. |
+| Trechos rejeitados ou corrigidos | (a) a ferramenta levantou a opção de uma entidade RETORNO; o grupo manteve tudo em AGENDAMENTO, com os tipos alta e retorno; (b) sugeriu um indicador "bloqueado" no PACIENTE; descartamos, porque é derivado das parcelas; (c) a primeira redação da restrição de biossegurança dizia que o tema "não foi levantado" e citava a RDC 15/2012 da ANVISA; ao conferir o texto oficial, vimos que a resolução exclui do seu escopo o processamento feito em consultórios odontológicos, e a restrição foi reescrita só com o que a pesquisa de campo mostrou: sala própria de esterilização e auxiliares de saúde bucal treinadas. |
+| Justificativa da escolha final | Só entrou o que a clínica respondeu. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso, em vez de preenchidos com um processo genérico. |
+| Reflexão crítica | A ferramenta tende a fechar lacuna com texto de "a confirmar" ou com uma citação de norma que soa bem. Para resolver, voltamos à clínica com perguntas específicas, escrevemos só o que foi respondido e conferimos cada citação legal na fonte antes de publicar. |
+
 ---
 
 ## Conclusão
 
-Neste trabalho levantamos, por pesquisa de campo, como a Meneghini Odontologia Integrada funciona, do primeiro contato do paciente até o pagamento, e transformamos esse levantamento em um modelo conceitual com 12 entidades e 15 relacionamentos. As principais decisões foram tratar todos os cargos como uma única entidade COLABORADOR, modelar ESPECIALIDADE como entidade (N:N), separar ORCAMENTO, ITEM_ORCAMENTO, CONTRATO e PARCELA para acompanhar a aprovação item a item e o pagamento parcelado, e usar AGENDAMENTO como a entidade que liga paciente, dentista e consultório.
+Neste trabalho levantamos, por pesquisa de campo, como a Meneghini Odontologia Integrada funciona, do primeiro contato do paciente até o pagamento e o retorno depois da alta, e transformamos esse levantamento em um modelo conceitual com 12 entidades e 15 relacionamentos. As principais decisões foram tratar todos os cargos como uma única entidade COLABORADOR, modelar ESPECIALIDADE como entidade (N:N), separar ORCAMENTO, ITEM_ORCAMENTO, CONTRATO e PARCELA para acompanhar a aprovação item a item e o pagamento parcelado, e usar AGENDAMENTO como a entidade que liga paciente, dentista e consultório.
 
 A parte que mais exigiu atenção foi a cardinalidade. Cada `(mín,máx)` do DER veio de uma resposta concreta da entrevista, e algumas mudaram quando conferimos com o funcionamento real da clínica (por exemplo, todo paciente cadastrado já passou pela avaliação e por isso tem pelo menos um orçamento). Também precisamos respeitar a LGPD no desenho, separando o dado sensível (evolução clínica) para permitir acesso restrito.
 
-Na Entrega 2 pretendemos revisar o DER com o retorno do professor, converter o modelo para o lógico (com as tabelas intermediárias dos relacionamentos N:N e a migração das chaves), escrever o SQL de criação das tabelas e confirmar com a clínica os pontos que ficaram em aberto: registro da evolução por consulta, regra de desconto por cargo e tratamento de parcelas atrasadas.
+Depois da devolutiva do professor, voltamos à clínica e fechamos dois dos pontos que estavam em aberto: o tratamento das parcelas atrasadas (RN18 e RN19) e o caminho do paciente depois do tratamento, com a consulta de alta e o retorno (Processo 6). Também entraram os cadastros de apoio (Processo 7): colaboradores pelo setor administrativo e especialidades, consultórios e tabela de preços pela gestora. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso. Continuam em aberto o registro da evolução por consulta e a regra de desconto por cargo. Na Entrega 2 pretendemos converter o modelo para o lógico (com as tabelas intermediárias dos relacionamentos N:N e a migração das chaves), normalizar e escrever o SQL de criação das tabelas.
 
 ---
 
@@ -509,6 +560,10 @@ ELMASRI, R.; NAVATHE, S. B. **Sistemas de Banco de Dados**. 7. ed. São Paulo: P
 CHEN, P. P. The Entity-Relationship Model: Toward a Unified View of Data. **ACM Transactions on Database Systems**, v. 1, n. 1, p. 9-36, 1976.
 
 BRASIL. **Lei nº 13.709, de 14 de agosto de 2018**. Lei Geral de Proteção de Dados Pessoais (LGPD). Diário Oficial da União, Brasília, DF, 15 ago. 2018.
+
+BRASIL. **Lei nº 13.787, de 27 de dezembro de 2018**. Dispõe sobre a digitalização e a utilização de sistemas informatizados para a guarda, o armazenamento e o manuseio de prontuário de paciente. Diário Oficial da União, Brasília, DF, 28 dez. 2018.
+
+BRASIL. **Lei nº 10.406, de 10 de janeiro de 2002**. Institui o Código Civil. Diário Oficial da União, Brasília, DF, 11 jan. 2002.
 
 CÂNDIDO, C. H. **brModelo**: ferramenta de modelagem conceitual de banco de dados. UFSC/UNIVAG, 2005.
 
