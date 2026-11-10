@@ -27,6 +27,7 @@
 --   . alta com retorno previsto já vencido e sem retorno marcado (paciente 26)
 --   . consulta de alta feita por dentista comum, não pelo diretor clínico (agendamento 35)
 --   . orçamento com VL_TOTAL diferente da soma dos itens (orçamento 14)
+--   . item negociado acima do preço de tabela (orçamento 12, item 2)
 --   . faltas (agendamentos 39, 63 e 66), reagendamento (46) e encaixe (40)
 --   . formas de pagamento: à vista, cartão parcelado e boleto com entrada de 20%
 -- ============================================================================
@@ -177,7 +178,7 @@ INSERT INTO ORCAMENTO (ID_ORCAMENTO, ID_PACIENTE, ID_COLABORADOR_AVALIADOR, ID_C
 (9,  9,  3, 13,   '2026-08-24', 2630.00,  'aprovado_parcial'),
 (10, 10, 6, 12,   '2026-08-25', 1800.00,  'aprovado'),
 (11, 11, 1, 12,   '2026-09-01', 3160.00,  'aprovado'),
-(12, 12, 3, 13,   '2026-09-02', 1200.00,  'recusado'),
+(12, 12, 3, 13,   '2026-09-02', 1400.00,  'recusado'),
 (13, 13, 6, 12,   '2026-09-08', 5900.00,  'aprovado'),
 (14, 14, 1, 13,   '2026-09-09', 11500.00, 'em_negociacao'),
 (15, 15, 3, 13,   '2026-09-15', 700.00,   'aprovado'),
@@ -235,8 +236,9 @@ INSERT INTO ITEM_ORCAMENTO (ID_ORCAMENTO, NR_ITEM, ID_PROCEDIMENTO, NR_DENTE, TP
 (11, 1, 14, NULL, 'protetica', 2600.00, 'aprovado', 'em_aberto'),
 (11, 2, 4,  41,   NULL,        280.00,  'aprovado', 'concluido'),
 (11, 3, 4,  31,   NULL,        280.00,  'aprovado', 'concluido'),
--- 12 Gabriel: recusou
+-- 12 Gabriel: recusou (o item 2 ficou acima da tabela de propósito)
 (12, 1, 7,  36,   NULL,        1200.00, 'recusado', 'em_aberto'),
+(12, 2, 2,  NULL, NULL,        200.00,  'recusado', 'em_aberto'),
 -- 13 Juliana C.: implante no 24, cirurgia marcada
 (13, 1, 8,  24,   'cirurgica', 3400.00, 'aprovado', 'em_aberto'),
 (13, 2, 9,  24,   'protetica', 2500.00, 'aprovado', 'em_aberto'),
