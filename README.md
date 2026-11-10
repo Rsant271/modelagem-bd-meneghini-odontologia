@@ -338,22 +338,23 @@ Cada pagamento previsto de um contrato.
 | VL_PARCELA | Valor da parcela | Obrigatório |
 | DT_VENCIMENTO | Data de vencimento | Obrigatório |
 | DT_PAGAMENTO | Data em que foi paga | Preenchida quando o financeiro dá a baixa |
-| CD_STATUS | Situação da parcela | Valores: aberta, paga, atrasada |
+| CD_STATUS | Situação da parcela | Valores: aberta, paga, atrasada. Duas parcelas atrasadas bloqueiam novos agendamentos do paciente (RN19) |
 
 ### AGENDAMENTO
 
-Consulta marcada: um paciente, com um dentista, em um consultório, em uma data e hora.
+Consulta marcada: um paciente, com um dentista, em um consultório, em uma data e hora. Cobre a avaliação, as consultas de tratamento, a consulta de alta e o retorno.
 
-`AGENDAMENTO = @ID_AGENDAMENTO + DT_HORA_INICIO + QT_DURACAO_MIN + TP_AGENDAMENTO + CD_STATUS + (DS_OBSERVACAO)`
+`AGENDAMENTO = @ID_AGENDAMENTO + DT_HORA_INICIO + QT_DURACAO_MIN + TP_AGENDAMENTO + CD_STATUS + (DS_OBSERVACAO) + (DT_RETORNO_PREVISTO)`
 
 | Atributo | Descrição | Regra de negócio associada |
 |---|---|---|
 | ID_AGENDAMENTO | Identificador do agendamento | Obrigatório, único |
 | DT_HORA_INICIO | Data e hora de início | Obrigatório; não pode haver dois agendamentos no mesmo consultório, nem o mesmo dentista em dois consultórios, no mesmo horário |
 | QT_DURACAO_MIN | Duração prevista em minutos | Obrigatório |
-| TP_AGENDAMENTO | Tipo da consulta | Valores: avaliação (sem custo), tratamento |
+| TP_AGENDAMENTO | Tipo da consulta | Valores: avaliação (sem custo), tratamento, alta (com o diretor clínico), retorno (manutenção ou limpeza) |
 | CD_STATUS | Situação do agendamento | Valores: agendado, confirmado, atendido, falta, reagendado |
 | DS_OBSERVACAO | Observação da recepção | Opcional |
+| DT_RETORNO_PREVISTO | Data prevista do retorno do paciente, definida na consulta de alta | Opcional; preenchida só no agendamento do tipo alta, em geral seis meses depois. A recepção usa essa data para ligar ou mandar mensagem e marcar o retorno (RN21, RN22) |
 
 ### EVOLUCAO_CLINICA
 
@@ -433,6 +434,8 @@ Solicitação de uma peça (coroa, prótese etc.) ao laboratório da própria cl
 - A evolução clínica fica em entidade própria por causa da LGPD (dado sensível de saúde, com acesso restrito).
 - O preço aparece em dois lugares: `VL_TABELA` no PROCEDIMENTO (preço de tabela) e `VL_NEGOCIADO` no ITEM_ORCAMENTO (preço com desconto). Assim a clínica guarda quanto foi cobrado em cada orçamento, mesmo que a tabela mude depois.
 - Não existem entidades de convênio (a clínica é particular) nem de unidade (a clínica tem um único endereço).
+- A consulta de alta e o retorno são agendamentos com tipos próprios (alta e retorno); a data prevista do retorno é um atributo opcional do agendamento de alta.
+- O bloqueio de agendamento por inadimplência (RN19) é calculado a partir das parcelas com status atrasada, sem atributo no PACIENTE, para não guardar a mesma informação em dois lugares.
 
 ---
 
