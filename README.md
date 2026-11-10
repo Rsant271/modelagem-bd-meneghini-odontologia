@@ -53,6 +53,7 @@ O pedido ao laboratório e o prazo de entrega da peça também são combinados n
 | Link no Google | [Meneghini Odontologia Integrada no Google Maps](https://www.google.com/maps/search/?api=1&query=Meneghini+Odontologia+Integrada+-+Dentista+Zona+Norte%2C+Av.+Leôncio+de+Magalhães%2C+162+-+Jardim+São+Paulo%2C+São+Paulo+-+SP) |
 | Responsável entrevistado | Fábio Meneghini (proprietário) |
 | Visita e entrevista | Feitas por Renan Silva dos Santos, em nome do grupo |
+| Registro do contato | Foto de Renan Silva dos Santos com Helen, gestora da clínica, na recepção (abaixo) |
 
 Fotos do local:
 
@@ -67,6 +68,14 @@ Fotos do local:
 </p>
 
 *Da esquerda para a direita, de cima para baixo: entrada com o nome da clínica, recepção, consultório, sala comercial/administrativa e um segundo consultório.*
+
+Registro do contato:
+
+<p align="center">
+  <img src="evidencias/06-visita-gestora.jpg" width="32%" alt="Renan Silva dos Santos com Helen, gestora da clínica, na recepção" />
+</p>
+
+*Renan Silva dos Santos, integrante do grupo, com Helen, gestora da clínica, na recepção da Meneghini Odontologia Integrada (novembro de 2026).*
 
 ---
 
