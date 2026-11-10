@@ -25,7 +25,7 @@ A Meneghini Odontologia Integrada é uma clínica odontológica particular no ba
 
 **Objetivo:** levantar os requisitos e as regras de funcionamento da clínica por meio de pesquisa de campo e construir o modelo conceitual (DER) de um sistema de gestão de informações que organize esses dados sem redundância e sem inconsistência.
 
-**Delimitação:** o modelo cobre o núcleo clínico, comercial e financeiro da clínica: cadastro de pacientes e colaboradores, agendamento, avaliação, orçamento, contrato e parcelas, execução dos procedimentos, evolução clínica e pedidos ao laboratório. Ficam fora desta etapa a folha de pagamento, as compras e o estoque de materiais, as campanhas de marketing e a contabilidade. Os leads (pessoas que ainda não compareceram à clínica) também ficam fora: eles são controlados em uma planilha do time de agendamento, a maioria não vira paciente e só esse time tem acesso. A pessoa entra no modelo quando comparece à avaliação e a recepção abre o cadastro. Os materiais (resinas, implantes etc.) variam por especialidade e não foram levantados na pesquisa de campo, então ficam para uma etapa futura. A clínica atende somente particular, sem convênios, e por isso o modelo não tem entidades de convênio.
+**Delimitação:** o modelo cobre o núcleo clínico, comercial e financeiro da clínica: cadastro de pacientes e colaboradores, agendamento, avaliação, orçamento, contrato e parcelas, execução dos procedimentos, evolução clínica, pedidos ao laboratório, cobrança e o caminho do paciente depois do tratamento (consulta de alta e retorno). Ficam fora desta etapa a folha de pagamento (holerite, pagamento de colaborador e ponto), as campanhas de marketing e a contabilidade. As compras de materiais, o cadastro de fornecedores e o controle de estoque também ficam fora, por um motivo diferente: o grupo não teve acesso a essa área da clínica na pesquisa de campo. Resinas, implantes e outros materiais variam por especialidade, e sem saber quem compra, como repõe e como controla, qualquer modelo seria inventado; preferimos registrar a limitação. Os leads (pessoas que ainda não compareceram à clínica) também ficam fora: eles são controlados em uma planilha do time de agendamento, a maioria não vira paciente e só esse time tem acesso. A pessoa entra no modelo quando comparece à avaliação e a recepção abre o cadastro. A clínica atende somente particular, sem convênios, e por isso o modelo não tem entidades de convênio.
 
 ---
 
@@ -33,7 +33,7 @@ A Meneghini Odontologia Integrada é uma clínica odontológica particular no ba
 
 **Nome e natureza da organização:** Meneghini Odontologia Integrada, clínica odontológica privada, com fins lucrativos. Oferece avaliação, clínica geral, implantodontia, ortodontia e endodontia, e tem laboratório de prótese próprio.
 
-**Contexto e porte:** a clínica tem uma única unidade, com 7 consultórios (7 cadeiras ativas) e cerca de 30 colaboradores, entre dentistas (implantodontia, clínica geral, ortodontia e endodontia), auxiliares de saúde bucal, recepção, financeiro, relacionamento, campanha, marketing, comercial, laboratório e apoio (manobrista). O atendimento é particular, sem convênio. A operação é diária, com agenda dividida por dentista, consultório e horário.
+**Contexto e porte:** a clínica tem uma única unidade, com 7 consultórios (7 cadeiras ativas) e cerca de 30 colaboradores, entre dentistas (implantodontia, clínica geral, ortodontia e endodontia), auxiliares de saúde bucal, recepção, financeiro, relacionamento, campanha, marketing, comercial, laboratório e apoio (manobrista). O atendimento é particular, sem convênio. A operação é diária, com agenda dividida por dentista, consultório e horário. A clínica tem ainda um diretor clínico, que faz a consulta de alta ao fim de cada tratamento; um setor administrativo em que uma pessoa cuida só dos colaboradores (cadastro, holerites, pagamentos e folha de ponto); uma pessoa do financeiro dedicada à cobrança dos pacientes; uma gestora que lidera os setores administrativo e financeiro e mantém os cadastros de apoio (especialidades, consultórios e tabela de preços); e uma sala própria de esterilização de materiais, onde as auxiliares de saúde bucal (ASB) processam o instrumental, além de auxiliarem os dentistas em sala.
 
 **Problemas e necessidades identificados:**
 
@@ -87,7 +87,11 @@ Registro do contato:
 2. Avaliação, orçamento e contrato. O dentista avaliador examina o paciente e monta o orçamento com procedimentos avulsos (por dente e por fase). O setor comercial negocia. Os itens aprovados viram contrato com a forma de pagamento, e o financeiro gera as parcelas.
 3. Agendamento e atendimento. A recepção agenda as consultas (paciente, dentista, consultório, data e hora), confirma a presença e registra falta ou atendimento. O dentista executa os itens do plano e registra a evolução clínica.
 4. Pedido ao laboratório. Quando o tratamento precisa de uma peça (coroa, prótese etc.), o dentista faz o pedido ao laboratório da própria clínica, que produz a peça e avisa quando está pronta.
-5. Pagamento. As parcelas são registradas e baixadas no sistema. O tratamento avança conforme o plano e a evolução do pagamento.
+5. Pagamento e cobrança. As parcelas são mensais, uma por mês, registradas e baixadas no sistema. Uma pessoa do financeiro cuida da parte dos pacientes, incluindo a cobrança de quem atrasa. O tratamento avança conforme o plano e a evolução do pagamento; se o paciente para de pagar e chega a duas parcelas sem pagar, ele não consegue agendar e o tratamento é interrompido. Quando volta a pagar, o tratamento segue de onde parou no planejamento.
+6. Alta e retorno. Quando o último item do plano é concluído, a recepção agenda a consulta de alta com o diretor clínico, que confere o tratamento. Na alta fica definido o retorno do paciente, em geral seis meses depois, para manutenção ou limpeza. Essa manutenção ou limpeza costuma já estar lançada no orçamento inicial do paciente, que no Controle Odonto é um planejamento geral com tudo o que ele precisa; por isso a recepção procura deixar esse valor pago antes do retorno e, perto da data, liga ou manda mensagem para o paciente marcar. Tudo fica registrado no sistema. Hoje a clínica não faz pesquisa de satisfação nem reativação de pacientes antigos, então esses dois contatos não entram no modelo.
+7. Cadastros de apoio. O setor administrativo tem uma pessoa responsável só pelos colaboradores, dentistas ou de qualquer outra função. Ela faz o cadastro no Controle Odonto quando alguém entra e cuida de holerites, pagamentos e folha de ponto. Especialidades, consultórios e tabela de preços são mantidos pela gestora, que lidera os setores administrativo e financeiro. No modelo entram o cadastro do colaborador (nome, CPF, cargo, setor, CRO e especialidades dos dentistas, admissão e situação), as especialidades, os consultórios e os procedimentos da tabela de preços; holerite, pagamento e ponto são folha de pagamento e ficam fora.
+
+**Fora do levantamento:** compra de materiais, cadastro de fornecedores e controle de estoque não aparecem aqui porque o grupo não teve acesso a essa área da clínica. O grupo registrou a limitação em vez de descrever um processo que não viu funcionar.
 
 **Fluxogramas:**
 
@@ -103,7 +107,11 @@ Processo 3: pedido ao laboratório da clínica.
 
 ![Fluxograma do processo 3](fluxogramas/processo-3-pedido-de-laboratorio.png)
 
-Os três processos se ligam assim: o Processo 1 termina com o contrato assinado e as primeiras consultas agendadas, que são o início do Processo 2. Dentro do Processo 2, sempre que o dentista precisa de uma peça, abre-se um pedido no Processo 3, e a peça pronta é instalada em uma consulta do Processo 2. As parcelas geradas no Processo 1 são baixadas pelo financeiro ao longo do tratamento, e a agenda das próximas sessões segue o plano e o andamento do pagamento.
+Processo 6: alta e retorno (fim do tratamento, consulta de alta com o diretor clínico e retorno para manutenção ou limpeza).
+
+![Fluxograma do processo 6](fluxogramas/processo-6-alta-e-retorno.png)
+
+Os processos se ligam assim: o Processo 1 termina com o contrato assinado e as primeiras consultas agendadas, que são o início do Processo 2. Dentro do Processo 2, sempre que o dentista precisa de uma peça, abre-se um pedido no Processo 3, e a peça pronta é instalada em uma consulta do Processo 2. As parcelas geradas no Processo 1 são baixadas pelo financeiro ao longo do tratamento, e a agenda das próximas sessões segue o plano e o andamento do pagamento. Se o paciente acumula duas parcelas sem pagar, o financeiro começa a cobrança (Processo 5), a recepção não agenda novas consultas e o tratamento fica interrompido. Quando o último item do plano é concluído, o Processo 2 leva ao Processo 6: consulta de alta com o diretor clínico e retorno marcado para alguns meses depois, o que traz o paciente de volta à agenda. O Processo 7 é de apoio: é dele que vem o cadastro de dentistas e demais colaboradores usado em todos os outros.
 
 ---
 
@@ -207,7 +215,7 @@ Pessoa que procura a clínica e passa pela avaliação inicial.
 
 ### COLABORADOR
 
-Pessoa que trabalha na clínica: dentistas, auxiliares, recepção, financeiro, comercial, relacionamento, campanha, marketing, laboratório e apoio.
+Pessoa que trabalha na clínica: dentistas (incluindo o diretor clínico), auxiliares de saúde bucal, recepção, financeiro, comercial, relacionamento, campanha, marketing, laboratório, administrativo e apoio.
 
 `COLABORADOR = @ID_COLABORADOR + NM_COLABORADOR + NR_CPF + TP_CARGO + NM_SETOR + (NR_CRO) + DT_ADMISSAO + IN_ATIVO`
 
@@ -216,8 +224,8 @@ Pessoa que trabalha na clínica: dentistas, auxiliares, recepção, financeiro, 
 | ID_COLABORADOR | Número que identifica o colaborador | Obrigatório, único |
 | NM_COLABORADOR | Nome completo | Obrigatório |
 | NR_CPF | CPF do colaborador | Obrigatório e único |
-| TP_CARGO | Função na clínica (ex.: dentista, auxiliar, recepcionista, financeiro, comercial, laboratório) | Obrigatório; só colaboradores com cargo "dentista" podem atender agendamentos e ter especialidades |
-| NM_SETOR | Setor em que trabalha (ex.: clínico, recepção, financeiro, comercial, laboratório) | Obrigatório |
+| TP_CARGO | Função na clínica (ex.: dentista, diretor clínico, auxiliar de saúde bucal, recepcionista, financeiro, comercial, administrativo, gestora, laboratório) | Obrigatório; só dentistas podem atender agendamentos e ter especialidades. O diretor clínico é um dentista: atende a consulta de alta, avaliações novas e, às vezes, cirurgias |
+| NM_SETOR | Setor em que trabalha (ex.: clínico, recepção, financeiro, comercial, administrativo, laboratório) | Obrigatório |
 | NR_CRO | Número de registro no Conselho Regional de Odontologia | Obrigatório e único para dentistas; vazio para os demais cargos |
 | DT_ADMISSAO | Data de entrada na clínica | Obrigatório |
 | IN_ATIVO | Indica se o colaborador está ativo | Colaborador inativo não pode ser escolhido em novos agendamentos, mas seu histórico é mantido |
