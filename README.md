@@ -136,6 +136,9 @@ Os processos se ligam assim: o Processo 1 termina com o contrato assinado e as p
 | RF13 | Registrar pedidos ao laboratório, com paciente, dentista solicitante, peça, prazo e status. |
 | RF14 | Acompanhar os itens do plano de tratamento em aberto e concluídos. |
 | RF15 | Consultar o histórico do paciente: agendamentos, orçamentos, contratos, parcelas, evoluções e pedidos. |
+| RF16 | Listar as parcelas atrasadas e os pacientes com duas parcelas sem pagar, para a cobrança do financeiro. |
+| RF17 | Impedir novo agendamento para o paciente com duas parcelas sem pagar, informando o motivo à recepção. |
+| RF18 | Registrar a consulta de alta com o diretor clínico e a data prevista do retorno, e listar os retornos que vencem no período para a recepção entrar em contato. |
 
 ### 3.2 Requisitos Não Funcionais
 
@@ -173,16 +176,23 @@ Os processos se ligam assim: o Processo 1 termina com o contrato assinado e as p
 | RN15 | O pedido ao laboratório é feito por paciente, solicitado por um dentista, e o prazo é combinado entre dentista, recepção e laboratório. |
 | RN16 | A evolução clínica é registrada apenas em agendamentos atendidos. |
 | RN17 | Antes de comparecer à clínica, a pessoa é um lead controlado em planilha pelo time de agendamento; ela só entra no sistema (vira paciente) quando comparece à avaliação e a recepção abre o cadastro. |
+| RN18 | A cobrança dos pacientes, incluindo a inadimplência, é feita por uma pessoa do financeiro dedicada a isso. |
+| RN19 | As parcelas são mensais. O paciente com duas parcelas sem pagar não agenda novas consultas e o tratamento fica interrompido; quando volta a pagar, o tratamento segue de onde parou no planejamento. |
+| RN20 | Quando o último item do plano é concluído, o paciente passa por uma consulta de alta com o diretor clínico, que confere o tratamento. |
+| RN21 | Na alta é definido o retorno do paciente, em geral seis meses depois, para manutenção ou limpeza; a recepção agenda o retorno seguindo o processo da clínica e registra tudo no sistema. |
+| RN22 | A manutenção ou limpeza do retorno em geral já está lançada no orçamento inicial do paciente (o planejamento geral); a recepção procura deixar esse valor pago com antecedência e, perto da data, entra em contato por ligação ou mensagem para marcar. |
+| RN23 | O cadastro de colaboradores, dentistas ou de qualquer função, é feito pelo setor administrativo, por uma pessoa responsável só por isso. |
+| RN24 | Especialidades, consultórios e tabela de preços são mantidos pela gestora, que lidera os setores administrativo e financeiro. |
 
 **Restrições organizacionais:**
 
 - LGPD: a clínica trata dados pessoais (nome, CPF, contato) e dados sensíveis de saúde (evolução clínica). Pela Lei 13.709/2018, esses dados exigem acesso restrito e finalidade definida. No modelo, a evolução clínica ficou em uma entidade separada para que o acesso a ela possa ser controlado. Neste trabalho não usamos nenhum dado real de paciente ou colaborador; os exemplos são fictícios.
-- Guarda do prontuário: pela Lei 13.787/2018 (art. 6º), o prontuário do paciente deve ser guardado por no mínimo 20 anos após o último registro. No modelo, a evolução clínica e os registros ligados a ela não podem ser apagados; ao fim do prazo, são anonimizados.
-- Biossegurança: a clínica segue as normas da ANVISA para o processamento e a esterilização do instrumental (RDC 15/2012). O controle dos ciclos de esterilização não entrou neste modelo porque não foi levantado na pesquisa de campo; fica como item a confirmar na próxima etapa.
+- Guarda do prontuário: na clínica o prontuário é digital e fica no Controle Odonto. Pela Lei 13.787/2018 (art. 6º), o prontuário do paciente deve ser guardado por no mínimo 20 anos após o último registro. No modelo, a evolução clínica e os registros ligados a ela não podem ser apagados; ao fim do prazo, são anonimizados.
+- Biossegurança e esterilização: a clínica tem uma sala própria de esterilização de materiais. O processamento do instrumental é feito pelas auxiliares de saúde bucal (ASB), profissionais treinadas para isso, que também auxiliam os dentistas em sala. Esse controle é da rotina da equipe da sala de esterilização e fica fora do modelo de dados, que cobre o caminho do paciente.
 - Registro profissional: todo dentista precisa ter registro no CRO, então o CRO é um atributo obrigatório para colaboradores do tipo dentista.
 - Atendimento particular: a clínica não trabalha com convênios, então não existem entidades de convênio ou guia.
 - Uma única unidade: o modelo não tem entidade de unidade/filial, mas o consultório é uma entidade própria, o que permite crescer no futuro.
-- Sistema atual: a clínica já usa o Controle Odonto, e o modelo proposto precisa ser compatível com o que a equipe já registra (agenda, orçamento por item, parcelas, prontuário).
+- Sistema atual: a clínica já usa o Controle Odonto, e o modelo proposto precisa ser compatível com o que a equipe já registra (agenda, orçamento por item, parcelas, prontuário, cadastro de colaboradores).
 
 ---
 
@@ -530,6 +540,10 @@ ELMASRI, R.; NAVATHE, S. B. **Sistemas de Banco de Dados**. 7. ed. São Paulo: P
 CHEN, P. P. The Entity-Relationship Model: Toward a Unified View of Data. **ACM Transactions on Database Systems**, v. 1, n. 1, p. 9-36, 1976.
 
 BRASIL. **Lei nº 13.709, de 14 de agosto de 2018**. Lei Geral de Proteção de Dados Pessoais (LGPD). Diário Oficial da União, Brasília, DF, 15 ago. 2018.
+
+BRASIL. **Lei nº 13.787, de 27 de dezembro de 2018**. Dispõe sobre a digitalização e a utilização de sistemas informatizados para a guarda, o armazenamento e o manuseio de prontuário de paciente. Diário Oficial da União, Brasília, DF, 28 dez. 2018.
+
+BRASIL. **Lei nº 10.406, de 10 de janeiro de 2002**. Institui o Código Civil. Diário Oficial da União, Brasília, DF, 11 jan. 2002.
 
 CÂNDIDO, C. H. **brModelo**: ferramenta de modelagem conceitual de banco de dados. UFSC/UNIVAG, 2005.
 
