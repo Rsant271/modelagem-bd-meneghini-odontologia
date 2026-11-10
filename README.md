@@ -17,6 +17,22 @@
 | Vinicius Scherer Di Giorno | 47028238 | vinischerer08-hub |
 | Lucas Henrique Roque Cruz | 47178922 | Lusca2803 |
 
+**Onde está cada item da Entrega 2**
+
+| Item do esqueleto da Entrega 2 | Onde está |
+|---|---|
+| 1.1 Revisão do modelo conceitual | Seção 1.1 |
+| 1.2 Conversão do conceitual para o lógico | Seção 10 |
+| 1.3 Definição das chaves primárias e estrangeiras | Seção 10 (tabela de conversão) e Seção 13 |
+| 1.4 Normalização (1FN, 2FN e 3FN) | Seção 11 |
+| 1.5 Justificativas das chaves e das restrições | Seção 13 |
+| 1.6 BI e IA (indicadores e rastreabilidade) | ainda não feito |
+| 2 Modelo lógico (diagrama) | Seção 12 e pasta `der/` |
+| 3 e 4 Script SQL e massa de dados | ainda não feito (pasta `docs/`) |
+| 5 Levantamento, fotos e dicionário de dados | Pasta `levantamento/` e dicionário em HTML (link acima) |
+| 6 Uso de IA | Seção 9 |
+| 7 Apresentação (slides) | ainda não feito (pasta `apresentacao/`) |
+
 ---
 
 ## Introdução
@@ -320,7 +336,7 @@ Proposta de tratamento montada na avaliação, composta por itens.
 
 Cada procedimento dentro de um orçamento. Só existe dentro de um orçamento.
 
-`ITEM_ORCAMENTO = @NR_ITEM + (NR_DENTE) + TP_FASE + VL_NEGOCIADO + CD_STATUS_APROVACAO + CD_STATUS_EXECUCAO`
+`ITEM_ORCAMENTO = @NR_ITEM + (NR_DENTE) + (TP_FASE) + VL_NEGOCIADO + CD_STATUS_APROVACAO + CD_STATUS_EXECUCAO`
 
 (`NR_ITEM` é identificador parcial: só identifica o item dentro do orçamento ao qual pertence.)
 
@@ -328,9 +344,9 @@ Cada procedimento dentro de um orçamento. Só existe dentro de um orçamento.
 |---|---|---|
 | NR_ITEM | Número sequencial do item dentro do orçamento | Identificador parcial: só identifica o item dentro do orçamento ao qual pertence (entidade fraca) |
 | NR_DENTE | Dente ao qual o procedimento se refere (ex.: 26) | Opcional, pois alguns procedimentos não são por dente (ex.: limpeza) |
-| TP_FASE | Fase do procedimento | Valores: cirúrgica, protética, ambas (usado principalmente em implantes) |
+| TP_FASE | Fase do procedimento | Opcional. Valores: cirúrgica, protética, ambas (usado principalmente em implantes; os procedimentos sem fase ficam sem valor) |
 | VL_NEGOCIADO | Valor final do item após o desconto | Não pode ser maior que o preço de tabela; o desconto fica dentro da margem permitida |
-| CD_STATUS_APROVACAO | Se o paciente aprovou o item | Valores: aprovado, recusado. Cada item é aprovado separadamente |
+| CD_STATUS_APROVACAO | Se o paciente aprovou o item | Valores: pendente, aprovado, recusado. O item nasce pendente e cada item é aprovado separadamente (RN04) |
 | CD_STATUS_EXECUCAO | Andamento do item | Valores: em aberto, concluído. Começa em aberto e muda quando o dentista finaliza |
 
 ### CONTRATO
@@ -517,9 +533,9 @@ Sobre o escopo: deixamos de fora folha de pagamento, marketing e contabilidade p
 
 ## 9. Uso de Inteligência Artificial
 
-O trabalho foi feito pelo grupo: a escolha da clínica, a pesquisa de campo (visita, entrevista com o proprietário, Fábio Meneghini, e observação do funcionamento, feitas por Renan Silva dos Santos em nome do grupo), as decisões de escopo (sem convênio, lead e materiais fora do modelo), a lista das 12 entidades, a definição das cardinalidades em palavras a partir do funcionamento real da clínica, a correção da ordem dos processos, as regras de negócio e a revisão do texto. Nenhum dado do trabalho foi inventado por ferramenta: tudo o que está aqui veio da clínica ou de decisão do grupo.
+O trabalho foi feito pelo grupo: a escolha da clínica, a pesquisa de campo (visita, entrevista com o proprietário, Fábio Meneghini, e com a gestora, Helen Meneghini, e observação do funcionamento, feitas por Renan Silva dos Santos em nome do grupo), as decisões de escopo (sem convênio, lead e materiais fora do modelo), a lista das 12 entidades, a definição das cardinalidades em palavras a partir do funcionamento real da clínica, a correção da ordem dos processos, as regras de negócio e a revisão do texto. Nenhum dado do trabalho foi inventado por ferramenta: tudo o que está aqui veio da clínica ou de decisão do grupo.
 
-Usamos a ferramenta Claude (Anthropic) como apoio em quatro pontos, registrados abaixo no formato pedido pelo esqueleto.
+Usamos a ferramenta Claude (Anthropic) como apoio em cinco pontos, registrados abaixo no formato pedido pelo esqueleto.
 
 | Item | Uso 1: leitura do material da disciplina |
 |---|---|
@@ -534,7 +550,7 @@ Usamos a ferramenta Claude (Anthropic) como apoio em quatro pontos, registrados 
 
 | Item | Uso 2: roteiro da entrevista |
 |---|---|
-| Ferramenta e etapa | Claude ajudou a montar as perguntas da pesquisa de campo. As respostas foram obtidas por Renan Silva dos Santos, na visita à clínica, com o proprietário. |
+| Ferramenta e etapa | Claude ajudou a montar as perguntas da pesquisa de campo. As respostas foram obtidas por Renan Silva dos Santos, na visita à clínica, com o proprietário e a gestora. |
 | Motivação | O grupo não sabia que perguntas fazer para levantar entidades, atributos e regras de negócio. |
 | Prompt(s) utilizados | "Faça as perguntas em blocos (identificação e porte, processos, regras de orçamento, agendamento, laboratório e pagamento); eu respondo com os dados da clínica." |
 | Resposta recebida | Três blocos com 24 perguntas. |
@@ -565,6 +581,176 @@ Usamos a ferramenta Claude (Anthropic) como apoio em quatro pontos, registrados 
 | Justificativa da escolha final | Só entrou o que a clínica respondeu. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso, em vez de preenchidos com um processo genérico. |
 | Reflexão crítica | A ferramenta tende a fechar lacuna com texto de "a confirmar" ou com uma citação de norma que soa bem. Para resolver, voltamos à clínica com perguntas específicas, escrevemos só o que foi respondido e conferimos cada citação legal na fonte antes de publicar. |
 
+| Item | Uso 5: conversão para o modelo lógico e normalização |
+|---|---|
+| Ferramenta e etapa | Claude, em 10 de novembro de 2026, na conversão do DER revisado para o modelo lógico. Aplicou as regras de conversão vistas em aula, montou a primeira versão da tabela de chaves e da lista de restrições por tabela e gerou o diagrama do modelo lógico pelo mesmo método do DER (script em Python). |
+| Motivação | O grupo tinha o DER e o dicionário prontos, mas pouca prática em escrever a conversão e a normalização no formato pedido pelo esqueleto. |
+| Prompt(s) utilizados | "A partir do DER e do dicionário de dados, aplique as regras de conversão para o modelo lógico (1:1, 1:N, N:N, entidade fraca, atributo composto e multivalorado), liste tabela por tabela as chaves primárias e estrangeiras e verifique 1FN, 2FN e 3FN, dizendo onde cada forma normal mudou alguma coisa. Para cada restrição, cite a regra de negócio (RNxx) que a justifica. Nada fora do material da disciplina." |
+| Resposta recebida | Lista das 16 tabelas com chaves, a tabela de conversão da Seção 10, a análise de normalização da Seção 11, o diagrama do modelo lógico da Seção 12 e a lista de restrições da Seção 13. |
+| Fontes consultadas e verificadas | DER e dicionário de dados do próprio trabalho; material do professor sobre modelo lógico e normalização; Heuser (2009), capítulos de projeto lógico e normalização. |
+| Trechos rejeitados ou corrigidos | (a) a ferramenta levantou a opção de uma tabela DENTISTA separada de COLABORADOR (especialização); o grupo manteve uma tabela só, pela mesma razão da Entrega 1; (b) levantou uma tabela de CEP para resolver a dependência entre CEP, logradouro e bairro; descartamos, porque o endereço é digitado pela recepção e uma tabela de CEPs não teria dono na clínica; (c) a primeira versão colocava uma restrição de unicidade em consultório e horário do agendamento; tiramos, porque o horário de uma falta pode ser preenchido por encaixe (RN11) e a sobreposição depende da duração, então a regra ficou para consulta de auditoria; (d) na primeira versão do diagrama as etiquetas das duas chaves estrangeiras de ORCAMENTO ficavam em cima das linhas de outras tabelas, e o layout foi ajustado. |
+| Justificativa da escolha final | Cada tabela do modelo lógico vem de uma entidade ou de um relacionamento do DER, e cada restrição tem uma regra de negócio levantada na clínica. O que o banco não consegue garantir sozinho está listado na Seção 13.4. |
+| Reflexão crítica | A ferramenta aplica bem as regras mecânicas de conversão, mas tende a normalizar demais (tabela de CEP, tabela de dentista) sem perguntar se aquilo faz sentido para a clínica. O critério do grupo foi: tabela nova só se alguém na clínica mantém aquele dado. |
+
+---
+
+## 10. Conversão do Modelo Conceitual para o Lógico
+
+O modelo lógico é o DER traduzido para o formato que o banco de dados entende: tabelas, colunas, tipos e chaves. Fizemos a conversão seguindo as regras vistas em aula (Heuser, 2009). A tabela abaixo resume cada regra e o ponto do nosso modelo em que ela foi aplicada.
+
+| Regra de conversão | Onde foi aplicada no modelo |
+|---|---|
+| Cada entidade vira uma tabela, e o identificador vira a chave primária | As 12 entidades do DER viraram 12 tabelas, cada uma com a chave `ID_` |
+| Atributo composto vira uma coluna para cada parte | `ENDERECO` de PACIENTE virou `DS_LOGRADOURO`, `NM_BAIRRO` e `NR_CEP` |
+| Atributo multivalorado vira tabela própria, com a chave da entidade de origem | `NR_TELEFONE` de PACIENTE virou a tabela TELEFONE_PACIENTE |
+| Relacionamento 1:N: a chave do lado 1 entra como chave estrangeira na tabela do lado N | `ID_PACIENTE` em AGENDAMENTO, ORCAMENTO e PEDIDO_LABORATORIO; `ID_COLABORADOR` em AGENDAMENTO e PEDIDO_LABORATORIO; `ID_CONSULTORIO` em AGENDAMENTO; `ID_PROCEDIMENTO` em ITEM_ORCAMENTO |
+| Relacionamento 1:1 opcional: a chave estrangeira fica na tabela do lado opcional e é única | CONTRATO recebe `ID_ORCAMENTO` (único); EVOLUCAO_CLINICA recebe `ID_AGENDAMENTO` (único) |
+| Relacionamento N:N vira tabela intermediária com as duas chaves | COLABORADOR_ESPECIALIDADE e AGENDAMENTO_ITEM |
+| Entidade fraca: a chave primária é a chave da entidade forte mais o identificador parcial | ITEM_ORCAMENTO (`ID_ORCAMENTO`, `NR_ITEM`) e PARCELA (`ID_CONTRATO`, `NR_PARCELA`) |
+| Dois relacionamentos entre as mesmas entidades viram duas chaves estrangeiras com nomes diferentes | AVALIA e NEGOCIA, entre COLABORADOR e ORCAMENTO, viraram `ID_COLABORADOR_AVALIADOR` (obrigatória) e `ID_COLABORADOR_COMERCIAL` (fica vazia enquanto o orçamento não passou pelo comercial) |
+| Especialização (generalização) | Não há no modelo. Avaliamos DENTISTA como especialização de COLABORADOR, mas o único atributo exclusivo do dentista é o `NR_CRO`; uma tabela a mais para uma coluna só não compensa. A regra de que só dentista atende, avalia e pede ao laboratório fica como restrição (Seção 13.4) |
+
+**Resultado da conversão, tabela por tabela.** Doze tabelas vêm das entidades, uma do atributo multivalorado, duas dos relacionamentos N:N e uma do requisito de rastreabilidade: 16 tabelas no total.
+
+| Origem no DER | Tabela | Chave primária | Chaves estrangeiras |
+|---|---|---|---|
+| PACIENTE | PACIENTE | ID_PACIENTE | nenhuma |
+| atributo NR_TELEFONE (multivalorado) | TELEFONE_PACIENTE | (ID_PACIENTE, NR_TELEFONE) | ID_PACIENTE referencia PACIENTE |
+| COLABORADOR | COLABORADOR | ID_COLABORADOR | nenhuma |
+| ESPECIALIDADE | ESPECIALIDADE | ID_ESPECIALIDADE | nenhuma |
+| relacionamento POSSUI (N:N) | COLABORADOR_ESPECIALIDADE | (ID_COLABORADOR, ID_ESPECIALIDADE) | ID_COLABORADOR referencia COLABORADOR; ID_ESPECIALIDADE referencia ESPECIALIDADE |
+| CONSULTORIO | CONSULTORIO | ID_CONSULTORIO | nenhuma |
+| PROCEDIMENTO | PROCEDIMENTO | ID_PROCEDIMENTO | nenhuma |
+| ORCAMENTO, com RECEBE, AVALIA e NEGOCIA | ORCAMENTO | ID_ORCAMENTO | ID_PACIENTE referencia PACIENTE; ID_COLABORADOR_AVALIADOR e ID_COLABORADOR_COMERCIAL referenciam COLABORADOR |
+| ITEM_ORCAMENTO (fraca), com CONTEM e REFERE | ITEM_ORCAMENTO | (ID_ORCAMENTO, NR_ITEM) | ID_ORCAMENTO referencia ORCAMENTO; ID_PROCEDIMENTO referencia PROCEDIMENTO |
+| CONTRATO, com GERA (1:1) | CONTRATO | ID_CONTRATO | ID_ORCAMENTO referencia ORCAMENTO (único) |
+| PARCELA (fraca), com TEM | PARCELA | (ID_CONTRATO, NR_PARCELA) | ID_CONTRATO referencia CONTRATO |
+| AGENDAMENTO, com MARCA, ATENDE e OCUPA | AGENDAMENTO | ID_AGENDAMENTO | ID_PACIENTE referencia PACIENTE; ID_COLABORADOR referencia COLABORADOR; ID_CONSULTORIO referencia CONSULTORIO |
+| relacionamento EXECUTA (N:N) | AGENDAMENTO_ITEM | (ID_AGENDAMENTO, ID_ORCAMENTO, NR_ITEM) | ID_AGENDAMENTO referencia AGENDAMENTO; o par (ID_ORCAMENTO, NR_ITEM) referencia ITEM_ORCAMENTO |
+| EVOLUCAO_CLINICA, com REGISTRA (1:1) | EVOLUCAO_CLINICA | ID_EVOLUCAO | ID_AGENDAMENTO referencia AGENDAMENTO (único) |
+| PEDIDO_LABORATORIO, com PERTENCE e SOLICITA | PEDIDO_LABORATORIO | ID_PEDIDO | ID_PACIENTE referencia PACIENTE; ID_COLABORADOR referencia COLABORADOR |
+| não vem do DER (RNF05 e seção 5 do dicionário) | LOG_ALTERACAO | ID_LOG | ID_COLABORADOR referencia COLABORADOR (pode ficar vazia) |
+
+**Ajustes feitos na conversão.** Ao passar do conceitual para o lógico, quatro coisas mudaram em relação à Entrega 1.
+
+| O que mudou | Por quê |
+|---|---|
+| `CD_STATUS_APROVACAO` de ITEM_ORCAMENTO ganhou o valor `pendente`, que passou a ser o padrão | No conceitual só havia aprovado e recusado, mas o item é lançado antes de o paciente decidir (RN04). Sem o valor pendente, a coluna ficaria vazia até a resposta do paciente |
+| `TP_FASE` de ITEM_ORCAMENTO passou a opcional | Fase cirúrgica ou protética só existe em implante (RN02); limpeza, canal e os demais procedimentos não têm fase |
+| `NR_TELEFONE` saiu de PACIENTE e virou a tabela TELEFONE_PACIENTE | Regra do atributo multivalorado: um paciente pode ter mais de um telefone, e uma coluna não guarda lista (1FN, Seção 11) |
+| Entrou a tabela LOG_ALTERACAO | Atende o RNF05 (rastreabilidade) e o log de acesso descrito no dicionário de dados. Guarda quem alterou o quê e quando, em qualquer tabela. É preenchida pelo próprio banco, no script SQL |
+
+Os tipos de dados seguem o padrão do MySQL: `INT` para identificadores, `VARCHAR` para textos curtos, `TEXT` para textos longos, `DECIMAL(10,2)` para valores em reais, `DATE` e `DATETIME` para datas, `ENUM` para status com valores fixos e `BOOLEAN` para indicadores. O tipo de cada coluna está no diagrama (Seção 12) e no dicionário de dados.
+
+---
+
+## 11. Normalização
+
+Normalizar é conferir, tabela por tabela, se cada informação está guardada em um lugar só e no lugar certo, para evitar repetição e dado contraditório. Aplicamos as três primeiras formas normais, nesta ordem, porque cada uma depende da anterior.
+
+**Primeira forma normal (1FN).** Cada coluna guarda um valor só, sem lista e sem grupo que se repete. Onde foi necessária: em PACIENTE. O conceitual tinha `NR_TELEFONE` multivalorado e `ENDERECO` composto. Se fosse para a tabela como estava, a coluna de telefone teria dois números separados por ponto e vírgula, e o endereço inteiro ficaria em uma coluna só. O multivalorado virou a tabela TELEFONE_PACIENTE, com uma linha por telefone, e o composto virou três colunas. As outras 15 tabelas já estavam na 1FN.
+
+**Segunda forma normal (2FN).** Vale para tabelas com chave primária composta: toda coluna fora da chave precisa depender da chave inteira, e não de uma parte dela. Onde foi conferida: nas quatro tabelas com chave composta. Em ITEM_ORCAMENTO (`ID_ORCAMENTO`, `NR_ITEM`), as colunas `NR_DENTE`, `TP_FASE`, `VL_NEGOCIADO` e os dois status dependem do item inteiro. A data de emissão e a situação do orçamento dependem só de `ID_ORCAMENTO`, por isso ficam em ORCAMENTO e não se repetem a cada item. Em PARCELA (`ID_CONTRATO`, `NR_PARCELA`), valor, vencimento e pagamento dependem da parcela; a forma de pagamento depende só do contrato e fica em CONTRATO. COLABORADOR_ESPECIALIDADE e AGENDAMENTO_ITEM só têm as colunas da chave, então passam direto. As tabelas de chave simples estão na 2FN por definição.
+
+**Terceira forma normal (3FN).** Nenhuma coluna fora da chave pode depender de outra coluna fora da chave (dependência transitiva). Onde foi conferida e o que decidimos:
+
+- COLABORADOR tem `TP_CARGO` e `NM_SETOR`. Parece que o cargo determina o setor, mas na clínica não é assim: o diretor clínico é dentista e também atende, e a gestora lidera dois setores (administrativo e financeiro). Como o cargo não determina o setor sozinho, não há dependência transitiva, e as duas colunas ficam.
+- PACIENTE tem `NR_CEP`, `DS_LOGRADOURO` e `NM_BAIRRO`. A rigor, o CEP determina logradouro e bairro. Resolver isso exigiria uma tabela de CEPs, que ninguém na clínica mantém: o endereço é digitado pela recepção no cadastro. Mantivemos as três colunas em PACIENTE e registramos a decisão.
+- ORCAMENTO guarda `VL_TOTAL` e CONTRATO guarda `VL_CONTRATADO`, que poderiam ser calculados a partir dos itens. Não é dependência entre colunas da mesma tabela, então a 3FN não é violada, mas é uma redundância. Mantivemos os dois porque o valor fechado com o paciente precisa ficar registrado mesmo que um item mude de situação depois, e uma consulta de auditoria confere se a soma dos itens bate com o total.
+
+Resultado: as 16 tabelas estão na 3FN. A única exceção é o CEP em PACIENTE, mantida de propósito e registrada acima. Os valores totais não violam a 3FN, mas ficaram registrados como redundância controlada.
+
+---
+
+## 12. Modelo Lógico
+
+![Modelo lógico da Meneghini Odontologia Integrada](der/modelo-logico-meneghini-odontologia.png)
+
+Como ler o diagrama: ele segue a notação do brModelo para o modelo lógico. Cada tabela é um retângulo com o nome no topo e uma linha por coluna, com o nome à esquerda e o tipo à direita. A chave primária está sublinhada e marcada com PK; a chave estrangeira está marcada com FK; a coluna que é as duas coisas ao mesmo tempo (chave composta de entidade fraca ou de tabela intermediária) está marcada com PK FK. Cada ligação é uma linha entre a chave estrangeira e a chave primária que ela referencia, com o `(mín,máx)` em cada ponta, na mesma leitura do DER (Seção 7). As duas chaves estrangeiras de ORCAMENTO para COLABORADOR têm o nome escrito na própria linha, para não confundir uma com a outra.
+
+O que não aparece no diagrama: NOT NULL, UNIQUE, CHECK e DEFAULT. A notação não tem símbolo para eles. Essas restrições estão na Seção 13, na seção 7 do dicionário de dados e no script SQL.
+
+Software usado: o mesmo método do DER (Seção 7). Um script em Python escrito pelo grupo com apoio da ferramenta de IA gera o arquivo SVG (`der/modelo-logico-meneghini-odontologia.svg`), e o PNG foi convertido com o Google Chrome.
+
+Resumo das 16 tabelas:
+
+| Tabela | Chave primária | Chaves estrangeiras | Colunas únicas |
+|---|---|---|---|
+| PACIENTE | ID_PACIENTE | nenhuma | NR_CPF |
+| TELEFONE_PACIENTE | ID_PACIENTE, NR_TELEFONE | ID_PACIENTE | |
+| COLABORADOR | ID_COLABORADOR | nenhuma | NR_CPF, NR_CRO |
+| ESPECIALIDADE | ID_ESPECIALIDADE | nenhuma | NM_ESPECIALIDADE |
+| COLABORADOR_ESPECIALIDADE | ID_COLABORADOR, ID_ESPECIALIDADE | ID_COLABORADOR, ID_ESPECIALIDADE | |
+| CONSULTORIO | ID_CONSULTORIO | nenhuma | NR_CONSULTORIO |
+| PROCEDIMENTO | ID_PROCEDIMENTO | nenhuma | CD_PROCEDIMENTO |
+| ORCAMENTO | ID_ORCAMENTO | ID_PACIENTE, ID_COLABORADOR_AVALIADOR, ID_COLABORADOR_COMERCIAL | |
+| ITEM_ORCAMENTO | ID_ORCAMENTO, NR_ITEM | ID_ORCAMENTO, ID_PROCEDIMENTO | |
+| CONTRATO | ID_CONTRATO | ID_ORCAMENTO | ID_ORCAMENTO |
+| PARCELA | ID_CONTRATO, NR_PARCELA | ID_CONTRATO | |
+| AGENDAMENTO | ID_AGENDAMENTO | ID_PACIENTE, ID_COLABORADOR, ID_CONSULTORIO | |
+| AGENDAMENTO_ITEM | ID_AGENDAMENTO, ID_ORCAMENTO, NR_ITEM | ID_AGENDAMENTO; (ID_ORCAMENTO, NR_ITEM) | |
+| EVOLUCAO_CLINICA | ID_EVOLUCAO | ID_AGENDAMENTO | ID_AGENDAMENTO |
+| PEDIDO_LABORATORIO | ID_PEDIDO | ID_PACIENTE, ID_COLABORADOR | |
+| LOG_ALTERACAO | ID_LOG | ID_COLABORADOR | |
+
+---
+
+## 13. Justificativas do Modelo Lógico
+
+### 13.1 Chaves primárias
+
+Nas tabelas fortes usamos um identificador numérico (`ID_`), inteiro com auto-incremento. Ele é curto, nunca muda e não expõe dado pessoal. Não usamos o CPF como chave primária do paciente nem do colaborador: o CPF pode ser digitado errado e corrigido depois, e é dado pessoal protegido pela LGPD. Ele fica como coluna única (UNIQUE), o que impede cadastro em duplicidade sem usá-lo como chave.
+
+Nas entidades fracas a chave é composta: (`ID_ORCAMENTO`, `NR_ITEM`) e (`ID_CONTRATO`, `NR_PARCELA`). O item só existe dentro do orçamento, e a chave composta impede dois itens com o mesmo número no mesmo orçamento. Nas tabelas intermediárias dos N:N a chave é o conjunto das chaves estrangeiras, o que impede registrar a mesma especialidade duas vezes para o mesmo dentista, ou o mesmo item duas vezes na mesma consulta.
+
+### 13.2 Chaves estrangeiras
+
+Toda chave estrangeira aponta para a chave primária da tabela de origem. Nas obrigatórias, lado `(1,1)` do diagrama, a coluna é NOT NULL. Nas opcionais, lado `(0,1)`, a coluna pode ficar vazia: `ID_COLABORADOR_COMERCIAL` em ORCAMENTO e `ID_COLABORADOR` em LOG_ALTERACAO.
+
+Ao apagar: todas as chaves estrangeiras bloqueiam a exclusão do registro de origem (ON DELETE RESTRICT). Um paciente com agendamento, orçamento ou pedido não pode ser apagado, e um procedimento usado em algum item também não. Isso segue o que a matriz de acesso do dicionário já dizia: na clínica nenhum papel apaga registro, por causa do histórico financeiro e da guarda do prontuário (Lei 13.787/2018). A única exceção é TELEFONE_PACIENTE, que é apagada junto com o paciente (ON DELETE CASCADE), porque o telefone é parte do cadastro e não tem vida própria.
+
+Ao atualizar: os identificadores são gerados pelo banco e não mudam, então não há regra de atualização em cascata.
+
+### 13.3 Restrições de integridade e a regra de negócio de cada uma
+
+| Restrição | Tabela e coluna | Regra que justifica |
+|---|---|---|
+| UNIQUE | PACIENTE.NR_CPF; COLABORADOR.NR_CPF | Cadastro sem duplicidade (Processo 1 e RN23) |
+| CHECK: 11 dígitos | PACIENTE.NR_CPF; COLABORADOR.NR_CPF | CPF guardado sem máscara, só os dígitos |
+| DEFAULT: data atual | PACIENTE.DT_CADASTRO | O cadastro é aberto no dia da avaliação (RN17) |
+| UNIQUE | COLABORADOR.NR_CRO | O registro profissional não se repete |
+| CHECK: cargo dentista ou diretor clínico exige NR_CRO | COLABORADOR | Só dentista atende, avalia e pede ao laboratório; o CRO é o que identifica o dentista |
+| DEFAULT: verdadeiro | COLABORADOR.IN_ATIVO; CONSULTORIO.IN_ATIVO | Cadastro novo nasce ativo; desligamento desativa em vez de apagar |
+| UNIQUE | ESPECIALIDADE.NM_ESPECIALIDADE; CONSULTORIO.NR_CONSULTORIO; PROCEDIMENTO.CD_PROCEDIMENTO | Cadastros de apoio mantidos pela gestora, sem repetição (RN24) |
+| CHECK: valor maior ou igual a zero | PROCEDIMENTO.VL_TABELA | RN01: a avaliação tem preço zero, então o valor pode ser zero, mas não negativo |
+| DEFAULT: em negociação; DEFAULT: 0 | ORCAMENTO.CD_STATUS; ORCAMENTO.VL_TOTAL | O orçamento nasce na avaliação e segue para o comercial (RN02, Processo 2) |
+| CHECK: dente entre 11 e 48 | ITEM_ORCAMENTO.NR_DENTE | Numeração dos dentes permanentes; opcional porque nem todo procedimento é por dente |
+| CHECK: valor maior ou igual a zero | ITEM_ORCAMENTO.VL_NEGOCIADO | RN03: preço tabelado com desconto, nunca negativo |
+| DEFAULT: pendente; DEFAULT: em aberto | ITEM_ORCAMENTO.CD_STATUS_APROVACAO; ITEM_ORCAMENTO.CD_STATUS_EXECUCAO | RN04 (aprovação item a item) e RN12 (todo item nasce em aberto) |
+| UNIQUE e NOT NULL | CONTRATO.ID_ORCAMENTO | RN05: um orçamento gera no máximo um contrato, e todo contrato vem de um orçamento |
+| CHECK: valor maior que zero; CHECK: parcelas maior ou igual a 1, DEFAULT 1 | CONTRATO.VL_CONTRATADO; CONTRATO.QT_PARCELAS | Contrato sem valor não existe; pagamento à vista é uma parcela só |
+| CHECK: à vista exige uma parcela | CONTRATO | RN06: formas de pagamento |
+| CHECK: boleto exige entrada de pelo menos 20% do valor | CONTRATO.VL_ENTRADA | RN06: no boleto é exigida entrada de 20% |
+| CHECK: valor maior que zero; DEFAULT: aberta | PARCELA.VL_PARCELA; PARCELA.CD_STATUS | RN07: parcelas registradas e baixadas uma a uma |
+| CHECK: parcela paga exige data de pagamento | PARCELA | RN07: a baixa registra a data |
+| DEFAULT: agendado; CHECK: duração maior que zero | AGENDAMENTO.CD_STATUS; AGENDAMENTO.QT_DURACAO_MIN | RN10: estados do agendamento |
+| CHECK: data de retorno só em agendamento do tipo alta | AGENDAMENTO.DT_RETORNO_PREVISTO | RN21: o retorno é definido na consulta de alta |
+| UNIQUE | EVOLUCAO_CLINICA.ID_AGENDAMENTO | RN16: uma evolução por consulta |
+| DEFAULT: data e hora atuais | EVOLUCAO_CLINICA.DT_REGISTRO; LOG_ALTERACAO.DT_HORA | Registro no momento do atendimento e da alteração |
+| DEFAULT: solicitado; DEFAULT: data atual | PEDIDO_LABORATORIO.CD_STATUS; PEDIDO_LABORATORIO.DT_SOLICITACAO | RN15: o pedido nasce solicitado no dia |
+| CHECK: prazo maior ou igual à solicitação; CHECK: entregue exige data de entrega | PEDIDO_LABORATORIO | RN15: prazo combinado na solicitação; entrega registrada com data |
+
+### 13.4 Regras que o banco não garante sozinho
+
+Algumas regras envolvem mais de uma tabela ou um cálculo, e o CHECK do MySQL só enxerga a própria linha. Elas ficam para a aplicação ou para gatilho (trigger), e cada uma ganha uma consulta de auditoria no script SQL, que mostra se a regra foi quebrada:
+
+- RN03: o `VL_NEGOCIADO` do item não pode passar do `VL_TABELA` do procedimento.
+- RN09 e RF07: dois agendamentos não podem ocupar o mesmo consultório, nem o mesmo dentista, no mesmo horário. Uma coluna única não resolve, porque a sobreposição depende da duração e porque o horário de uma falta pode ser preenchido por encaixe (RN11).
+- Só colaborador com cargo de dentista pode atender, avaliar, pedir ao laboratório e ter especialidade.
+- RN16: a evolução clínica só pode ser registrada em agendamento com situação atendido.
+- RN19: paciente com duas parcelas atrasadas não agenda. É calculado a partir de PARCELA, sem coluna no PACIENTE.
+- O `VL_TOTAL` do orçamento deve ser igual à soma dos itens, e o `VL_CONTRATADO` à soma dos itens aprovados.
+
 ---
 
 ## Conclusão
@@ -573,7 +759,9 @@ Neste trabalho levantamos, por pesquisa de campo, como a Meneghini Odontologia I
 
 A parte que mais exigiu atenção foi a cardinalidade. Cada `(mín,máx)` do DER veio de uma resposta concreta da entrevista, e algumas mudaram quando conferimos com o funcionamento real da clínica (por exemplo, todo paciente cadastrado já passou pela avaliação e por isso tem pelo menos um orçamento). Também precisamos respeitar a LGPD no desenho, separando o dado sensível (evolução clínica) para permitir acesso restrito.
 
-Depois da devolutiva do professor, voltamos à clínica e fechamos dois dos pontos que estavam em aberto: o tratamento das parcelas atrasadas (RN18 e RN19) e o caminho do paciente depois do tratamento, com a consulta de alta e o retorno (Processo 6). Também entraram os cadastros de apoio (Processo 7): colaboradores pelo setor administrativo e especialidades, consultórios e tabela de preços pela gestora. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso. Continuam em aberto o registro da evolução por consulta e a regra de desconto por cargo. Na Entrega 2 pretendemos converter o modelo para o lógico (com as tabelas intermediárias dos relacionamentos N:N e a migração das chaves), normalizar e escrever o SQL de criação das tabelas.
+Depois da devolutiva do professor, voltamos à clínica e fechamos dois dos pontos que estavam em aberto: o tratamento das parcelas atrasadas (RN18 e RN19) e o caminho do paciente depois do tratamento, com a consulta de alta e o retorno (Processo 6). Também entraram os cadastros de apoio (Processo 7): colaboradores pelo setor administrativo e especialidades, consultórios e tabela de preços pela gestora. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso. Continuam em aberto o registro da evolução por consulta e a regra de desconto por cargo.
+
+Na Entrega 2 convertemos o modelo para o lógico (Seções 10 a 13): 16 tabelas, com as tabelas intermediárias dos relacionamentos N:N, o telefone em tabela própria e as chaves migradas, conferidas na primeira, segunda e terceira formas normais. O próximo passo é o script SQL de criação, carga e consultas, com os indicadores de BI.
 
 ---
 
