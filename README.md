@@ -2,7 +2,7 @@
 
 **Disciplina:** Modelagem de Banco de Dados (2260065), Análise e Desenvolvimento de Sistemas, UNICID
 **Professor:** Cid Rodrigues de Andrade
-**Entrega 1: Modelo Conceitual (DER)**, setembro de 2026
+**Entrega 1: Modelo Conceitual (DER)**, setembro de 2026; revisado em novembro de 2026 a partir da devolutiva do professor e de uma segunda rodada de levantamento na clínica
 **Dicionário de dados completo (HTML):** [abrir no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html)
 
 ## Metadados
@@ -477,9 +477,15 @@ As chaves estrangeiras não aparecem no DER. No modelo conceitual, a ligação e
 
 O lead ficou fora do modelo. Ele existe só em planilha, a maioria não vira paciente (é um funil) e só o time de agendamento tem acesso. O modelo começa quando a pessoa comparece à clínica e a recepção abre o cadastro; o paciente guarda apenas de onde veio (`TP_ORIGEM`). Incluir o lead traria o marketing para dentro do modelo sem necessidade nesta etapa.
 
-Os materiais também ficaram fora. Resinas, implantes e outros materiais são ligados às especialidades e não foram levantados na pesquisa de campo (quem controla, como repõe). Sem esses fatos, preferimos deixar para uma etapa futura a modelar de forma inventada.
+Compras de materiais, fornecedores e estoque ficaram fora porque o grupo não teve acesso a essa área da clínica na pesquisa de campo. Resinas, implantes e outros materiais variam por especialidade, e sem saber quem compra, como repõe e como controla, qualquer entidade de MATERIAL ou FORNECEDOR seria inventada. Por isso ficou registrada só a limitação.
 
-Sobre o escopo: deixamos de fora folha de pagamento, compras e estoque, marketing e contabilidade porque não fazem parte do caminho do paciente e tornariam o modelo grande demais para esta etapa. O modelo foi montado para receber essas partes depois sem alterar o que já existe.
+A alta e o retorno do paciente não viraram entidades novas. Chegamos a pensar em uma entidade RETORNO, mas a alta é uma consulta com o diretor clínico e o retorno é uma consulta de manutenção ou limpeza: as duas têm paciente, dentista, consultório, data e hora, exatamente o que AGENDAMENTO já guarda. Por isso acrescentamos dois valores ao tipo do agendamento (alta e retorno) e um atributo opcional, `DT_RETORNO_PREVISTO`, preenchido na alta. A manutenção que a recepção deixa paga antes fica no orçamento inicial do paciente: na clínica esse orçamento é um planejamento geral, com tudo o que o paciente precisa já lançado, e a manutenção costuma ser um item dele (ITEM_ORCAMENTO), pago pelas parcelas do contrato.
+
+A inadimplência ficou só nas parcelas, sem atributo novo. "Paciente bloqueado" se calcula a partir delas: se o paciente tem duas parcelas com status atrasada, a recepção não agenda (RN19). Como as parcelas são mensais, duas atrasadas são dois meses sem pagar; quando o paciente regulariza, o tratamento segue de onde parou no planejamento, e nada disso precisa ser guardado além das próprias parcelas. Guardar um indicador no PACIENTE repetiria o que as parcelas já dizem e poderia ficar desatualizado quando o financeiro desse a baixa.
+
+Os cadastros de apoio entraram como um processo só (Processo 7): o cadastro de colaboradores, feito pelo setor administrativo no Controle Odonto, e as especialidades, os consultórios e a tabela de preços, mantidos pela gestora que lidera os setores administrativo e financeiro (RN24). As quatro entidades envolvidas (COLABORADOR, ESPECIALIDADE, CONSULTORIO e PROCEDIMENTO) já existiam no modelo; a segunda rodada definiu quem mantém cada uma. Holerite, pagamento de colaborador e folha de ponto são folha de pagamento e continuam fora, como já estava na delimitação.
+
+Sobre o escopo: deixamos de fora folha de pagamento, marketing e contabilidade porque não fazem parte do caminho do paciente e tornariam o modelo grande demais para esta etapa; compras e estoque ficaram fora por falta de acesso, como explicado acima. O modelo foi montado para receber essas partes depois sem alterar o que já existe.
 
 ---
 
@@ -487,7 +493,7 @@ Sobre o escopo: deixamos de fora folha de pagamento, compras e estoque, marketin
 
 O trabalho foi feito pelo grupo: a escolha da clínica, a pesquisa de campo (visita, entrevista com o proprietário, Fábio Meneghini, e observação do funcionamento, feitas por Renan Silva dos Santos em nome do grupo), as decisões de escopo (sem convênio, lead e materiais fora do modelo), a lista das 12 entidades, a definição das cardinalidades em palavras a partir do funcionamento real da clínica, a correção da ordem dos processos, as regras de negócio e a revisão do texto. Nenhum dado do trabalho foi inventado por ferramenta: tudo o que está aqui veio da clínica ou de decisão do grupo.
 
-Usamos a ferramenta Claude (Anthropic) como apoio em três pontos, registrados abaixo no formato pedido pelo esqueleto.
+Usamos a ferramenta Claude (Anthropic) como apoio em quatro pontos, registrados abaixo no formato pedido pelo esqueleto.
 
 | Item | Uso 1: leitura do material da disciplina |
 |---|---|
@@ -522,15 +528,26 @@ Usamos a ferramenta Claude (Anthropic) como apoio em três pontos, registrados a
 | Justificativa da escolha final | Cada entidade e cada cardinalidade do trabalho tem origem em uma resposta da entrevista ou em uma decisão do grupo. |
 | Reflexão crítica | O rascunho supunha coisas que não são da clínica (paciente sem orçamento, um CRM só, lead dentro do sistema). Foi a pesquisa de campo que corrigiu. O ponto de mais cuidado foi a cardinalidade invertida, armadilha citada no material do brModelo: por isso respondemos as cardinalidades em palavras e escrevemos a regra de leitura na legenda do DER e neste README. Os pontos que ficaram em dúvida (evolução por consulta ou histórico único, teto de desconto por cargo, parcela atrasada) serão confirmados com a clínica antes da Entrega 2. |
 
+| Item | Uso 4: revisão após a devolutiva do professor |
+|---|---|
+| Ferramenta e etapa | Claude, em outubro e novembro de 2026, depois da devolutiva (issues #3 e #4). Ajudou a completar o dicionário de dados em HTML e a transformar as respostas de uma segunda rodada de levantamento na clínica em processos, requisitos e regras. |
+| Motivação | A devolutiva apontou processos e regras ausentes (relacionamento pós-tratamento, cadastro de colaboradores, inadimplência, guarda do prontuário, biossegurança, compras) e um dicionário incompleto. |
+| Prompt(s) utilizados | "Aqui estão as respostas da clínica sobre cobrança, alta e retorno, cadastro de colaboradores e esterilização. Transforme em processos, requisitos e regras no formato do README. Não invente nada: o que não foi respondido fica de fora ou marcado como pendente." |
+| Resposta recebida | Processos 6 e 7, RF16 a RF18, RN18 a RN24, restrições de guarda do prontuário e de biossegurança reescritas, e o dicionário v1.2 com cardinalidades, fluxo de dados, SGBD e collation, tipo físico, índices, log de acesso e matriz de acesso com LGPD. |
+| Fontes consultadas e verificadas | Respostas da clínica na segunda rodada; devolutiva e esqueletos do professor; Lei 13.787/2018 (art. 6º) e Código Civil (art. 206, § 5º, I), conferidos pelo grupo no texto oficial antes de entrar no trabalho. |
+| Trechos rejeitados ou corrigidos | (a) a ferramenta levantou a opção de uma entidade RETORNO; o grupo manteve tudo em AGENDAMENTO, com os tipos alta e retorno; (b) sugeriu um indicador "bloqueado" no PACIENTE; descartamos, porque é derivado das parcelas; (c) a primeira redação da restrição de biossegurança dizia que o tema "não foi levantado" e citava a RDC 15/2012 da ANVISA; ao conferir o texto oficial, vimos que a resolução exclui do seu escopo o processamento feito em consultórios odontológicos, e a restrição foi reescrita só com o que a pesquisa de campo mostrou: sala própria de esterilização e auxiliares de saúde bucal treinadas. |
+| Justificativa da escolha final | Só entrou o que a clínica respondeu. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso, em vez de preenchidos com um processo genérico. |
+| Reflexão crítica | A ferramenta tende a fechar lacuna com texto de "a confirmar" ou com uma citação de norma que soa bem. Para resolver, voltamos à clínica com perguntas específicas, escrevemos só o que foi respondido e conferimos cada citação legal na fonte antes de publicar. |
+
 ---
 
 ## Conclusão
 
-Neste trabalho levantamos, por pesquisa de campo, como a Meneghini Odontologia Integrada funciona, do primeiro contato do paciente até o pagamento, e transformamos esse levantamento em um modelo conceitual com 12 entidades e 15 relacionamentos. As principais decisões foram tratar todos os cargos como uma única entidade COLABORADOR, modelar ESPECIALIDADE como entidade (N:N), separar ORCAMENTO, ITEM_ORCAMENTO, CONTRATO e PARCELA para acompanhar a aprovação item a item e o pagamento parcelado, e usar AGENDAMENTO como a entidade que liga paciente, dentista e consultório.
+Neste trabalho levantamos, por pesquisa de campo, como a Meneghini Odontologia Integrada funciona, do primeiro contato do paciente até o pagamento e o retorno depois da alta, e transformamos esse levantamento em um modelo conceitual com 12 entidades e 15 relacionamentos. As principais decisões foram tratar todos os cargos como uma única entidade COLABORADOR, modelar ESPECIALIDADE como entidade (N:N), separar ORCAMENTO, ITEM_ORCAMENTO, CONTRATO e PARCELA para acompanhar a aprovação item a item e o pagamento parcelado, e usar AGENDAMENTO como a entidade que liga paciente, dentista e consultório.
 
 A parte que mais exigiu atenção foi a cardinalidade. Cada `(mín,máx)` do DER veio de uma resposta concreta da entrevista, e algumas mudaram quando conferimos com o funcionamento real da clínica (por exemplo, todo paciente cadastrado já passou pela avaliação e por isso tem pelo menos um orçamento). Também precisamos respeitar a LGPD no desenho, separando o dado sensível (evolução clínica) para permitir acesso restrito.
 
-Na Entrega 2 pretendemos revisar o DER com o retorno do professor, converter o modelo para o lógico (com as tabelas intermediárias dos relacionamentos N:N e a migração das chaves), escrever o SQL de criação das tabelas e confirmar com a clínica os pontos que ficaram em aberto: registro da evolução por consulta, regra de desconto por cargo e tratamento de parcelas atrasadas.
+Depois da devolutiva do professor, voltamos à clínica e fechamos dois dos pontos que estavam em aberto: o tratamento das parcelas atrasadas (RN18 e RN19) e o caminho do paciente depois do tratamento, com a consulta de alta e o retorno (Processo 6). Também entraram os cadastros de apoio (Processo 7): colaboradores pelo setor administrativo e especialidades, consultórios e tabela de preços pela gestora. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso. Continuam em aberto o registro da evolução por consulta e a regra de desconto por cargo. Na Entrega 2 pretendemos converter o modelo para o lógico (com as tabelas intermediárias dos relacionamentos N:N e a migração das chaves), normalizar e escrever o SQL de criação das tabelas.
 
 ---
 
