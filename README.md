@@ -595,7 +595,7 @@ Na pesquisa de campo, cada setor tem uma pergunta que hoje é respondida de cabe
 - Laboratório e dentistas: quais peças estão atrasadas (P2).
 - Dentista em consulta: o histórico completo do paciente em um lugar só (P1).
 
-O atributo `TP_ORIGEM` do paciente permite ainda saber de onde vêm os pacientes que fecham contrato (anúncio, indicação, fachada ou parceria). O modelo guarda tudo isso nas mesmas 16 tabelas do dia a dia, e por isso cada pergunta vira uma consulta SQL na Parte 3 de `docs/01-banco-e-consultas.sql` (G01 a G14), sem planilha paralela.
+O atributo `TP_ORIGEM` do paciente permite ainda saber de onde vêm os pacientes que fecham contrato (anúncio, indicação, fachada ou parceria). O modelo guarda tudo isso nas mesmas 16 tabelas do dia a dia, e por isso cada pergunta vira uma consulta SQL na Parte 3 de `docs/01-banco-e-consultas.sql` (G01 a G15), sem planilha paralela.
 
 ### 14.2 Indicadores (KPIs)
 
@@ -669,8 +669,8 @@ Os arquivos `.sql` ficam na pasta `docs/`, como pedem os slides da Entrega 2. S�
 | `docs/01-banco-e-consultas.sql` | 1 | DROP e CREATE DATABASE; as 16 tabelas com NOT NULL, UNIQUE, CHECK e DEFAULT nomeados; as 19 chaves estrangeiras por ALTER TABLE; os índices; os seis gatilhos que preenchem LOG_ALTERACAO | 1, 2 e 3 |
 | `docs/02-massa-de-dados.sql` | | massa fictícia: 26 pacientes, 31 telefones, 17 colaboradores, 4 especialidades, 7 consultórios, 15 procedimentos, 26 orçamentos com 61 itens, 20 contratos com 76 parcelas, 75 agendamentos, 60 evoluções clínicas e 6 pedidos ao laboratório | 4 |
 | `docs/01-banco-e-consultas.sql` | 2 | cinco SELECT com JOIN (agenda do dia, orçamento item a item, dentistas por especialidade, carnê do contrato, pacientes com e sem contrato); UPDATE com o log gravando (baixa de parcela, confirmação de consulta, peça pronta); DELETE barrado pela chave estrangeira; DELETE na ordem certa | 5, 6 e 7 |
-| `docs/01-banco-e-consultas.sql` | 3 | G01 a G14: uma por problema (P1 a P5) ou por indicador da Seção 14 | 8 |
-| `docs/01-banco-e-consultas.sql` | 4 | A01 a A10: uma por regra que o banco não garante sozinho (Seção 13.4), mais o log de alterações | 9 |
+| `docs/01-banco-e-consultas.sql` | 3 | G01 a G15: uma por problema (P1 a P5), por indicador da Seção 14 ou por volume de atendimento | 8 |
+| `docs/01-banco-e-consultas.sql` | 4 | A01 a A11: uma por regra que o banco não garante sozinho (Seção 13.4), mais o log de alterações | 9 |
 
 A ordem de execução é a da tabela: Parte 1 (cria o banco), depois a massa de dados, depois as Partes 2, 3 e 4 (precisam da massa). Cada parte termina com uma linha de comentário `FIM DA PARTE n`.
 
@@ -704,7 +704,7 @@ E casos errados de propósito, um para cada consulta de auditoria:
 - pedido 2 ao laboratório com prazo vencido e não entregue (A07);
 - item 2 do orçamento 17 concluído sem consulta ligada (A08);
 - alta do agendamento 35 feita por dentista comum, não pelo diretor clínico (A09);
-- item 2 do orçamento 12 (limpeza) negociado a 200 com preço de tabela 180, acima da margem da RN03 (consulta A11, que entra na Parte 4).
+- item 2 do orçamento 12 (limpeza) negociado a 200 com preço de tabela 180, acima da margem da RN03 (consulta A11).
 
 A A02 (o contrato bate com os itens aprovados e com a entrada mais as parcelas, RN05 e RN07) lista os 20 contratos com "ok", porque nela a massa está correta. A A10 mostra o log: as 60 evoluções da carga e as alterações da Parte 2, com o nome de quem fez. Algumas consultas usam a data do dia (`CURDATE()`), então os dias de atraso e as listas de vencidos mudam conforme o dia em que o script roda.
 
