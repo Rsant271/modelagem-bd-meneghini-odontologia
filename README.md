@@ -28,8 +28,8 @@
 | 1.5 Justificativas das chaves e das restrições | Seção 13 |
 | 1.6 BI e IA (indicadores e rastreabilidade) | Seção 14 |
 | 2 Modelo lógico (diagrama) | Seção 12 e pasta `der/` |
-| 3 e 4 Script SQL e massa de dados | Seção 15 e pasta `docs/` (cinco arquivos `.sql`) |
-| 5 Levantamento, fotos e dicionário de dados | Pasta `levantamento/` e dicionário em HTML (link acima) |
+| 3 e 4 Script SQL e massa de dados | Seção 15 e pasta `docs/` (dois arquivos `.sql`: banco e consultas; massa de dados) |
+| 5 Levantamento, fotos e dicionário de dados | Pasta `levantamento/` e dicionário em HTML (Seção 5 e link acima) |
 | 6 Uso de IA | Seção 9 |
 | 7 Apresentação (slides) | ainda não feito (pasta `apresentacao/`) |
 
@@ -110,7 +110,7 @@ A devolutiva do professor (issues #3 e #4 do repositório) apontou os itens abai
 | Apontamento da E1 | O que mudou | Por quê |
 |---|---|---|
 | Contato com a organização sem foto ou print (critério 3.2, fator 0,85) | Foto de Renan Silva dos Santos com Helen Meneghini, gestora da clínica, na recepção, publicada em `levantamento/06-visita-gestora.jpg` e citada na tabela de evidências | A visita e a entrevista estavam só relatadas em texto; a foto comprova o contato presencial |
-| Processos com cobertura parcial (65%): faltavam relacionamento pós-tratamento, compra de materiais, fornecedores e estoque; cadastro de colaboradores incompleto | Processo 6 (alta e retorno), com fluxograma próprio; Processo 7 (cadastros de apoio: colaboradores, especialidades, consultórios e tabela de preços); compras, fornecedores e estoque declarados fora do levantamento na Delimitação, na Seção 2 e na Seção 8 | Voltamos à clínica em 09/11 e ela explicou como funcionam a alta, o retorno e o cadastro. A área de compras não ficou acessível ao grupo; registramos a limitação em vez de inventar um processo |
+| Processos com cobertura parcial (65%): faltavam relacionamento pós-tratamento, compra de materiais, fornecedores e estoque; cadastro de colaboradores incompleto | PR06 (alta e retorno), com fluxograma próprio; PR07 (cadastros de apoio: colaboradores, especialidades, consultórios e tabela de preços); compras, fornecedores e estoque declarados fora do levantamento na Delimitação, na Seção 2 e na Seção 8 | Voltamos à clínica em 09/11 e ela explicou como funcionam a alta, o retorno e o cadastro. A área de compras não ficou acessível ao grupo; registramos a limitação em vez de inventar um processo |
 | Regras de negócio com cobertura parcial (78%): faltavam inadimplência, guarda do prontuário, biossegurança e compras | RN18 a RN24 (cobrança e inadimplência, alta e retorno, cadastro de colaboradores e cadastros de apoio); restrições de guarda do prontuário e de biossegurança reescritas na Seção 4; compras fora, pelo motivo acima | As regras vieram da segunda rodada de perguntas. A guarda do prontuário segue a Lei 13.787/2018, art. 6º, conferida no texto oficial. A biossegurança ficou como fato da clínica: sala própria de esterilização e auxiliares de saúde bucal treinadas |
 | Dicionário de dados não atendido: faltavam cardinalidades e associativas, fluxo de dados, SGBD e collation, leitura das expressões, tipo físico e índices, log de acesso e acesso por operação com LGPD | Dicionário v1.2 em HTML, com todos esses itens (link no topo deste README) | Era o item de maior desconto (0,20). O dicionário da E1 só tinha atributo, descrição e regra de cada entidade |
 | Observação sobre o DER: nenhuma entidade associativa com atributos próprios | Os dois relacionamentos N:N (COLABORADOR com ESPECIALIDADE e AGENDAMENTO com ITEM_ORCAMENTO) continuam sem atributos no DER; na conversão para o lógico viram as tabelas COLABORADOR_ESPECIALIDADE e AGENDAMENTO_ITEM | Nenhum dos dois tem dado próprio: a especialidade é só a ligação, e o item executado em uma consulta não tem valor nem quantidade, porque o valor fica no item do orçamento |
@@ -121,37 +121,37 @@ A devolutiva do professor (issues #3 e #4 do repositório) apontou os itens abai
 
 ## 2. Processos de Negócio
 
-**Principais processos mapeados:**
+**Principais processos mapeados** (numerados PR01 a PR07, como os requisitos RF e as regras RN):
 
-1. Captação e cadastro do paciente. O lead chega por anúncio (principal canal), indicação, fachada ou parceria e fica registrado na planilha do time de agendamento, que marca a avaliação inicial (sem custo). Quando o lead comparece à clínica, a recepção abre o cadastro no sistema e ele passa a ser paciente. A avaliação acontece em um consultório disponível, com o dentista avaliador.
-2. Avaliação, orçamento e contrato. O dentista avaliador examina o paciente e monta o orçamento com procedimentos avulsos (por dente e por fase). O setor comercial negocia. Os itens aprovados viram contrato com a forma de pagamento, e o financeiro gera as parcelas.
-3. Agendamento e atendimento. A recepção agenda as consultas (paciente, dentista, consultório, data e hora), confirma a presença e registra falta ou atendimento. O dentista executa os itens do plano e registra a evolução clínica.
-4. Pedido ao laboratório. Quando o tratamento precisa de uma peça (coroa, prótese etc.), o dentista faz o pedido ao laboratório da própria clínica, que produz a peça e avisa quando está pronta.
-5. Pagamento e cobrança. As parcelas são mensais, uma por mês, registradas e baixadas no sistema. Uma pessoa do financeiro cuida da parte dos pacientes, incluindo a cobrança de quem atrasa. O tratamento avança conforme o plano e a evolução do pagamento; se o paciente para de pagar e chega a duas parcelas sem pagar, ele não consegue agendar e o tratamento é interrompido. Quando volta a pagar, o tratamento segue de onde parou no planejamento.
-6. Alta e retorno. Quando o último item do plano é concluído, a recepção agenda a consulta de alta com o diretor clínico, que confere o tratamento. Na alta fica definido o retorno do paciente, em geral seis meses depois, para manutenção ou limpeza. Essa manutenção ou limpeza costuma já estar lançada no orçamento inicial do paciente, que no Controle Odonto é um planejamento geral com tudo o que ele precisa; por isso a recepção procura deixar esse valor pago antes do retorno e, perto da data, liga ou manda mensagem para o paciente marcar. Tudo fica registrado no sistema. Hoje a clínica não faz pesquisa de satisfação nem reativação de pacientes antigos, então esses dois contatos não entram no modelo.
-7. Cadastros de apoio. O setor administrativo tem uma pessoa responsável só pelos colaboradores, dentistas ou de qualquer outra função. Ela faz o cadastro no Controle Odonto quando alguém entra e cuida de holerites, pagamentos e folha de ponto. Especialidades, consultórios e tabela de preços são mantidos pela gestora, que lidera os setores administrativo e financeiro. No modelo entram o cadastro do colaborador (nome, CPF, cargo, setor, CRO e especialidades dos dentistas, admissão e situação), as especialidades, os consultórios e os procedimentos da tabela de preços; holerite, pagamento e ponto são folha de pagamento e ficam fora.
+- **PR01 Captação e cadastro do paciente.** O lead chega por anúncio (principal canal), indicação, fachada ou parceria e fica registrado na planilha do time de agendamento, que marca a avaliação inicial (sem custo). Quando o lead comparece à clínica, a recepção abre o cadastro no sistema e ele passa a ser paciente. A avaliação acontece em um consultório disponível, com o dentista avaliador.
+- **PR02 Avaliação, orçamento e contrato.** O dentista avaliador examina o paciente e monta o orçamento com procedimentos avulsos (por dente e por fase). O setor comercial negocia. Os itens aprovados viram contrato com a forma de pagamento, e o financeiro gera as parcelas.
+- **PR03 Agendamento e atendimento.** A recepção agenda as consultas (paciente, dentista, consultório, data e hora), confirma a presença e registra falta ou atendimento. O dentista executa os itens do plano e registra a evolução clínica.
+- **PR04 Pedido ao laboratório.** Quando o tratamento precisa de uma peça (coroa, prótese etc.), o dentista faz o pedido ao laboratório da própria clínica, que produz a peça e avisa quando está pronta.
+- **PR05 Pagamento e cobrança.** As parcelas são mensais, uma por mês, registradas e baixadas no sistema. Uma pessoa do financeiro cuida da parte dos pacientes, incluindo a cobrança de quem atrasa. O tratamento avança conforme o plano e a evolução do pagamento; se o paciente para de pagar e chega a duas parcelas sem pagar, ele não consegue agendar e o tratamento é interrompido. Quando volta a pagar, o tratamento segue de onde parou no planejamento.
+- **PR06 Alta e retorno.** Quando o último item do plano é concluído, a recepção agenda a consulta de alta com o diretor clínico, que confere o tratamento. Na alta fica definido o retorno do paciente, em geral seis meses depois, para manutenção ou limpeza. Essa manutenção ou limpeza costuma já estar lançada no orçamento inicial do paciente, que no Controle Odonto é um planejamento geral com tudo o que ele precisa; por isso a recepção procura deixar esse valor pago antes do retorno e, perto da data, liga ou manda mensagem para o paciente marcar. Tudo fica registrado no sistema. Hoje a clínica não faz pesquisa de satisfação nem reativação de pacientes antigos, então esses dois contatos não entram no modelo.
+- **PR07 Cadastros de apoio.** O setor administrativo tem uma pessoa responsável só pelos colaboradores, dentistas ou de qualquer outra função. Ela faz o cadastro no Controle Odonto quando alguém entra e cuida de holerites, pagamentos e folha de ponto. Especialidades, consultórios e tabela de preços são mantidos pela gestora, que lidera os setores administrativo e financeiro. No modelo entram o cadastro do colaborador (nome, CPF, cargo, setor, CRO e especialidades dos dentistas, admissão e situação), as especialidades, os consultórios e os procedimentos da tabela de preços; holerite, pagamento e ponto são folha de pagamento e ficam fora.
 
 **Fora do levantamento:** compra de materiais, cadastro de fornecedores e controle de estoque não aparecem aqui porque o grupo não teve acesso a essa área da clínica. O grupo registrou a limitação em vez de descrever um processo que não viu funcionar.
 
 **Fluxogramas:**
 
-Processo 1: do primeiro contato ao contrato (captação, avaliação, orçamento, contrato e parcelas).
+PR01 e PR02: do primeiro contato ao contrato (captação, avaliação, orçamento, contrato e parcelas).
 
-![Fluxograma do processo 1](fluxogramas/processo-1-contato-ao-contrato.png)
+![Fluxograma dos processos PR01 e PR02](fluxogramas/pr01-pr02-contato-ao-contrato.png)
 
-Processo 2: agendamento e atendimento (ciclo de cada consulta, com os status do agendamento).
+PR03: agendamento e atendimento (ciclo de cada consulta, com os status do agendamento).
 
-![Fluxograma do processo 2](fluxogramas/processo-2-agendamento-e-atendimento.png)
+![Fluxograma do processo PR03](fluxogramas/pr03-agendamento-e-atendimento.png)
 
-Processo 3: pedido ao laboratório da clínica.
+PR04: pedido ao laboratório da clínica.
 
-![Fluxograma do processo 3](fluxogramas/processo-3-pedido-de-laboratorio.png)
+![Fluxograma do processo PR04](fluxogramas/pr04-pedido-de-laboratorio.png)
 
-Processo 6: alta e retorno (fim do tratamento, consulta de alta com o diretor clínico e retorno para manutenção ou limpeza).
+PR06: alta e retorno (fim do tratamento, consulta de alta com o diretor clínico e retorno para manutenção ou limpeza).
 
-![Fluxograma do processo 6](fluxogramas/processo-6-alta-e-retorno.png)
+![Fluxograma do processo PR06](fluxogramas/pr06-alta-e-retorno.png)
 
-Os processos se ligam assim: o Processo 1 termina com o contrato assinado e as primeiras consultas agendadas, que são o início do Processo 2. Dentro do Processo 2, sempre que o dentista precisa de uma peça, abre-se um pedido no Processo 3, e a peça pronta é instalada em uma consulta do Processo 2. As parcelas geradas no Processo 1 são baixadas pelo financeiro ao longo do tratamento, e a agenda das próximas sessões segue o plano e o andamento do pagamento. Se o paciente acumula duas parcelas sem pagar, o financeiro começa a cobrança (Processo 5), a recepção não agenda novas consultas e o tratamento fica interrompido. Quando o último item do plano é concluído, o Processo 2 leva ao Processo 6: consulta de alta com o diretor clínico e retorno marcado para alguns meses depois, o que traz o paciente de volta à agenda. O Processo 7 é de apoio: é dele que vem o cadastro de dentistas e demais colaboradores usado em todos os outros.
+Os processos se ligam assim: o PR01 e o PR02 terminam com o contrato assinado e as primeiras consultas agendadas, que são o início do PR03. Dentro do PR03, sempre que o dentista precisa de uma peça, abre-se um pedido no PR04, e a peça pronta é instalada em uma consulta do PR03. As parcelas geradas no PR02 são baixadas pelo financeiro ao longo do tratamento (PR05), e a agenda das próximas sessões segue o plano e o andamento do pagamento. Se o paciente acumula duas parcelas sem pagar, o financeiro começa a cobrança (PR05), a recepção não agenda novas consultas e o tratamento fica interrompido. Quando o último item do plano é concluído, o PR03 leva ao PR06: consulta de alta com o diretor clínico e retorno marcado para alguns meses depois, o que traz o paciente de volta à agenda. O PR07 é de apoio: é dele que vem o cadastro de dentistas e demais colaboradores usado em todos os outros.
 
 ---
 
@@ -236,194 +236,11 @@ Os processos se ligam assim: o Processo 1 termina com o contrato assinado e as p
 
 ---
 
-## 5. Dicionário de Dados Conceitual (Preliminar)
+## 5. Dicionário de Dados
 
-Convenções adotadas (seguindo o exemplo de dicionário de dados apresentado em aula): os nomes dos atributos usam os prefixos `ID_` (identificador), `NM_` (nome), `DT_` (data), `TP_` (tipo), `CD_` (código ou status), `QT_` (quantidade), `IN_` (indicador sim/não) e `DS_` (descrição). Acrescentamos `NR_` (número de documento ou número sequencial) e `VL_` (valor em reais). Na definição de cada entidade, `@` marca o identificador, `+` liga os atributos, `( )` indica atributo opcional e `1{ }N` indica atributo multivalorado.
+O dicionário de dados completo fica em página HTML, fora deste README: [abrir o dicionário de dados no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html). O arquivo é [dicionario/dicionario-de-dados.html](dicionario/dicionario-de-dados.html).
 
-Todos os exemplos de valores citados abaixo são fictícios.
-
-Esta seção traz a parte conceitual do dicionário: atributo, descrição e regra de negócio de cada entidade. A versão completa, com SGBD e collation, tipo físico, obrigatoriedade, leitura de cada expressão, chaves e índices, fluxo de dados, log de acesso e matriz de acesso com LGPD, está em página HTML: [abrir o dicionário de dados no navegador](https://rsant271.github.io/modelagem-bd-meneghini-odontologia/dicionario/dicionario-de-dados.html). O arquivo fica em [dicionario/dicionario-de-dados.html](dicionario/dicionario-de-dados.html).
-
-### PACIENTE
-
-Pessoa que procura a clínica e passa pela avaliação inicial.
-
-`PACIENTE = @ID_PACIENTE + NM_PACIENTE + NR_CPF + DT_NASCIMENTO + 1{NR_TELEFONE}N + (DS_EMAIL) + ENDERECO + DT_CADASTRO + TP_ORIGEM`
-`ENDERECO = DS_LOGRADOURO + NM_BAIRRO + NR_CEP`
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| ID_PACIENTE | Número que identifica o paciente no sistema | Obrigatório, único, gerado automaticamente |
-| NM_PACIENTE | Nome completo do paciente | Obrigatório |
-| NR_CPF | CPF do paciente | Obrigatório e único; necessário para o contrato |
-| DT_NASCIMENTO | Data de nascimento | Obrigatório |
-| NR_TELEFONE | Telefone(s) de contato | Pelo menos um; pode haver mais de um (multivalorado); usado para confirmar as consultas |
-| DS_EMAIL | E-mail de contato | Opcional |
-| ENDERECO (DS_LOGRADOURO, NM_BAIRRO, NR_CEP) | Endereço do paciente (atributo composto) | Obrigatório para o contrato |
-| DT_CADASTRO | Data em que o paciente foi cadastrado | Preenchida automaticamente no cadastro |
-| TP_ORIGEM | Como o paciente chegou à clínica | Valores possíveis: anúncio, indicação, fachada, parceria |
-
-### COLABORADOR
-
-Pessoa que trabalha na clínica: dentistas (incluindo o diretor clínico), auxiliares de saúde bucal, recepção, financeiro, comercial, relacionamento, campanha, marketing, laboratório, administrativo e apoio.
-
-`COLABORADOR = @ID_COLABORADOR + NM_COLABORADOR + NR_CPF + TP_CARGO + NM_SETOR + (NR_CRO) + DT_ADMISSAO + IN_ATIVO`
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| ID_COLABORADOR | Número que identifica o colaborador | Obrigatório, único |
-| NM_COLABORADOR | Nome completo | Obrigatório |
-| NR_CPF | CPF do colaborador | Obrigatório e único |
-| TP_CARGO | Função na clínica (ex.: dentista, diretor clínico, auxiliar de saúde bucal, recepcionista, financeiro, comercial, administrativo, gestora, laboratório) | Obrigatório; só dentistas podem atender agendamentos e ter especialidades. O diretor clínico é um dentista: atende a consulta de alta, avaliações novas e, às vezes, cirurgias |
-| NM_SETOR | Setor em que trabalha (ex.: clínico, recepção, financeiro, comercial, administrativo, laboratório) | Obrigatório |
-| NR_CRO | Número de registro no Conselho Regional de Odontologia | Obrigatório e único para dentistas; vazio para os demais cargos |
-| DT_ADMISSAO | Data de entrada na clínica | Obrigatório |
-| IN_ATIVO | Indica se o colaborador está ativo | Colaborador inativo não pode ser escolhido em novos agendamentos, mas seu histórico é mantido |
-
-### ESPECIALIDADE
-
-Área da odontologia em que um dentista atua.
-
-`ESPECIALIDADE = @ID_ESPECIALIDADE + NM_ESPECIALIDADE + (DS_ESPECIALIDADE)`
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| ID_ESPECIALIDADE | Identificador da especialidade | Obrigatório, único |
-| NM_ESPECIALIDADE | Nome da especialidade (ex.: implantodontia, clínica geral, ortodontia, endodontia) | Obrigatório e único |
-| DS_ESPECIALIDADE | Descrição resumida | Opcional |
-
-### CONSULTORIO
-
-Sala com cadeira odontológica onde os atendimentos acontecem.
-
-`CONSULTORIO = @ID_CONSULTORIO + NR_CONSULTORIO + IN_ATIVO`
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| ID_CONSULTORIO | Identificador do consultório | Obrigatório, único |
-| NR_CONSULTORIO | Número da sala (a clínica tem 7) | Obrigatório e único |
-| IN_ATIVO | Indica se o consultório está em uso | Só consultórios ativos podem receber agendamentos |
-
-### PROCEDIMENTO
-
-Item da tabela de serviços da clínica, com preço de tabela.
-
-`PROCEDIMENTO = @ID_PROCEDIMENTO + CD_PROCEDIMENTO + NM_PROCEDIMENTO + (DS_PROCEDIMENTO) + VL_TABELA + (QT_DURACAO_MIN)`
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| ID_PROCEDIMENTO | Identificador do procedimento | Obrigatório, único |
-| CD_PROCEDIMENTO | Código interno usado na tabela de preços (ex.: `IMP-01`) | Obrigatório e único |
-| NM_PROCEDIMENTO | Nome do procedimento (ex.: limpeza, restauração, canal, implante) | Obrigatório |
-| DS_PROCEDIMENTO | Descrição do que o procedimento inclui | Opcional |
-| VL_TABELA | Preço de tabela em reais | Obrigatório; é a base do orçamento. O desconto é dado no item, nunca aqui |
-| QT_DURACAO_MIN | Duração estimada em minutos | Opcional; ajuda a montar a agenda |
-
-### ORCAMENTO
-
-Proposta de tratamento montada na avaliação, composta por itens.
-
-`ORCAMENTO = @ID_ORCAMENTO + DT_EMISSAO + VL_TOTAL + CD_STATUS + 1{ITEM_ORCAMENTO}N`
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| ID_ORCAMENTO | Identificador do orçamento | Obrigatório, único |
-| DT_EMISSAO | Data da avaliação em que o orçamento foi montado | Obrigatório |
-| VL_TOTAL | Soma dos valores negociados dos itens aprovados | Calculado a partir dos itens |
-| CD_STATUS | Situação do orçamento | Valores: em negociação, aprovado, aprovado parcialmente, recusado |
-
-### ITEM_ORCAMENTO (entidade fraca)
-
-Cada procedimento dentro de um orçamento. Só existe dentro de um orçamento.
-
-`ITEM_ORCAMENTO = @NR_ITEM + (NR_DENTE) + (TP_FASE) + VL_NEGOCIADO + CD_STATUS_APROVACAO + CD_STATUS_EXECUCAO`
-
-(`NR_ITEM` é identificador parcial: só identifica o item dentro do orçamento ao qual pertence.)
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| NR_ITEM | Número sequencial do item dentro do orçamento | Identificador parcial: só identifica o item dentro do orçamento ao qual pertence (entidade fraca) |
-| NR_DENTE | Dente ao qual o procedimento se refere (ex.: 26) | Opcional, pois alguns procedimentos não são por dente (ex.: limpeza) |
-| TP_FASE | Fase do procedimento | Opcional. Valores: cirúrgica, protética, ambas (usado principalmente em implantes; os procedimentos sem fase ficam sem valor) |
-| VL_NEGOCIADO | Valor final do item após o desconto | Não pode ser maior que o preço de tabela; o desconto fica dentro da margem permitida |
-| CD_STATUS_APROVACAO | Se o paciente aprovou o item | Valores: pendente, aprovado, recusado. O item nasce pendente e cada item é aprovado separadamente (RN04) |
-| CD_STATUS_EXECUCAO | Andamento do item | Valores: em aberto, concluído. Começa em aberto e muda quando o dentista finaliza |
-
-### CONTRATO
-
-Formalização dos itens aprovados, com a forma de pagamento.
-
-`CONTRATO = @ID_CONTRATO + DT_ASSINATURA + VL_CONTRATADO + TP_FORMA_PAGAMENTO + QT_PARCELAS + (VL_ENTRADA) + 1{PARCELA}N`
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| ID_CONTRATO | Identificador do contrato | Obrigatório, único |
-| DT_ASSINATURA | Data em que o paciente fechou o contrato | Obrigatório |
-| VL_CONTRATADO | Valor total contratado | Igual à soma dos itens aprovados do orçamento |
-| TP_FORMA_PAGAMENTO | Forma de pagamento | Valores: à vista, cartão parcelado, boleto parcelado |
-| QT_PARCELAS | Quantidade de parcelas | 1 quando à vista |
-| VL_ENTRADA | Valor da entrada | Obrigatório no boleto: no mínimo 20% do valor contratado |
-
-### PARCELA (entidade fraca)
-
-Cada pagamento previsto de um contrato.
-
-`PARCELA = @NR_PARCELA + VL_PARCELA + DT_VENCIMENTO + (DT_PAGAMENTO) + CD_STATUS`
-
-(`NR_PARCELA` é identificador parcial: só identifica a parcela dentro do contrato ao qual pertence.)
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| NR_PARCELA | Número da parcela dentro do contrato | Identificador parcial: só identifica a parcela dentro do contrato ao qual pertence (entidade fraca) |
-| VL_PARCELA | Valor da parcela | Obrigatório |
-| DT_VENCIMENTO | Data de vencimento | Obrigatório |
-| DT_PAGAMENTO | Data em que foi paga | Preenchida quando o financeiro dá a baixa |
-| CD_STATUS | Situação da parcela | Valores: aberta, paga, atrasada. Duas parcelas atrasadas bloqueiam novos agendamentos do paciente (RN19) |
-
-### AGENDAMENTO
-
-Consulta marcada: um paciente, com um dentista, em um consultório, em uma data e hora. Cobre a avaliação, as consultas de tratamento, a consulta de alta e o retorno.
-
-`AGENDAMENTO = @ID_AGENDAMENTO + DT_HORA_INICIO + QT_DURACAO_MIN + TP_AGENDAMENTO + CD_STATUS + (DS_OBSERVACAO) + (DT_RETORNO_PREVISTO)`
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| ID_AGENDAMENTO | Identificador do agendamento | Obrigatório, único |
-| DT_HORA_INICIO | Data e hora de início | Obrigatório; não pode haver dois agendamentos no mesmo consultório, nem o mesmo dentista em dois consultórios, no mesmo horário |
-| QT_DURACAO_MIN | Duração prevista em minutos | Obrigatório |
-| TP_AGENDAMENTO | Tipo da consulta | Valores: avaliação (sem custo), tratamento, alta (com o diretor clínico), retorno (manutenção ou limpeza) |
-| CD_STATUS | Situação do agendamento | Valores: agendado, confirmado, atendido, falta, reagendado |
-| DS_OBSERVACAO | Observação da recepção | Opcional |
-| DT_RETORNO_PREVISTO | Data prevista do retorno do paciente, definida na consulta de alta | Opcional; preenchida só no agendamento do tipo alta, em geral seis meses depois. A recepção usa essa data para ligar ou mandar mensagem e marcar o retorno (RN21, RN22) |
-
-### EVOLUCAO_CLINICA
-
-Registro, no prontuário, do que o dentista fez na consulta.
-
-`EVOLUCAO_CLINICA = @ID_EVOLUCAO + DT_REGISTRO + DS_EVOLUCAO + (NR_DENTE) + (DS_PROXIMOS_PASSOS)`
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| ID_EVOLUCAO | Identificador da evolução | Obrigatório, único |
-| DT_REGISTRO | Data e hora do registro | Obrigatório |
-| DS_EVOLUCAO | O que foi feito na consulta e o que foi finalizado | Obrigatório; dado sensível de saúde, com acesso restrito aos dentistas |
-| NR_DENTE | Dente tratado | Opcional |
-| DS_PROXIMOS_PASSOS | Próximos passos do tratamento, anotados pelo dentista | Opcional; orienta a recepção a agendar a próxima sessão |
-
-### PEDIDO_LABORATORIO
-
-Solicitação de uma peça (coroa, prótese etc.) ao laboratório da própria clínica.
-
-`PEDIDO_LABORATORIO = @ID_PEDIDO + DT_SOLICITACAO + DS_PECA + DT_PRAZO_ENTREGA + (DT_ENTREGA) + CD_STATUS`
-
-| Atributo | Descrição | Regra de negócio associada |
-|---|---|---|
-| ID_PEDIDO | Identificador do pedido | Obrigatório, único |
-| DT_SOLICITACAO | Data em que o dentista fez o pedido | Obrigatório |
-| DS_PECA | Descrição da peça solicitada (ex.: coroa de porcelana no dente 26) | Obrigatório |
-| DT_PRAZO_ENTREGA | Prazo combinado entre dentista, recepção e laboratório | Obrigatório |
-| DT_ENTREGA | Data em que a peça ficou pronta | Preenchida pelo laboratório |
-| CD_STATUS | Situação do pedido | Valores: solicitado, em produção, pronto, entregue |
+Ele traz, para cada uma das 16 entidades, os atributos com descrição e regra de negócio, SGBD e collation, tipo físico, obrigatoriedade, leitura de cada expressão, chaves e índices, cardinalidades e entidades associativas, fluxo de dados, log de acesso e matriz de acesso com LGPD. Os nomes dos atributos seguem os prefixos do exemplo apresentado em aula (`ID_`, `NM_`, `DT_`, `TP_`, `CD_`, `QT_`, `IN_`, `DS_`), mais `NR_` (número) e `VL_` (valor em reais). Todos os exemplos de valores são fictícios.
 
 ---
 
@@ -525,7 +342,7 @@ A alta e o retorno do paciente não viraram entidades novas. Chegamos a pensar e
 
 A inadimplência ficou só nas parcelas, sem atributo novo. "Paciente bloqueado" se calcula a partir delas: se o paciente tem duas parcelas com status atrasada, a recepção não agenda (RN19). Como as parcelas são mensais, duas atrasadas são dois meses sem pagar; quando o paciente regulariza, o tratamento segue de onde parou no planejamento, e nada disso precisa ser guardado além das próprias parcelas. Guardar um indicador no PACIENTE repetiria o que as parcelas já dizem e poderia ficar desatualizado quando o financeiro desse a baixa.
 
-Os cadastros de apoio entraram como um processo só (Processo 7): o cadastro de colaboradores, feito pelo setor administrativo no Controle Odonto, e as especialidades, os consultórios e a tabela de preços, mantidos pela gestora que lidera os setores administrativo e financeiro (RN24). As quatro entidades envolvidas (COLABORADOR, ESPECIALIDADE, CONSULTORIO e PROCEDIMENTO) já existiam no modelo; a segunda rodada definiu quem mantém cada uma. Holerite, pagamento de colaborador e folha de ponto são folha de pagamento e continuam fora, como já estava na delimitação.
+Os cadastros de apoio entraram como um processo só (PR07): o cadastro de colaboradores, feito pelo setor administrativo no Controle Odonto, e as especialidades, os consultórios e a tabela de preços, mantidos pela gestora que lidera os setores administrativo e financeiro (RN24). As quatro entidades envolvidas (COLABORADOR, ESPECIALIDADE, CONSULTORIO e PROCEDIMENTO) já existiam no modelo; a segunda rodada definiu quem mantém cada uma. Holerite, pagamento de colaborador e folha de ponto são folha de pagamento e continuam fora, como já estava na delimitação.
 
 Sobre o escopo: deixamos de fora folha de pagamento, marketing e contabilidade porque não fazem parte do caminho do paciente e tornariam o modelo grande demais para esta etapa; compras e estoque ficaram fora por falta de acesso, como explicado acima. O modelo foi montado para receber essas partes depois sem alterar o que já existe.
 
@@ -566,7 +383,7 @@ Usamos a ferramenta Claude (Anthropic) como apoio em seis pontos, registrados ab
 | Prompt(s) utilizados | "Organize as respostas da entrevista no formato do esqueleto, com cardinalidade (mín,máx), e gere o DER e os fluxogramas em linguagem simples, só com o conteúdo da disciplina." |
 | Resposta recebida | Rascunho das seções, dicionário com os prefixos do exemplo do professor, DER e três fluxogramas. |
 | Fontes consultadas e verificadas | Respostas da entrevista e decisões do grupo; guia MER/DER, exemplo de dicionário de dados e material sobre o brModelo do professor. |
-| Trechos rejeitados ou corrigidos | Correções feitas pelo grupo sobre o rascunho: (a) o lead ficou fora do modelo, porque existe só em planilha e a maioria não vira paciente; (b) os materiais ficaram fora, porque não foram levantados em campo; (c) a ordem do Processo 1 foi corrigida, já que o cadastro é aberto quando o lead comparece; (d) a cardinalidade entre PACIENTE e ORCAMENTO passou de "0 ou mais" para "1 ou mais", porque a avaliação sempre gera um orçamento; (e) a evolução clínica ganhou o atributo de próximos passos; (f) o parágrafo de problemas e necessidades foi reescrito com os dois CRMs da clínica; (g) uma entidade a menos ("origem de captação" virou o atributo TP_ORIGEM); (h) um relacionamento redundante entre COLABORADOR e EVOLUCAO_CLINICA foi retirado; (i) as imagens passaram por vários ajustes de layout; (j) as partes avançadas do dicionário (índices, matriz de acesso) ficaram para a Entrega 2. |
+| Trechos rejeitados ou corrigidos | Correções feitas pelo grupo sobre o rascunho: (a) o lead ficou fora do modelo, porque existe só em planilha e a maioria não vira paciente; (b) os materiais ficaram fora, porque não foram levantados em campo; (c) a ordem do PR01 foi corrigida, já que o cadastro é aberto quando o lead comparece; (d) a cardinalidade entre PACIENTE e ORCAMENTO passou de "0 ou mais" para "1 ou mais", porque a avaliação sempre gera um orçamento; (e) a evolução clínica ganhou o atributo de próximos passos; (f) o parágrafo de problemas e necessidades foi reescrito com os dois CRMs da clínica; (g) uma entidade a menos ("origem de captação" virou o atributo TP_ORIGEM); (h) um relacionamento redundante entre COLABORADOR e EVOLUCAO_CLINICA foi retirado; (i) as imagens passaram por vários ajustes de layout; (j) as partes avançadas do dicionário (índices, matriz de acesso) ficaram para a Entrega 2. |
 | Justificativa da escolha final | Cada entidade e cada cardinalidade do trabalho tem origem em uma resposta da entrevista ou em uma decisão do grupo. |
 | Reflexão crítica | O rascunho supunha coisas que não são da clínica (paciente sem orçamento, um CRM só, lead dentro do sistema). Foi a pesquisa de campo que corrigiu. O ponto de mais cuidado foi a cardinalidade invertida, armadilha citada no material do brModelo: por isso respondemos as cardinalidades em palavras e escrevemos a regra de leitura na legenda do DER e neste README. Os pontos que ficaram em dúvida (evolução por consulta ou histórico único, teto de desconto por cargo, parcela atrasada) serão confirmados com a clínica antes da Entrega 2. |
 
@@ -575,7 +392,7 @@ Usamos a ferramenta Claude (Anthropic) como apoio em seis pontos, registrados ab
 | Ferramenta e etapa | Claude, em outubro e novembro de 2026, depois da devolutiva (issues #3 e #4). Ajudou a completar o dicionário de dados em HTML e a transformar as respostas de uma segunda rodada de levantamento na clínica em processos, requisitos e regras. |
 | Motivação | A devolutiva apontou processos e regras ausentes (relacionamento pós-tratamento, cadastro de colaboradores, inadimplência, guarda do prontuário, biossegurança, compras) e um dicionário incompleto. |
 | Prompt(s) utilizados | "Aqui estão as respostas da clínica sobre cobrança, alta e retorno, cadastro de colaboradores e esterilização. Transforme em processos, requisitos e regras no formato do README. Não invente nada: o que não foi respondido fica de fora ou marcado como pendente." |
-| Resposta recebida | Processos 6 e 7, RF16 a RF18, RN18 a RN24, restrições de guarda do prontuário e de biossegurança reescritas, e o dicionário v1.2 com cardinalidades, fluxo de dados, SGBD e collation, tipo físico, índices, log de acesso e matriz de acesso com LGPD. |
+| Resposta recebida | PR06 e PR07, RF16 a RF18, RN18 a RN24, restrições de guarda do prontuário e de biossegurança reescritas, e o dicionário v1.2 com cardinalidades, fluxo de dados, SGBD e collation, tipo físico, índices, log de acesso e matriz de acesso com LGPD. |
 | Fontes consultadas e verificadas | Respostas da clínica na segunda rodada; devolutiva e esqueletos do professor; Lei 13.787/2018 (art. 6º) e Código Civil (art. 206, § 5º, I), conferidos pelo grupo no texto oficial antes de entrar no trabalho. |
 | Trechos rejeitados ou corrigidos | (a) a ferramenta levantou a opção de uma entidade RETORNO; o grupo manteve tudo em AGENDAMENTO, com os tipos alta e retorno; (b) sugeriu um indicador "bloqueado" no PACIENTE; descartamos, porque é derivado das parcelas; (c) a primeira redação da restrição de biossegurança dizia que o tema "não foi levantado" e citava a RDC 15/2012 da ANVISA; ao conferir o texto oficial, vimos que a resolução exclui do seu escopo o processamento feito em consultórios odontológicos, e a restrição foi reescrita só com o que a pesquisa de campo mostrou: sala própria de esterilização e auxiliares de saúde bucal treinadas. |
 | Justificativa da escolha final | Só entrou o que a clínica respondeu. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso, em vez de preenchidos com um processo genérico. |
@@ -594,10 +411,10 @@ Usamos a ferramenta Claude (Anthropic) como apoio em seis pontos, registrados ab
 
 | Item | Uso 6: script SQL, massa de dados e indicadores |
 |---|---|
-| Ferramenta e etapa | Claude, em 10 de novembro de 2026, na escrita dos cinco arquivos `.sql` da pasta `docs/` a partir do modelo lógico e do dicionário de dados, na geração da massa de dados fictícia, no teste do script do zero em MySQL e na primeira versão da tabela de indicadores da Seção 14. |
+| Ferramenta e etapa | Claude, em 10 de novembro de 2026, na escrita dos dois arquivos `.sql` da pasta `docs/` a partir do modelo lógico e do dicionário de dados, na geração da massa de dados fictícia, no teste do script do zero em MySQL e na primeira versão da tabela de indicadores da Seção 14. |
 | Motivação | Volume de escrita (16 tabelas, 19 chaves estrangeiras, centenas de linhas de INSERT) e pouca prática do grupo com gatilhos e com consultas de agrupamento. |
 | Prompt(s) utilizados | "A partir do modelo lógico (Seções 10 a 13) e do dicionário de dados, escreva o script na ordem do esqueleto: CREATE DATABASE, CREATE TABLE com as restrições nomeadas, chaves estrangeiras por ALTER TABLE, INSERT, SELECT com JOIN, UPDATE, DELETE, consultas gerenciais e consultas de auditoria, no estilo do script Westeros do professor. A massa é fictícia, sem nenhum dado real, com volume justificado pelo porte da clínica e com casos errados de propósito para as auditorias devolverem linhas. Cada consulta leva o cabeçalho G ou A com a pergunta e o problema ou a regra que atende. Rode tudo do zero e mostre o resultado de cada consulta." |
-| Resposta recebida | Os cinco arquivos, a lista de casos propositais da massa e o resultado de cada consulta no MySQL local. |
+| Resposta recebida | Os dois arquivos, a lista de casos propositais da massa e o resultado de cada consulta no MySQL local. |
 | Fontes consultadas e verificadas | README e dicionário de dados do próprio trabalho; material do professor (unidades de SQL, DDL e DML, apostila e guia MySQL, script Westeros); documentação do MySQL 8 sobre CHECK, gatilhos e ENUM, conferida pelo grupo. |
 | Trechos rejeitados ou corrigidos | (a) a primeira massa colocava consultas de alta com dentistas comuns; a regra RN20 diz que a alta é com o diretor clínico, e o grupo corrigiu três agendamentos e deixou um errado de propósito (agendamento 35) para a auditoria A09 encontrar; (b) a primeira versão das consultas G03, G07 e G12 repetia o paciente que tem dois telefones; trocamos por uma lista de telefones na mesma linha; (c) as metas dos indicadores da Seção 14 não vieram da clínica, então ficaram marcadas como proposta do grupo, para a gestora validar, em vez de aparecer como dado da clínica; (d) dois indicadores (inadimplência e retorno pós-alta) só tinham consultas de lista, sem o número; acrescentamos G13 e G14, porque indicador sem consulta que o calcule não é indicador. |
 | Justificativa da escolha final | O script segue a ordem obrigatória do esqueleto, cada consulta responde a um problema (P1 a P5), a um indicador ou a uma regra do README, e tudo rodou do zero no MySQL antes de entrar no repositório. |
@@ -726,7 +543,7 @@ Ao atualizar: os identificadores são gerados pelo banco e não mudam, então n�
 
 | Restrição | Tabela e coluna | Regra que justifica |
 |---|---|---|
-| UNIQUE | PACIENTE.NR_CPF; COLABORADOR.NR_CPF | Cadastro sem duplicidade (Processo 1 e RN23) |
+| UNIQUE | PACIENTE.NR_CPF; COLABORADOR.NR_CPF | Cadastro sem duplicidade (PR01 e RN23) |
 | CHECK: 11 dígitos | PACIENTE.NR_CPF; COLABORADOR.NR_CPF | CPF guardado sem máscara, só os dígitos |
 | DEFAULT: data atual | PACIENTE.DT_CADASTRO | O cadastro é aberto no dia da avaliação (RN17) |
 | UNIQUE | COLABORADOR.NR_CRO | O registro profissional não se repete |
@@ -734,7 +551,7 @@ Ao atualizar: os identificadores são gerados pelo banco e não mudam, então n�
 | DEFAULT: verdadeiro | COLABORADOR.IN_ATIVO; CONSULTORIO.IN_ATIVO | Cadastro novo nasce ativo; desligamento desativa em vez de apagar |
 | UNIQUE | ESPECIALIDADE.NM_ESPECIALIDADE; CONSULTORIO.NR_CONSULTORIO; PROCEDIMENTO.CD_PROCEDIMENTO | Cadastros de apoio mantidos pela gestora, sem repetição (RN24) |
 | CHECK: valor maior ou igual a zero | PROCEDIMENTO.VL_TABELA | RN01: a avaliação tem preço zero, então o valor pode ser zero, mas não negativo |
-| DEFAULT: em negociação; DEFAULT: 0 | ORCAMENTO.CD_STATUS; ORCAMENTO.VL_TOTAL | O orçamento nasce na avaliação e segue para o comercial (RN02, Processo 2) |
+| DEFAULT: em negociação; DEFAULT: 0 | ORCAMENTO.CD_STATUS; ORCAMENTO.VL_TOTAL | O orçamento nasce na avaliação e segue para o comercial (RN02, PR02) |
 | CHECK: dente entre 11 e 48 | ITEM_ORCAMENTO.NR_DENTE | Numeração dos dentes permanentes; opcional porque nem todo procedimento é por dente |
 | CHECK: valor maior ou igual a zero | ITEM_ORCAMENTO.VL_NEGOCIADO | RN03: preço tabelado com desconto, nunca negativo |
 | DEFAULT: pendente; DEFAULT: em aberto | ITEM_ORCAMENTO.CD_STATUS_APROVACAO; ITEM_ORCAMENTO.CD_STATUS_EXECUCAO | RN04 (aprovação item a item) e RN12 (todo item nasce em aberto) |
@@ -778,7 +595,7 @@ Na pesquisa de campo, cada setor tem uma pergunta que hoje é respondida de cabe
 - Laboratório e dentistas: quais peças estão atrasadas (P2).
 - Dentista em consulta: o histórico completo do paciente em um lugar só (P1).
 
-O atributo `TP_ORIGEM` do paciente permite ainda saber de onde vêm os pacientes que fecham contrato (anúncio, indicação, fachada ou parceria). O modelo guarda tudo isso nas mesmas 16 tabelas do dia a dia, e por isso cada pergunta vira uma consulta SQL no arquivo `docs/04-consultas-gerenciais.sql` (G01 a G14), sem planilha paralela.
+O atributo `TP_ORIGEM` do paciente permite ainda saber de onde vêm os pacientes que fecham contrato (anúncio, indicação, fachada ou parceria). O modelo guarda tudo isso nas mesmas 16 tabelas do dia a dia, e por isso cada pergunta vira uma consulta SQL na Parte 3 de `docs/01-banco-e-consultas.sql` (G01 a G14), sem planilha paralela.
 
 ### 14.2 Indicadores (KPIs)
 
@@ -797,7 +614,7 @@ Duas observações sobre a massa fictícia. As 8 horas por dia da ocupação sã
 
 ### 14.3 Rastreabilidade: problema ou indicador, tabelas e consulta
 
-A tabela abaixo liga cada problema da Seção 1 e cada indicador às tabelas de onde o dado sai e à consulta que responde. As consultas G estão em `docs/04-consultas-gerenciais.sql` e as A em `docs/05-consultas-auditoria.sql`; o cabeçalho de cada uma repete a pergunta e o que ela atende ou verifica.
+A tabela abaixo liga cada problema da Seção 1 e cada indicador às tabelas de onde o dado sai e à consulta que responde. As consultas G estão na Parte 3 e as A na Parte 4 de `docs/01-banco-e-consultas.sql`; o cabeçalho de cada uma repete a pergunta e o que ela atende ou verifica.
 
 | Problema ou indicador | Tabelas usadas | Consultas |
 |---|---|---|
@@ -837,7 +654,7 @@ Com histórico acumulado (o recorte de quatro meses da massa não serve para iss
 
 - Risco de falta: a partir do histórico de faltas do paciente, do dia da semana, do horário, do tipo de consulta e da origem (AGENDAMENTO e PACIENTE), ordenar a agenda do dia seguinte por chance de falta. A recepção confirma primeiro quem tem mais risco e já prepara o encaixe (RN11).
 - Risco de atraso de parcela: forma de pagamento, valor e atrasos anteriores do mesmo paciente (CONTRATO e PARCELA). O financeiro manda o lembrete antes do vencimento para quem tem mais risco, em vez de cobrar todo mundo depois (RN18).
-- Risco de não voltar depois da alta: tempo desde a alta, faltas durante o tratamento e retorno anterior (AGENDAMENTO). O relacionamento liga primeiro para quem tem mais chance de sumir (Processo 6).
+- Risco de não voltar depois da alta: tempo desde a alta, faltas durante o tratamento e retorno anterior (AGENDAMENTO). O relacionamento liga primeiro para quem tem mais chance de sumir (PR06).
 
 Limites definidos desde já: a evolução clínica, dado sensível pela LGPD, fica fora de qualquer modelo; o modelo só ordena a lista, e a decisão continua com a pessoa (a recepção decide se liga, o financeiro decide se cobra); o treinamento usa dados sem nome e sem CPF, com o identificador trocado por um código; e o LOG_ALTERACAO continua registrando quem alterou o quê, o que permite auditar depois qualquer ação tomada a partir dessas listas (A10).
 
@@ -845,29 +662,29 @@ Limites definidos desde já: a evolução clínica, dado sensível pela LGPD, fi
 
 ## 15. Script SQL e Massa de Dados
 
-Os arquivos `.sql` ficam na pasta `docs/`, como pedem os slides da Entrega 2, e seguem a ordem obrigatória do esqueleto. Cada arquivo roda depois do anterior:
+Os arquivos `.sql` ficam na pasta `docs/`, como pedem os slides da Entrega 2. São dois, como o professor pediu: um com a massa de dados e outro com todo o resto (criação do banco, manipulação e consultas), dividido em quatro partes que seguem a ordem obrigatória do esqueleto:
 
-| Arquivo | O que faz | Itens da ordem do esqueleto |
-|---|---|---|
-| `docs/01-criacao.sql` | DROP e CREATE DATABASE; as 16 tabelas com NOT NULL, UNIQUE, CHECK e DEFAULT nomeados; as 19 chaves estrangeiras por ALTER TABLE; os índices; os seis gatilhos que preenchem LOG_ALTERACAO | 1, 2 e 3 |
-| `docs/02-massa-de-dados.sql` | massa fictícia: 26 pacientes, 31 telefones, 17 colaboradores, 4 especialidades, 7 consultórios, 15 procedimentos, 26 orçamentos com 61 itens, 20 contratos com 76 parcelas, 75 agendamentos, 60 evoluções clínicas e 6 pedidos ao laboratório | 4 |
-| `docs/03-manipulacao.sql` | cinco SELECT com JOIN (agenda do dia, orçamento item a item, dentistas por especialidade, carnê do contrato, pacientes com e sem contrato); UPDATE com o log gravando (baixa de parcela, confirmação de consulta, peça pronta); DELETE barrado pela chave estrangeira; DELETE na ordem certa | 5, 6 e 7 |
-| `docs/04-consultas-gerenciais.sql` | G01 a G14: uma por problema (P1 a P5) ou por indicador da Seção 14 | 8 |
-| `docs/05-consultas-auditoria.sql` | A01 a A10: uma por regra que o banco não garante sozinho (Seção 13.4), mais o log de alterações | 9 |
+| Arquivo | Parte | O que faz | Itens da ordem do esqueleto |
+|---|---|---|---|
+| `docs/01-banco-e-consultas.sql` | 1 | DROP e CREATE DATABASE; as 16 tabelas com NOT NULL, UNIQUE, CHECK e DEFAULT nomeados; as 19 chaves estrangeiras por ALTER TABLE; os índices; os seis gatilhos que preenchem LOG_ALTERACAO | 1, 2 e 3 |
+| `docs/02-massa-de-dados.sql` | | massa fictícia: 26 pacientes, 31 telefones, 17 colaboradores, 4 especialidades, 7 consultórios, 15 procedimentos, 26 orçamentos com 61 itens, 20 contratos com 76 parcelas, 75 agendamentos, 60 evoluções clínicas e 6 pedidos ao laboratório | 4 |
+| `docs/01-banco-e-consultas.sql` | 2 | cinco SELECT com JOIN (agenda do dia, orçamento item a item, dentistas por especialidade, carnê do contrato, pacientes com e sem contrato); UPDATE com o log gravando (baixa de parcela, confirmação de consulta, peça pronta); DELETE barrado pela chave estrangeira; DELETE na ordem certa | 5, 6 e 7 |
+| `docs/01-banco-e-consultas.sql` | 3 | G01 a G14: uma por problema (P1 a P5) ou por indicador da Seção 14 | 8 |
+| `docs/01-banco-e-consultas.sql` | 4 | A01 a A10: uma por regra que o banco não garante sozinho (Seção 13.4), mais o log de alterações | 9 |
 
-**Como rodar.** O script foi testado do zero em 10 de novembro de 2026 no MySQL 26.10 (macOS), pelo cliente de terminal. No MySQL Workbench: abrir cada arquivo na ordem (File, Open SQL Script) e executar; no arquivo 3, desmarcar "Stop script execution on errors" na barra do editor, porque o DELETE da parte 3 dá o erro 1451 de propósito (é a chave estrangeira barrando a exclusão de um paciente com orçamento). No terminal:
+A ordem de execução é a da tabela: Parte 1 (cria o banco), depois a massa de dados, depois as Partes 2, 3 e 4 (precisam da massa). Cada parte termina com uma linha de comentário `FIM DA PARTE n`.
+
+**Como rodar.** O script foi testado do zero em 10 de novembro de 2026 no MySQL 26.10 (macOS), pelo cliente de terminal. No MySQL Workbench: abrir `01-banco-e-consultas.sql` (File, Open SQL Script), selecionar da primeira linha até `FIM DA PARTE 1` e executar a seleção; abrir `02-massa-de-dados.sql` e executar inteiro; voltar ao primeiro arquivo, selecionar da Parte 2 até o fim e executar a seleção, com "Stop script execution on errors" desmarcado na barra do editor, porque o DELETE do item 3 da Parte 2 dá o erro 1451 de propósito (é a chave estrangeira barrando a exclusão de um paciente com orçamento). No terminal, a partir da raiz do repositório (o `sed` só corta o arquivo na linha `FIM DA PARTE 1`):
 
 ```bash
-mysql -u root -p < docs/01-criacao.sql
+sed '/^-- FIM DA PARTE 1/q' docs/01-banco-e-consultas.sql | mysql -u root -p
 mysql -u root -p < docs/02-massa-de-dados.sql
-mysql -u root -p --force < docs/03-manipulacao.sql
-mysql -u root -p --table < docs/04-consultas-gerenciais.sql
-mysql -u root -p --table < docs/05-consultas-auditoria.sql
+sed -n '/^-- FIM DA PARTE 1/,$p' docs/01-banco-e-consultas.sql | mysql -u root -p --force --table
 ```
 
 O myCompiler.io, sugerido pelo professor, roda o script inteiro a cada execução; o grupo não testou lá os gatilhos (comando DELIMITER), e por isso a demonstração em sala usa o Workbench ou o terminal.
 
-**Como o log é preenchido.** O sistema da clínica ainda não existe, então quem alterou cada registro vem de dois lugares: o usuário do MySQL (`CURRENT_USER()`) e uma variável de sessão, `@ID_COLABORADOR_LOGADO`, que o arquivo 3 define antes de cada alteração (por exemplo, o colaborador do financeiro antes da baixa da parcela). Seis gatilhos (triggers), comandos que o próprio banco executa depois de um INSERT, UPDATE ou DELETE, gravam a linha em LOG_ALTERACAO com a tabela, a operação, o usuário, o colaborador e a data e hora. No sistema real, a aplicação define essa variável no login.
+**Como o log é preenchido.** O sistema da clínica ainda não existe, então quem alterou cada registro vem de dois lugares: o usuário do MySQL (`CURRENT_USER()`) e uma variável de sessão, `@ID_COLABORADOR_LOGADO`, que a Parte 2 do script define antes de cada alteração (por exemplo, o colaborador do financeiro antes da baixa da parcela). Seis gatilhos (triggers), comandos que o próprio banco executa depois de um INSERT, UPDATE ou DELETE, gravam a linha em LOG_ALTERACAO com a tabela, a operação, o usuário, o colaborador e a data e hora. No sistema real, a aplicação define essa variável no login.
 
 **Massa de dados.** Toda fictícia: nomes, CPFs, telefones, endereços e valores são inventados, como pedem a LGPD e o esqueleto. O volume é um recorte de agosto a novembro de 2026 da clínica descrita na Seção 1 (7 consultórios, 4 especialidades, cerca de 30 colaboradores, 1 laboratório próprio). O recorte não cobre o movimento inteiro da clínica, mas basta para cada consulta devolver linhas e para todos os casos aparecerem. A massa tem casos variados de propósito, porque consulta que devolve vazio não demonstra nada:
 
@@ -888,7 +705,7 @@ E casos errados de propósito, um para cada consulta de auditoria:
 - item 2 do orçamento 17 concluído sem consulta ligada (A08);
 - alta do agendamento 35 feita por dentista comum, não pelo diretor clínico (A09).
 
-A A02 (o contrato bate com os itens aprovados e com a entrada mais as parcelas, RN05 e RN07) lista os 20 contratos com "ok", porque nela a massa está correta. A A10 mostra o log: as 60 evoluções da carga e as alterações do arquivo 3, com o nome de quem fez. Algumas consultas usam a data do dia (`CURDATE()`), então os dias de atraso e as listas de vencidos mudam conforme o dia em que o script roda.
+A A02 (o contrato bate com os itens aprovados e com a entrada mais as parcelas, RN05 e RN07) lista os 20 contratos com "ok", porque nela a massa está correta. A A10 mostra o log: as 60 evoluções da carga e as alterações da Parte 2, com o nome de quem fez. Algumas consultas usam a data do dia (`CURDATE()`), então os dias de atraso e as listas de vencidos mudam conforme o dia em que o script roda.
 
 ---
 
@@ -898,7 +715,7 @@ Neste trabalho levantamos, por pesquisa de campo, como a Meneghini Odontologia I
 
 A parte que mais exigiu atenção foi a cardinalidade. Cada `(mín,máx)` do DER veio de uma resposta concreta da entrevista, e algumas mudaram quando conferimos com o funcionamento real da clínica (por exemplo, todo paciente cadastrado já passou pela avaliação e por isso tem pelo menos um orçamento). Também precisamos respeitar a LGPD no desenho, separando o dado sensível (evolução clínica) para permitir acesso restrito.
 
-Depois da devolutiva do professor, voltamos à clínica e fechamos dois dos pontos que estavam em aberto: o tratamento das parcelas atrasadas (RN18 e RN19) e o caminho do paciente depois do tratamento, com a consulta de alta e o retorno (Processo 6). Também entraram os cadastros de apoio (Processo 7): colaboradores pelo setor administrativo e especialidades, consultórios e tabela de preços pela gestora. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso. Continuam em aberto o registro da evolução por consulta e a regra de desconto por cargo.
+Depois da devolutiva do professor, voltamos à clínica e fechamos dois dos pontos que estavam em aberto: o tratamento das parcelas atrasadas (RN18 e RN19) e o caminho do paciente depois do tratamento, com a consulta de alta e o retorno (PR06). Também entraram os cadastros de apoio (PR07): colaboradores pelo setor administrativo e especialidades, consultórios e tabela de preços pela gestora. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso. Continuam em aberto o registro da evolução por consulta e a regra de desconto por cargo.
 
 Na Entrega 2 convertemos o modelo para o lógico (Seções 10 a 13): 16 tabelas, com as tabelas intermediárias dos relacionamentos N:N, o telefone em tabela própria e as chaves migradas, conferidas na primeira, segunda e terceira formas normais. O script SQL (Seção 15 e pasta `docs/`) cria o banco, carrega uma massa fictícia com casos variados e com erros plantados de propósito, e responde aos cinco problemas da clínica com 14 consultas gerenciais e 10 de auditoria, todas testadas do zero no MySQL. A Seção 14 fecha o trabalho com os seis indicadores que a direção pode acompanhar, a tabela que liga cada problema e cada indicador às tabelas e às consultas, e a proposta de painéis e de previsão de falta, de atraso e de não retorno. O que fica para a clínica decidir são as metas dos indicadores, que o grupo propôs sem número da clínica.
 

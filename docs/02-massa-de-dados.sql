@@ -1,7 +1,8 @@
 -- ============================================================================
 -- Meneghini Odontologia Integrada: banco de dados do trabalho
--- Arquivo 2 de 5: massa de dados fictícia (INSERT)
--- Rodar depois de 01-criacao.sql.
+-- Arquivo 2 de 2: massa de dados fictícia (INSERT)
+-- Rodar depois da Parte 1 de 01-banco-e-consultas.sql (criação do banco)
+-- e antes das Partes 2, 3 e 4 (manipulação e consultas).
 --
 -- Todos os dados são inventados (LGPD): nomes, CPFs, endereços, telefones,
 -- e-mails e valores. Nenhum paciente ou colaborador aqui existe de verdade.
@@ -11,7 +12,7 @@
 -- recorte de agosto a novembro de 2026 com 26 pacientes, 17 colaboradores
 -- (6 dentistas), 26 orçamentos, 20 contratos, 76 parcelas e 75 agendamentos.
 -- Não é o movimento inteiro da clínica: é o suficiente para cada consulta
--- dos arquivos 4 e 5 devolver linhas e para todos os casos aparecerem.
+-- das Partes 3 e 4 do arquivo 01 devolver linhas e para todos os casos aparecerem.
 --
 -- Casos propositais (para as consultas gerenciais e de auditoria):
 --   . orçamento recusado (pacientes 4 e 12) e em negociação (7, 14, 18, 24)
@@ -309,7 +310,7 @@ INSERT INTO CONTRATO (ID_CONTRATO, ID_ORCAMENTO, DT_ASSINATURA, VL_CONTRATADO, T
 -- Parcelas: no boleto, o valor parcelado é (contratado - entrada) / parcelas.
 -- Contrato 1, parcela 3: venceu em 05/11 e continua "aberta" de propósito.
 -- Contrato 6 (paciente 8): duas parcelas atrasadas, paciente bloqueado (RN19).
--- Contrato 10, parcela 2: vence em 10/11 e recebe baixa no arquivo 03.
+-- Contrato 10, parcela 2: vence em 10/11 e recebe baixa na Parte 2 do arquivo 01.
 INSERT INTO PARCELA (ID_CONTRATO, NR_PARCELA, VL_PARCELA, DT_VENCIMENTO, DT_PAGAMENTO, CD_STATUS) VALUES
 (1, 1, 780.00, '2026-09-05', '2026-09-04', 'paga'),
 (1, 2, 780.00, '2026-10-05', '2026-10-06', 'paga'),
