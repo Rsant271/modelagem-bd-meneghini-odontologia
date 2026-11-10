@@ -7,8 +7,8 @@
 -- Este arquivo tem 4 partes:
 --   Parte 1  criação do banco, das 16 tabelas, das chaves e dos gatilhos
 --   Parte 2  manipulação dos dados (SELECT com JOIN, UPDATE, DELETE)
---   Parte 3  consultas gerenciais (G01 a G14)
---   Parte 4  consultas de auditoria (A01 a A10)
+--   Parte 3  consultas gerenciais (G01 a G15)
+--   Parte 4  consultas de auditoria (A01 a A11)
 --
 -- Ordem de execução: Parte 1 -> 02-massa-de-dados.sql -> Partes 2, 3 e 4.
 -- A massa precisa das tabelas da Parte 1, e as consultas precisam da massa.
@@ -613,7 +613,7 @@ SELECT (SELECT COUNT(*) FROM PACIENTE WHERE ID_PACIENTE = 99)          AS pacien
 -- ============================================================================
 
 -- ============================================================================
--- PARTE 3: CONSULTAS GERENCIAIS (G01 A G14)
+-- PARTE 3: CONSULTAS GERENCIAIS (G01 A G15)
 -- Rodar depois de 02-massa-de-dados.sql.
 -- ============================================================================
 -- Cada consulta responde a um problema da clínica (P1 a P5, README Seção 1)
@@ -887,12 +887,26 @@ WHERE ALTA.TP_AGENDAMENTO = 'alta'
   AND ALTA.CD_STATUS = 'atendido'
   AND ALTA.DT_RETORNO_PREVISTO <= CURDATE();
 
+-- G15 — Quantos atendimentos cada dentista fez por mês, e quantos minutos de cadeira isso deu?
+-- Atende: a consulta de número de atendimentos pedida no roteiro da Entrega 2 e o painel Agenda da Seção 14.
+--         Período: agosto a novembro de 2026.
+SELECT DATE_FORMAT(A.DT_HORA_INICIO, '%Y-%m')  AS mes,
+       C.NM_COLABORADOR                        AS dentista,
+       COUNT(*)                                AS atendimentos,
+       SUM(A.QT_DURACAO_MIN)                   AS minutos_de_cadeira
+FROM AGENDAMENTO A
+JOIN COLABORADOR C ON C.ID_COLABORADOR = A.ID_COLABORADOR
+WHERE A.CD_STATUS = 'atendido'
+  AND A.DT_HORA_INICIO >= '2026-08-01' AND A.DT_HORA_INICIO < '2026-12-01'
+GROUP BY DATE_FORMAT(A.DT_HORA_INICIO, '%Y-%m'), C.NM_COLABORADOR
+ORDER BY mes, atendimentos DESC, dentista;
+
 -- ============================================================================
 -- FIM DA PARTE 3 (consultas gerenciais)
 -- ============================================================================
 
 -- ============================================================================
--- PARTE 4: CONSULTAS DE AUDITORIA (A01 A A10)
+-- PARTE 4: CONSULTAS DE AUDITORIA (A01 A A11)
 -- Rodar depois de 02-massa-de-dados.sql.
 -- ============================================================================
 -- As consultas de auditoria conferem se os dados respeitam as regras de
@@ -1087,6 +1101,23 @@ LEFT JOIN COLABORADOR C ON C.ID_COLABORADOR = L.ID_COLABORADOR
 WHERE L.DT_HORA >= NOW() - INTERVAL 30 DAY
 GROUP BY L.NM_TABELA, L.TP_OPERACAO, L.NM_USUARIO_BD, C.NM_COLABORADOR
 ORDER BY L.NM_TABELA, L.TP_OPERACAO;
+
+-- A11 — Quais itens receberam desconto, de quanto, e algum passou do preço de tabela?
+-- Verifica: RN03 (preço tabelado; o desconto tem margem e o VL_NEGOCIADO não pode passar do VL_TABELA do procedimento).
+SELECT I.ID_ORCAMENTO,
+       I.NR_ITEM,
+       P.NM_PACIENTE                                                  AS paciente,
+       PR.NM_PROCEDIMENTO                                             AS procedimento,
+       PR.VL_TABELA                                                   AS preco_tabela,
+       I.VL_NEGOCIADO                                                 AS preco_negociado,
+       ROUND(100 * (PR.VL_TABELA - I.VL_NEGOCIADO) / PR.VL_TABELA, 1) AS desconto_pct,
+       IF(I.VL_NEGOCIADO > PR.VL_TABELA, 'ACIMA DA TABELA', 'ok')     AS situacao
+FROM ITEM_ORCAMENTO I
+JOIN ORCAMENTO O     ON O.ID_ORCAMENTO = I.ID_ORCAMENTO
+JOIN PACIENTE P      ON P.ID_PACIENTE = O.ID_PACIENTE
+JOIN PROCEDIMENTO PR ON PR.ID_PROCEDIMENTO = I.ID_PROCEDIMENTO
+WHERE I.VL_NEGOCIADO <> PR.VL_TABELA
+ORDER BY (I.VL_NEGOCIADO > PR.VL_TABELA) DESC, desconto_pct DESC, I.ID_ORCAMENTO, I.NR_ITEM;
 
 -- ============================================================================
 -- FIM DA PARTE 4 (consultas de auditoria)
