@@ -26,9 +26,9 @@
 | 1.3 Definição das chaves primárias e estrangeiras | Seção 10 (tabela de conversão) e Seção 13 |
 | 1.4 Normalização (1FN, 2FN e 3FN) | Seção 11 |
 | 1.5 Justificativas das chaves e das restrições | Seção 13 |
-| 1.6 BI e IA (indicadores e rastreabilidade) | ainda não feito |
+| 1.6 BI e IA (indicadores e rastreabilidade) | Seção 14 |
 | 2 Modelo lógico (diagrama) | Seção 12 e pasta `der/` |
-| 3 e 4 Script SQL e massa de dados | ainda não feito (pasta `docs/`) |
+| 3 e 4 Script SQL e massa de dados | Seção 15 e pasta `docs/` (cinco arquivos `.sql`) |
 | 5 Levantamento, fotos e dicionário de dados | Pasta `levantamento/` e dicionário em HTML (link acima) |
 | 6 Uso de IA | Seção 9 |
 | 7 Apresentação (slides) | ainda não feito (pasta `apresentacao/`) |
@@ -535,7 +535,7 @@ Sobre o escopo: deixamos de fora folha de pagamento, marketing e contabilidade p
 
 O trabalho foi feito pelo grupo: a escolha da clínica, a pesquisa de campo (visita, entrevista com o proprietário, Fábio Meneghini, e com a gestora, Helen Meneghini, e observação do funcionamento, feitas por Renan Silva dos Santos em nome do grupo), as decisões de escopo (sem convênio, lead e materiais fora do modelo), a lista das 12 entidades, a definição das cardinalidades em palavras a partir do funcionamento real da clínica, a correção da ordem dos processos, as regras de negócio e a revisão do texto. Nenhum dado do trabalho foi inventado por ferramenta: tudo o que está aqui veio da clínica ou de decisão do grupo.
 
-Usamos a ferramenta Claude (Anthropic) como apoio em cinco pontos, registrados abaixo no formato pedido pelo esqueleto.
+Usamos a ferramenta Claude (Anthropic) como apoio em seis pontos, registrados abaixo no formato pedido pelo esqueleto.
 
 | Item | Uso 1: leitura do material da disciplina |
 |---|---|
@@ -591,6 +591,17 @@ Usamos a ferramenta Claude (Anthropic) como apoio em cinco pontos, registrados a
 | Trechos rejeitados ou corrigidos | (a) a ferramenta levantou a opção de uma tabela DENTISTA separada de COLABORADOR (especialização); o grupo manteve uma tabela só, pela mesma razão da Entrega 1; (b) levantou uma tabela de CEP para resolver a dependência entre CEP, logradouro e bairro; descartamos, porque o endereço é digitado pela recepção e uma tabela de CEPs não teria dono na clínica; (c) a primeira versão colocava uma restrição de unicidade em consultório e horário do agendamento; tiramos, porque o horário de uma falta pode ser preenchido por encaixe (RN11) e a sobreposição depende da duração, então a regra ficou para consulta de auditoria; (d) na primeira versão do diagrama as etiquetas das duas chaves estrangeiras de ORCAMENTO ficavam em cima das linhas de outras tabelas, e o layout foi ajustado. |
 | Justificativa da escolha final | Cada tabela do modelo lógico vem de uma entidade ou de um relacionamento do DER, e cada restrição tem uma regra de negócio levantada na clínica. O que o banco não consegue garantir sozinho está listado na Seção 13.4. |
 | Reflexão crítica | A ferramenta aplica bem as regras mecânicas de conversão, mas tende a normalizar demais (tabela de CEP, tabela de dentista) sem perguntar se aquilo faz sentido para a clínica. O critério do grupo foi: tabela nova só se alguém na clínica mantém aquele dado. |
+
+| Item | Uso 6: script SQL, massa de dados e indicadores |
+|---|---|
+| Ferramenta e etapa | Claude, em 10 de novembro de 2026, na escrita dos cinco arquivos `.sql` da pasta `docs/` a partir do modelo lógico e do dicionário de dados, na geração da massa de dados fictícia, no teste do script do zero em MySQL e na primeira versão da tabela de indicadores da Seção 14. |
+| Motivação | Volume de escrita (16 tabelas, 19 chaves estrangeiras, centenas de linhas de INSERT) e pouca prática do grupo com gatilhos e com consultas de agrupamento. |
+| Prompt(s) utilizados | "A partir do modelo lógico (Seções 10 a 13) e do dicionário de dados, escreva o script na ordem do esqueleto: CREATE DATABASE, CREATE TABLE com as restrições nomeadas, chaves estrangeiras por ALTER TABLE, INSERT, SELECT com JOIN, UPDATE, DELETE, consultas gerenciais e consultas de auditoria, no estilo do script Westeros do professor. A massa é fictícia, sem nenhum dado real, com volume justificado pelo porte da clínica e com casos errados de propósito para as auditorias devolverem linhas. Cada consulta leva o cabeçalho G ou A com a pergunta e o problema ou a regra que atende. Rode tudo do zero e mostre o resultado de cada consulta." |
+| Resposta recebida | Os cinco arquivos, a lista de casos propositais da massa e o resultado de cada consulta no MySQL local. |
+| Fontes consultadas e verificadas | README e dicionário de dados do próprio trabalho; material do professor (unidades de SQL, DDL e DML, apostila e guia MySQL, script Westeros); documentação do MySQL 8 sobre CHECK, gatilhos e ENUM, conferida pelo grupo. |
+| Trechos rejeitados ou corrigidos | (a) a primeira massa colocava consultas de alta com dentistas comuns; a regra RN20 diz que a alta é com o diretor clínico, e o grupo corrigiu três agendamentos e deixou um errado de propósito (agendamento 35) para a auditoria A09 encontrar; (b) a primeira versão das consultas G03, G07 e G12 repetia o paciente que tem dois telefones; trocamos por uma lista de telefones na mesma linha; (c) as metas dos indicadores da Seção 14 não vieram da clínica, então ficaram marcadas como proposta do grupo, para a gestora validar, em vez de aparecer como dado da clínica; (d) dois indicadores (inadimplência e retorno pós-alta) só tinham consultas de lista, sem o número; acrescentamos G13 e G14, porque indicador sem consulta que o calcule não é indicador. |
+| Justificativa da escolha final | O script segue a ordem obrigatória do esqueleto, cada consulta responde a um problema (P1 a P5), a um indicador ou a uma regra do README, e tudo rodou do zero no MySQL antes de entrar no repositório. |
+| Reflexão crítica | A ferramenta escreve SQL correto e rápido, mas a massa que ela gera sai limpa demais: sem os casos errados plantados, as consultas de auditoria voltariam vazias e não demonstrariam nada, como o professor alertou. O trabalho do grupo foi decidir quais erros plantar, conferir que cada consulta devolve o caso certo e explicar cada resultado com as próprias palavras, porque na apresentação cada integrante responde sozinho. |
 
 ---
 
@@ -753,6 +764,134 @@ Algumas regras envolvem mais de uma tabela ou um cálculo, e o CHECK do MySQL s�
 
 ---
 
+## 14. Arquitetura Analítica para BI e IA
+
+Esta seção responde ao item 1.6 do esqueleto: que informações a direção da clínica precisa, quais indicadores o banco consegue calcular, de que tabelas e de que consulta cada um sai, e o que dá para fazer depois com painéis e com previsão.
+
+### 14.1 Informações estratégicas
+
+Na pesquisa de campo, cada setor tem uma pergunta que hoje é respondida de cabeça ou olhando a planilha e os dois CRMs separados:
+
+- Financeiro e gestora: quanto entrou no mês e quanto está vencido sem pagar (P4).
+- Comercial: quantos orçamentos viram contrato e quais estão parados em negociação (P3).
+- Recepção e diretor clínico: se os consultórios estão ocupados, quantos pacientes faltam e quem precisa ser chamado para o retorno depois da alta (P5).
+- Laboratório e dentistas: quais peças estão atrasadas (P2).
+- Dentista em consulta: o histórico completo do paciente em um lugar só (P1).
+
+O atributo `TP_ORIGEM` do paciente permite ainda saber de onde vêm os pacientes que fecham contrato (anúncio, indicação, fachada ou parceria). O modelo guarda tudo isso nas mesmas 16 tabelas do dia a dia, e por isso cada pergunta vira uma consulta SQL no arquivo `docs/04-consultas-gerenciais.sql` (G01 a G14), sem planilha paralela.
+
+### 14.2 Indicadores (KPIs)
+
+Um indicador só entra aqui se tem fórmula, período e meta, e se existe uma consulta no script que o calcula. As metas não vieram da clínica: a pesquisa de campo levantou processos e regras, não números de meta. Por isso cada meta abaixo é uma proposta do grupo, para a gestora validar ou trocar.
+
+| Indicador | Fórmula | Período | Meta (proposta do grupo) | Consulta |
+|---|---|---|---|---|
+| Faturamento recebido | entradas dos contratos assinados no mês + parcelas pagas no mês | mensal | crescer em relação à média dos três meses anteriores | G08 |
+| Taxa de inadimplência | valor das parcelas vencidas e não pagas ÷ valor de todas as parcelas vencidas × 100 | foto do dia, conferida no fechamento do mês | abaixo de 5% | G13 (detalhe por contrato em G02; pacientes bloqueados em G03) |
+| Taxa de conversão de orçamentos | orçamentos aprovados, inteiros ou em parte ÷ orçamentos emitidos no mês × 100 | mensal | 70% ou mais | G05 (por origem do paciente em G11) |
+| Ocupação dos consultórios | minutos de consultas atendidas ÷ (dias úteis × 8 h × 60) × 100, por consultório | mensal | 60% ou mais | G09 |
+| Taxa de falta | consultas com falta ÷ (atendidas + faltas) × 100 | mensal | abaixo de 10% | G10 |
+| Taxa de retorno pós-alta | retornos realizados ÷ retornos previstos já vencidos × 100 | acumulado, conferido todo mês | 80% ou mais | G14 (lista de quem chamar em G07) |
+
+Duas observações sobre a massa fictícia. As 8 horas por dia da ocupação são uma suposição do grupo para a fórmula; a clínica troca pelo horário real de funcionamento. E na massa a ocupação fica abaixo de 2%, porque o recorte de quatro meses tem poucas consultas por consultório: o que vale é a fórmula, que na clínica usa a agenda inteira.
+
+### 14.3 Rastreabilidade: problema ou indicador, tabelas e consulta
+
+A tabela abaixo liga cada problema da Seção 1 e cada indicador às tabelas de onde o dado sai e à consulta que responde. As consultas G estão em `docs/04-consultas-gerenciais.sql` e as A em `docs/05-consultas-auditoria.sql`; o cabeçalho de cada uma repete a pergunta e o que ela atende ou verifica.
+
+| Problema ou indicador | Tabelas usadas | Consultas |
+|---|---|---|
+| P1 Informação do paciente espalhada | PACIENTE, AGENDAMENTO, COLABORADOR, AGENDAMENTO_ITEM, ITEM_ORCAMENTO, PROCEDIMENTO, EVOLUCAO_CLINICA | G01 |
+| P2 Pedido ao laboratório sem registro único | PEDIDO_LABORATORIO, PACIENTE, COLABORADOR, AGENDAMENTO | G06; A07 |
+| P3 Orçamento aprovado em parte | ORCAMENTO, ITEM_ORCAMENTO, PROCEDIMENTO, AGENDAMENTO_ITEM, AGENDAMENTO, CONTRATO, PACIENTE | G04, G05, G12; A01, A02, A08 |
+| P4 Bloqueio por inadimplência | CONTRATO, PARCELA, ORCAMENTO, PACIENTE, TELEFONE_PACIENTE, AGENDAMENTO | G02, G03, G13; A03, A06 |
+| P5 Retorno depois da alta | AGENDAMENTO (tipos alta e retorno), PACIENTE, TELEFONE_PACIENTE, COLABORADOR | G07, G14; A09 |
+| Faturamento recebido | CONTRATO, PARCELA | G08 |
+| Taxa de inadimplência | PARCELA | G13 |
+| Taxa de conversão de orçamentos | ORCAMENTO, CONTRATO, PACIENTE | G05, G11 |
+| Ocupação dos consultórios | AGENDAMENTO, CONSULTORIO | G09 |
+| Taxa de falta | AGENDAMENTO | G10 |
+| Taxa de retorno pós-alta | AGENDAMENTO | G14 |
+| Regras de agenda e de prontuário (RN09, RN10, RN16) | AGENDAMENTO, CONSULTORIO, COLABORADOR, EVOLUCAO_CLINICA | A04, A05 |
+| Rastreabilidade (RNF05) | LOG_ALTERACAO, COLABORADOR | A10 |
+
+### 14.4 Painéis (dashboards)
+
+O banco deste trabalho é o banco do dia a dia: a recepção agenda, o financeiro dá baixa, o dentista registra a evolução. Um painel de BI não deve ler essas tabelas direto, por dois motivos: uma consulta pesada atrapalha quem está atendendo, e o painel de números não precisa de nome, CPF, telefone nem evolução clínica. A proposta do grupo tem três camadas:
+
+1. O banco MySQL do dia a dia, com as 16 tabelas deste trabalho.
+2. Uma camada de leitura: views (consultas gravadas no banco com nome, que se usam como se fossem tabela) ou uma extração diária, que entregam os números já somados por mês, por consultório e por origem, sem dado pessoal. As consultas G05, G08, G09, G10, G11, G13 e G14 já são essa camada: nenhuma delas devolve nome de paciente.
+3. A ferramenta de painel (Looker Studio, Power BI ou parecida), ligada só à camada 2.
+
+As listas com nome e telefone (G03, quem cobrar; G07, quem chamar para o retorno; G12, quem o comercial liga) não entram em painel aberto: ficam com quem já tem esse direito na matriz de acesso do dicionário de dados. Três painéis, um por público:
+
+| Painel | Quem vê | O que mostra | Consultas de origem |
+|---|---|---|---|
+| Financeiro | gestora e financeiro | recebido por mês, taxa de inadimplência, contratos com parcela vencida | G08, G13, G02 |
+| Agenda | diretor clínico e recepção | ocupação por consultório, faltas por mês, retornos vencidos, peças atrasadas no laboratório | G09, G10, G14, G06 |
+| Comercial | comercial e marketing | conversão por mês e por origem, orçamentos parados em negociação | G05, G11, G12 |
+
+### 14.5 Aplicações analíticas e preditivas
+
+Com histórico acumulado (o recorte de quatro meses da massa não serve para isso; é preciso pelo menos um ano de agenda e de parcelas), as mesmas tabelas permitem três usos de previsão, todos simples de explicar para a clínica:
+
+- Risco de falta: a partir do histórico de faltas do paciente, do dia da semana, do horário, do tipo de consulta e da origem (AGENDAMENTO e PACIENTE), ordenar a agenda do dia seguinte por chance de falta. A recepção confirma primeiro quem tem mais risco e já prepara o encaixe (RN11).
+- Risco de atraso de parcela: forma de pagamento, valor e atrasos anteriores do mesmo paciente (CONTRATO e PARCELA). O financeiro manda o lembrete antes do vencimento para quem tem mais risco, em vez de cobrar todo mundo depois (RN18).
+- Risco de não voltar depois da alta: tempo desde a alta, faltas durante o tratamento e retorno anterior (AGENDAMENTO). O relacionamento liga primeiro para quem tem mais chance de sumir (Processo 6).
+
+Limites definidos desde já: a evolução clínica, dado sensível pela LGPD, fica fora de qualquer modelo; o modelo só ordena a lista, e a decisão continua com a pessoa (a recepção decide se liga, o financeiro decide se cobra); o treinamento usa dados sem nome e sem CPF, com o identificador trocado por um código; e o LOG_ALTERACAO continua registrando quem alterou o quê, o que permite auditar depois qualquer ação tomada a partir dessas listas (A10).
+
+---
+
+## 15. Script SQL e Massa de Dados
+
+Os arquivos `.sql` ficam na pasta `docs/`, como pedem os slides da Entrega 2, e seguem a ordem obrigatória do esqueleto. Cada arquivo roda depois do anterior:
+
+| Arquivo | O que faz | Itens da ordem do esqueleto |
+|---|---|---|
+| `docs/01-criacao.sql` | DROP e CREATE DATABASE; as 16 tabelas com NOT NULL, UNIQUE, CHECK e DEFAULT nomeados; as 19 chaves estrangeiras por ALTER TABLE; os índices; os seis gatilhos que preenchem LOG_ALTERACAO | 1, 2 e 3 |
+| `docs/02-massa-de-dados.sql` | massa fictícia: 26 pacientes, 31 telefones, 17 colaboradores, 4 especialidades, 7 consultórios, 15 procedimentos, 26 orçamentos com 61 itens, 20 contratos com 76 parcelas, 75 agendamentos, 60 evoluções clínicas e 6 pedidos ao laboratório | 4 |
+| `docs/03-manipulacao.sql` | cinco SELECT com JOIN (agenda do dia, orçamento item a item, dentistas por especialidade, carnê do contrato, pacientes com e sem contrato); UPDATE com o log gravando (baixa de parcela, confirmação de consulta, peça pronta); DELETE barrado pela chave estrangeira; DELETE na ordem certa | 5, 6 e 7 |
+| `docs/04-consultas-gerenciais.sql` | G01 a G14: uma por problema (P1 a P5) ou por indicador da Seção 14 | 8 |
+| `docs/05-consultas-auditoria.sql` | A01 a A10: uma por regra que o banco não garante sozinho (Seção 13.4), mais o log de alterações | 9 |
+
+**Como rodar.** O script foi testado do zero em 10 de novembro de 2026 no MySQL 26.10 (macOS), pelo cliente de terminal. No MySQL Workbench: abrir cada arquivo na ordem (File, Open SQL Script) e executar; no arquivo 3, desmarcar "Stop script execution on errors" na barra do editor, porque o DELETE da parte 3 dá o erro 1451 de propósito (é a chave estrangeira barrando a exclusão de um paciente com orçamento). No terminal:
+
+```bash
+mysql -u root -p < docs/01-criacao.sql
+mysql -u root -p < docs/02-massa-de-dados.sql
+mysql -u root -p --force < docs/03-manipulacao.sql
+mysql -u root -p --table < docs/04-consultas-gerenciais.sql
+mysql -u root -p --table < docs/05-consultas-auditoria.sql
+```
+
+O myCompiler.io, sugerido pelo professor, roda o script inteiro a cada execução; o grupo não testou lá os gatilhos (comando DELIMITER), e por isso a demonstração em sala usa o Workbench ou o terminal.
+
+**Como o log é preenchido.** O sistema da clínica ainda não existe, então quem alterou cada registro vem de dois lugares: o usuário do MySQL (`CURRENT_USER()`) e uma variável de sessão, `@ID_COLABORADOR_LOGADO`, que o arquivo 3 define antes de cada alteração (por exemplo, o colaborador do financeiro antes da baixa da parcela). Seis gatilhos (triggers), comandos que o próprio banco executa depois de um INSERT, UPDATE ou DELETE, gravam a linha em LOG_ALTERACAO com a tabela, a operação, o usuário, o colaborador e a data e hora. No sistema real, a aplicação define essa variável no login.
+
+**Massa de dados.** Toda fictícia: nomes, CPFs, telefones, endereços e valores são inventados, como pedem a LGPD e o esqueleto. O volume é um recorte de agosto a novembro de 2026 da clínica descrita na Seção 1 (7 consultórios, 4 especialidades, cerca de 30 colaboradores, 1 laboratório próprio). O recorte não cobre o movimento inteiro da clínica, mas basta para cada consulta devolver linhas e para todos os casos aparecerem. A massa tem casos variados de propósito, porque consulta que devolve vazio não demonstra nada:
+
+- orçamentos recusados (pacientes 4 e 12), em negociação (7, 14, 18 e 24) e aprovados em parte (2, 9 e 16);
+- pagamento à vista, cartão parcelado e boleto com entrada de 20% (RN06);
+- paciente bloqueado com duas parcelas atrasadas (paciente 8) e paciente com uma só (paciente 6);
+- faltas (agendamentos 39, 63 e 66), reagendamento (46) e encaixe (40);
+- um paciente com o ciclo completo, da avaliação ao retorno depois da alta (paciente 25).
+
+E casos errados de propósito, um para cada consulta de auditoria:
+
+- orçamento 14 com `VL_TOTAL` diferente da soma dos itens (A01);
+- parcela 3 do contrato 1 vencida e ainda marcada como "aberta" (A03);
+- consulta 54 atendida sem evolução clínica (A04);
+- consultas 47 e 74 sobrepostas no mesmo consultório e com a mesma dentista em 18/11 (A05);
+- paciente 8, bloqueado, com consulta marcada (agendamento 31) (A06);
+- pedido 2 ao laboratório com prazo vencido e não entregue (A07);
+- item 2 do orçamento 17 concluído sem consulta ligada (A08);
+- alta do agendamento 35 feita por dentista comum, não pelo diretor clínico (A09).
+
+A A02 (o contrato bate com os itens aprovados e com a entrada mais as parcelas, RN05 e RN07) lista os 20 contratos com "ok", porque nela a massa está correta. A A10 mostra o log: as 60 evoluções da carga e as alterações do arquivo 3, com o nome de quem fez. Algumas consultas usam a data do dia (`CURDATE()`), então os dias de atraso e as listas de vencidos mudam conforme o dia em que o script roda.
+
+---
+
 ## Conclusão
 
 Neste trabalho levantamos, por pesquisa de campo, como a Meneghini Odontologia Integrada funciona, do primeiro contato do paciente até o pagamento e o retorno depois da alta, e transformamos esse levantamento em um modelo conceitual com 12 entidades e 15 relacionamentos. As principais decisões foram tratar todos os cargos como uma única entidade COLABORADOR, modelar ESPECIALIDADE como entidade (N:N), separar ORCAMENTO, ITEM_ORCAMENTO, CONTRATO e PARCELA para acompanhar a aprovação item a item e o pagamento parcelado, e usar AGENDAMENTO como a entidade que liga paciente, dentista e consultório.
@@ -761,7 +900,7 @@ A parte que mais exigiu atenção foi a cardinalidade. Cada `(mín,máx)` do DER
 
 Depois da devolutiva do professor, voltamos à clínica e fechamos dois dos pontos que estavam em aberto: o tratamento das parcelas atrasadas (RN18 e RN19) e o caminho do paciente depois do tratamento, com a consulta de alta e o retorno (Processo 6). Também entraram os cadastros de apoio (Processo 7): colaboradores pelo setor administrativo e especialidades, consultórios e tabela de preços pela gestora. Compras, fornecedores e estoque ficaram registrados como fora do levantamento por falta de acesso. Continuam em aberto o registro da evolução por consulta e a regra de desconto por cargo.
 
-Na Entrega 2 convertemos o modelo para o lógico (Seções 10 a 13): 16 tabelas, com as tabelas intermediárias dos relacionamentos N:N, o telefone em tabela própria e as chaves migradas, conferidas na primeira, segunda e terceira formas normais. O próximo passo é o script SQL de criação, carga e consultas, com os indicadores de BI.
+Na Entrega 2 convertemos o modelo para o lógico (Seções 10 a 13): 16 tabelas, com as tabelas intermediárias dos relacionamentos N:N, o telefone em tabela própria e as chaves migradas, conferidas na primeira, segunda e terceira formas normais. O script SQL (Seção 15 e pasta `docs/`) cria o banco, carrega uma massa fictícia com casos variados e com erros plantados de propósito, e responde aos cinco problemas da clínica com 14 consultas gerenciais e 10 de auditoria, todas testadas do zero no MySQL. A Seção 14 fecha o trabalho com os seis indicadores que a direção pode acompanhar, a tabela que liga cada problema e cada indicador às tabelas e às consultas, e a proposta de painéis e de previsão de falta, de atraso e de não retorno. O que fica para a clínica decidir são as metas dos indicadores, que o grupo propôs sem número da clínica.
 
 ---
 
