@@ -1122,3 +1122,4 @@ ORDER BY (I.VL_NEGOCIADO > PR.VL_TABELA) DESC, desconto_pct DESC, I.ID_ORCAMENTO
 -- ============================================================================
 -- FIM DA PARTE 4 (consultas de auditoria)
 -- ============================================================================
+
